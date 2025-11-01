@@ -181,10 +181,9 @@
           />
           <div id="folder-breadcrumbs" class="mt-2 text-sm text-gray-600"></div>
         </div>
-        <div
-          id="document-grid"
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-        >
+        <!-- THAY ĐỔI: Đổi grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 -->
+        <!-- THÀNH: grid-cols-4 gap-4 để luôn 4 cột -->
+        <div id="document-grid" class="grid grid-cols-4 gap-4">
           <!-- Các thẻ tài liệu sẽ được render vào đây -->
         </div>
       </div>
@@ -434,6 +433,48 @@
       <!-- View: Lịch Sử Đơn Hàng -->
       <div id="history-view" class="view">
         <h2 class="text-3xl font-bold mb-6">Lịch Sử Đơn Hàng</h2>
+
+        <!-- THÊM: Tab Lịch Sử -->
+        <div class="mb-6 border-b border-gray-200">
+          <nav
+            class="-mb-px flex space-x-8 overflow-x-auto"
+            aria-label="Tabs"
+            id="history-tabs-nav"
+          >
+            <button
+              class="history-tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-blue-500 text-blue-600"
+              data-tab="all"
+            >
+              Tất Cả
+            </button>
+            <button
+              class="history-tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              data-tab="pending"
+            >
+              Chờ thanh toán
+            </button>
+            <button
+              class="history-tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              data-tab="processing"
+            >
+              Đang xử lý
+            </button>
+            <button
+              class="history-tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              data-tab="completed"
+            >
+              Đã hoàn thành
+            </button>
+            <button
+              class="history-tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              data-tab="replaced"
+            >
+              Đã hủy/thay thế
+            </button>
+          </nav>
+        </div>
+        <!-- KẾT THÚC: Tab Lịch Sử -->
+
         <div class="bg-white shadow-lg rounded-lg overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -523,7 +564,8 @@
 
         <!-- Admin Tab Content: Quản Lý Tài Liệu -->
         <div id="admin-docs" class="admin-tab-content">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- THAY ĐỔI: Đổi gap-6 thành gap-4 -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <!-- Form thêm/sửa tài liệu -->
             <div class="bg-white p-6 rounded-lg shadow">
               <h3 class="text-xl font-semibold mb-4" id="admin-form-title">
@@ -561,14 +603,15 @@
                   <label
                     for="admin-doc-pages"
                     class="block text-sm font-medium text-gray-700"
-                    >Số trang (BẮT BUỘC)</label
+                    >Số trang (Tự động nếu là PDF)</label
                   >
                   <input
                     type="number"
                     id="admin-doc-pages"
-                    class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md"
+                    class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md transition-colors"
                     required
                     min="1"
+                    placeholder="Tự động điền khi tải PDF..."
                   />
                 </div>
                 <div class="mb-4">
@@ -608,6 +651,17 @@
             </div>
             <!-- Danh sách tài liệu -->
             <div class="bg-white p-6 rounded-lg shadow">
+              <!-- ==== THÊM THANH TÌM KIẾM ADMIN ==== -->
+              <div class="mb-4">
+                <input
+                  type="text"
+                  id="admin-search-bar"
+                  class="w-full p-3 border border-gray-300 rounded-lg"
+                  placeholder="Tìm kiếm trong danh sách tài liệu..."
+                />
+              </div>
+              <!-- ==== KẾT THÚC THÊM ==== -->
+
               <h3 class="text-xl font-semibold mb-4">Danh Sách Tài Liệu</h3>
               <div
                 id="admin-doc-list"
@@ -1099,6 +1153,89 @@
           document.getElementById("message-modal").style.display = "none";
         });
 
+      // THÊM: Hàm copy link chia sẻ (Sử dụng execCommand cho tương thích iframe)
+      /**
+       * Sao chép link chia sẻ vào clipboard
+       * @param {string} docId - ID của tài liệu
+       */
+      function copyShareLink(docId) {
+        // 1. Lấy URL gốc (không bao gồm hash)
+        const url = window.location.href.split("#")[0];
+        const shareLink = url + "#doc=" + docId;
+
+        // 2. Tạo một textarea ẩn
+        const textarea = document.createElement("textarea");
+        textarea.value = shareLink;
+        textarea.style.position = "fixed"; // Đặt ngoài màn hình
+        textarea.style.top = 0;
+        textarea.style.left = 0;
+        textarea.style.opacity = 0;
+        document.body.appendChild(textarea);
+
+        // 3. Chọn và copy
+        textarea.focus();
+        textarea.select();
+
+        try {
+          const successful = document.execCommand("copy");
+          if (successful) {
+            showMessage("Đã Sao Chép", "Đã copy link chia sẻ vào clipboard.");
+          } else {
+            showMessage("Lỗi", "Không thể copy link. Vui lòng thử lại.");
+          }
+        } catch (err) {
+          console.error("Lỗi copy clipboard:", err);
+          showMessage("Lỗi", "Không thể copy link.");
+        }
+
+        // 4. Xóa textarea
+        document.body.removeChild(textarea);
+      }
+
+      // THÊM: Hàm trợ giúp xử lý link PDF (tải về)
+      /**
+       * Tạo URL để buộc tải xuống file PDF từ Cloudinary
+       * @param {string} url - URL gốc
+       * @param {string} [name=""] - Tên file (để kiểm tra .pdf)
+       * @returns {string} - URL đã sửa đổi (nếu là PDF) hoặc URL gốc
+       */
+      function getForcedDownloadLink(url, name = "") {
+        if (!url) return "#";
+        const fileName = name.toLowerCase();
+        const fileUrl = url.toLowerCase();
+        // Kiểm tra cả url và tên file
+        const isPdf = fileUrl.endsWith(".pdf") || fileName.endsWith(".pdf");
+
+        // Chỉ áp dụng cho link Cloudinary và là file PDF
+        if (isPdf && url.includes("res.cloudinary.com")) {
+          const parts = url.split("/upload/");
+          // Đảm bảo URL hợp lệ và chưa có cờ fl_attachment
+          if (parts.length === 2 && !parts[1].startsWith("fl_attachment")) {
+            return parts[0] + "/upload/fl_attachment/" + parts[1];
+          }
+        }
+        return url; // Trả về URL gốc nếu không phải PDF hoặc không phải Cloudinary
+      }
+
+      /**
+       * Thêm thuộc tính 'download' nếu file là PDF nhưng *không* phải từ Cloudinary
+       * @param {string} url - URL gốc
+       * @param {string} [name=""] - Tên file
+       * @returns {string} - 'download' hoặc ""
+       */
+      function getDownloadAttribute(url, name = "") {
+        if (!url) return "";
+        const fileName = name.toLowerCase();
+        const fileUrl = url.toLowerCase();
+        const isPdf = fileUrl.endsWith(".pdf") || fileName.endsWith(".pdf");
+
+        // Chỉ thêm 'download' nếu là PDF và KHÔNG phải link Cloudinary (vì Cloudinary đã xử lý bằng URL)
+        if (isPdf && !url.includes("res.cloudinary.com")) {
+          return "download";
+        }
+        return "";
+      }
+
       // --- HÀM MODAL CHI TIẾT ĐƠN HÀNG ---
       document
         .getElementById("order-details-modal-close")
@@ -1111,14 +1248,20 @@
         const itemsHtml = order.items
           .map((item) => {
             let url = "#";
+            let name = item.docName;
             if (item.cloudinaryUrl) {
               url = item.cloudinaryUrl; // Custom upload
             } else if (item.docId && allDocuments[item.docId]) {
               url = allDocuments[item.docId].url; // Standard doc
             }
+
+            // THÊM: Áp dụng logic tải PDF
+            const fileUrl = getForcedDownloadLink(url, name);
+            const downloadAttr = getDownloadAttribute(url, name);
+
             return `
                       <div class="p-3 bg-gray-50 rounded-md border">
-                          <p class="font-semibold text-gray-800">Tên file: <a href="${url}" target="_blank" class="text-blue-600 hover:underline">${item.docName}</a></p>
+                          <p class="font-semibold text-gray-800">Tên file: <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">${item.docName}</a></p>
                           <p>Số trang: ${item.pages} | Số bản: ${item.copies}</p>
                           <p>Tùy chọn: ${item.printType}, ${item.paperType}, ${item.paperSize}</p>
                       </div>
@@ -1193,6 +1336,30 @@
           const firstTab = document.querySelector(".admin-tab");
           switchAdminTab(firstTab.dataset.tab);
         }
+        // THÊM: Nếu là history view, active tab đầu tiên
+        if (viewId === "history-view") {
+          // Đặt lại tab 'all' là active khi chuyển view
+          document.querySelectorAll(".history-tab").forEach((tab, index) => {
+            tab.classList.remove("border-blue-500", "text-blue-600");
+            tab.classList.add(
+              "border-transparent",
+              "text-gray-500",
+              "hover:text-gray-700",
+              "hover:border-gray-300"
+            );
+            if (index === 0) {
+              // Tab "Tất Cả"
+              tab.classList.add("border-blue-500", "text-blue-600");
+              tab.classList.remove(
+                "border-transparent",
+                "text-gray-500",
+                "hover:text-gray-700",
+                "hover:border-gray-300"
+              );
+            }
+          });
+          renderUserHistory(); // Render lại lịch sử
+        }
       }
 
       // Hàm chuyển đổi tab Admin
@@ -1248,6 +1415,24 @@
       // --- HÀM XÁC THỰC & KHỞI TẠO ---
 
       async function initializeAppLogic() {
+        // --- THÊM LOGIC DEEP LINK (PHẦN 1) ---
+        // Kiểm tra hash khi tải trang và lưu vào session
+        if (window.location.hash.startsWith("#doc=")) {
+          const initialDocId = window.location.hash.substring(5);
+          sessionStorage.setItem("deepLinkDocId", initialDocId);
+          // Xóa hash ngay lập tức để tránh lỗi
+          try {
+            history.replaceState(
+              null,
+              null,
+              window.location.pathname + window.location.search
+            );
+          } catch (e) {
+            window.location.hash = ""; // Fallback
+          }
+        }
+        // --- KẾT THÚC THÊM ---
+
         showLoading(true);
         try {
           // 1. Xác thực Firebase
@@ -1269,6 +1454,7 @@
             updateUserInfoUI();
             showView("home-view");
             setupListeners(); // Bắt đầu lắng nghe dữ liệu
+            // (Phần 2 của deep link sẽ nằm trong setupListeners)
           } else {
             // 3b. Nếu không, hiển thị form đăng nhập
             showView("login-view");
@@ -1314,6 +1500,7 @@
             updateUserInfoUI();
             showView("home-view");
             setupListeners(); // Bắt đầu lắng nghe dữ liệu
+            // (Phần 2 của deep link sẽ nằm trong setupListeners)
           } catch (error) {
             console.error("Lỗi lưu thông tin:", error);
             showMessage("Lỗi", "Không thể lưu thông tin. Vui lòng thử lại.");
@@ -1358,22 +1545,75 @@
         const docsRef = ref(db, `artifacts/${appId}/public/documents`);
         onValue(docsRef, (snapshot) => {
           allDocuments = snapshot.val() || {};
-          renderDocumentGrid();
+          renderDocumentGrid(); // Sẽ render lại khi đơn hàng thay đổi
           if (currentUserData.name === "Admin") {
             renderAdminDocList();
           }
+
+          // --- THÊM LOGIC DEEP LINK (PHẦN 2) ---
+          // Xử lý deep link (nếu có) sau khi tài liệu đã tải
+          const pendingDocId = sessionStorage.getItem("deepLinkDocId");
+          if (pendingDocId && allDocuments[pendingDocId]) {
+            console.log("Tài liệu đã tải, xử lý deep link...");
+            // Đảm bảo user đã login (currentUserData tồn tại)
+            if (currentUserData) {
+              openOrderView(pendingDocId);
+              sessionStorage.removeItem("deepLinkDocId"); // Xóa sau khi xử lý
+            } else {
+              console.log("Chờ user login... (Lỗi logic: đáng lẽ đã login)");
+            }
+          }
+          // --- KẾT THÚC THÊM ---
         });
 
         // Lắng nghe danh sách đơn hàng (cho Admin)
         const ordersRef = ref(db, `artifacts/${appId}/public/orders`);
         onValue(ordersRef, (snapshot) => {
           allOrders = snapshot.val() || {};
+          // THÊM: Render lại trang chủ để cập nhật lượt in
+          renderDocumentGrid();
           if (currentUserData.name === "Admin") {
             renderAdminOrdersTable();
             renderAdminReports(); // Cập nhật báo cáo khi đơn hàng thay đổi
           }
           renderUserHistory(); // Cập nhật lịch sử user
         });
+
+        // ==== THÊM TÌM KIẾM ADMIN ====
+        // Thêm listener cho thanh tìm kiếm admin
+        document
+          .getElementById("admin-search-bar")
+          .addEventListener("input", renderAdminDocList);
+        // ==== KẾT THÚC THÊM ====
+
+        // THÊM: Listener cho các tab lịch sử
+        document
+          .getElementById("history-tabs-nav")
+          .addEventListener("click", (e) => {
+            const tabButton = e.target.closest(".history-tab");
+            if (!tabButton) return;
+
+            // Cập nhật UI tabs
+            document.querySelectorAll(".history-tab").forEach((tab) => {
+              tab.classList.remove("border-blue-500", "text-blue-600");
+              tab.classList.add(
+                "border-transparent",
+                "text-gray-500",
+                "hover:text-gray-700",
+                "hover:border-gray-300"
+              );
+            });
+            tabButton.classList.add("border-blue-500", "text-blue-600");
+            tabButton.classList.remove(
+              "border-transparent",
+              "text-gray-500",
+              "hover:text-gray-700",
+              "hover:border-gray-300"
+            );
+
+            // Render lại bảng
+            renderUserHistory();
+          });
 
         // Thiết lập tháng cho báo cáo (chỉ chạy 1 lần)
         setupReportMonths();
@@ -1384,6 +1624,20 @@
       function renderDocumentGrid() {
         const grid = document.getElementById("document-grid");
         grid.innerHTML = "";
+
+        // THÊM: Tính toán lượt in
+        const printCounts = {};
+        Object.values(allOrders).forEach((order) => {
+          // Chỉ đếm đơn chưa bị thay thế
+          if (order.paymentStatus !== "replaced") {
+            order.items.forEach((item) => {
+              if (item.docId) {
+                // Chỉ đếm tài liệu chuẩn, không đếm custom upload
+                printCounts[item.docId] = (printCounts[item.docId] || 0) + 1;
+              }
+            });
+          }
+        });
 
         const searchTerm = document
           .getElementById("search-bar")
@@ -1424,32 +1678,60 @@
             grid.appendChild(folderHeader);
           }
 
+          // THÊM: Lấy lượt in
+          const printCount = printCounts[id] || 0;
+
+          // THÊM: Lấy link PDF
+          const fileUrl = getForcedDownloadLink(doc.url, doc.name);
+          const downloadAttr = getDownloadAttribute(doc.url, doc.name);
+
           // Thẻ tài liệu
           const card = document.createElement("div");
           card.className =
             "bg-white rounded-lg shadow-md overflow-hidden transform transition-all hover:shadow-xl hover:-translate-y-1";
+
+          // CẬP NHẬT: Thêm nút Share
           card.innerHTML = `
                       <div class="p-5">
-                          <h3 class="text-lg font-semibold text-gray-800 truncate" title="${
-                            doc.name
-                          }">${doc.name}</h3>
+                          <div class="flex justify-between items-start">
+                              <h3 class="text-lg font-semibold text-gray-800 truncate flex-1 mr-2" title="${
+                                doc.name
+                              }">${doc.name}</h3>
+                              <button class="flex-shrink-0 text-gray-400 hover:text-blue-500 share-doc-btn" data-doc-id="${id}" title="Copy link chia sẻ">
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                      <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.658 14.185 8 15 8z" />
+                                  </svg>
+                              </button>
+                          </div>
                           <p class="text-sm text-gray-500 mt-1">${
                             doc.folderPath || "Thư mục gốc"
                           }</p>
-                          <p class="text-sm text-gray-600 mt-2 font-medium">${
-                            doc.pages || "?"
-                          } trang</p>
+                          <div class="flex justify-between items-center text-sm text-gray-600 mt-2 font-medium">
+                            <span>${doc.pages || "?"} trang</span>
+                            <span class="text-blue-500">${printCount} lượt in</span>
+                          </div>
                       </div>
                       <div class="bg-gray-50 px-5 py-3 flex items-center justify-between space-x-2">
-                          <a href="${
-                            doc.url
-                          }" target="_blank" rel="noopener noreferrer" class="flex-1 text-center text-sm font-semibold text-green-600 hover:text-green-800 px-3 py-1 bg-green-50 rounded-md border border-green-200 hover:bg-green-100">Xem File</a>
-                          <button class="flex-1 text-center text-sm font-semibold text-blue-600 hover:text-blue-800 px-3 py-1 bg-blue-50 rounded-md border border-blue-200 hover:bg-blue-100" data-doc-id="${id}">Chọn In</button>
+                          <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="flex-1 text-center text-sm font-semibold text-green-600 hover:text-green-800 px-3 py-1 bg-green-50 rounded-md border border-green-200 hover:bg-green-100">Xem File</a>
+                          <button class="flex-1 text-center text-sm font-semibold text-blue-600 hover:text-blue-800 px-3 py-1 bg-blue-50 rounded-md border border-blue-200 hover:bg-blue-100 select-print-btn" data-doc-id="${id}">Chọn In</button>
                       </div>
                   `;
-          card.querySelector("button").addEventListener("click", () => {
-            openOrderView(id);
-          });
+
+          // CẬP NHẬT: Thêm listener cho nút Share
+          card
+            .querySelector(".share-doc-btn")
+            .addEventListener("click", (e) => {
+              e.stopPropagation(); // Ngăn sự kiện click khác (nếu có)
+              copyShareLink(id);
+            });
+
+          // CẬP NHẬT: Listener cho "Chọn In" (dùng class)
+          card
+            .querySelector(".select-print-btn")
+            .addEventListener("click", () => {
+              openOrderView(id);
+            });
+
           grid.appendChild(card);
         });
       }
@@ -1550,7 +1832,10 @@
           uploadPreset: CLOUDINARY_UPLOAD_PRESET,
           multiple: true,
           folder: "user_uploads",
+          // === SỬA LỖI PREVIEW VÀ ĐẾM TRANG TỰ ĐỘNG ===
+          resourceType: "raw", // Đảm bảo file (PDF, DOCX) được upload ở dạng "raw"
           imageMetadata: true, // Yêu cầu phân tích metadata (bao gồm số trang PDF)
+          // === KẾT THÚC SỬA ===
           sources: ["local", "url"],
           clientAllowedFormats: [
             "pdf",
@@ -1568,7 +1853,17 @@
         },
         (error, result) => {
           if (!error && result && result.event === "success") {
-            console.log("Upload success:", result.info); // Log để kiểm tra
+            // FIX: Thêm log chẩn đoán
+            console.log(
+              "Custom upload success. info.pages:",
+              result.info.pages
+            );
+            if (!result.info.pages) {
+              console.warn(
+                "Cloudinary did not return page count for this file (custom upload)."
+              );
+            }
+
             customUploadedFiles.push({
               name: result.info.original_filename,
               url: result.info.secure_url,
@@ -1604,11 +1899,16 @@
         }
 
         customUploadedFiles.forEach((file, index) => {
+          // THÊM: Áp dụng logic tải PDF
+          const fileUrl = getForcedDownloadLink(file.url, file.name);
+          const downloadAttr = getDownloadAttribute(file.url, file.name);
+
           const fileEl = document.createElement("div");
           fileEl.className =
             "flex items-center justify-between bg-gray-50 p-3 rounded-md border";
+          // CẬP NHẬT: Thêm link download
           fileEl.innerHTML = `
-                      <a href="${file.url}" target="_blank" class="text-sm font-medium text-blue-600 truncate flex-1 mr-4">${file.name}</a>
+                      <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-blue-600 truncate flex-1 mr-4">${file.name}</a>
                       <div class="flex items-center space-x-2">
                           <label class="text-sm">Số trang:</label>
                           <input type="number" class="w-16 p-1 border rounded-md text-sm custom-file-pages" min="1" value="${file.pages}" data-index="${index}">
@@ -1803,13 +2103,47 @@
         const tbody = document.getElementById("history-table-body");
         tbody.innerHTML = "";
 
-        const userOrders = Object.entries(allOrders)
-          .filter(([id, order]) => order.userId === currentUserId)
-          .sort(([, a], [, b]) => b.timestamp - a.timestamp); // Sắp xếp mới nhất trước
+        // THÊM: Lấy tab đang active
+        const activeTab =
+          document.querySelector(".history-tab.text-blue-600")?.dataset.tab ||
+          "all";
+
+        let userOrders = Object.entries(allOrders).filter(
+          ([id, order]) => order.userId === currentUserId
+        );
+
+        // THÊM: Lọc theo tab
+        switch (activeTab) {
+          case "pending":
+            userOrders = userOrders.filter(
+              ([, order]) => order.paymentStatus === "pending"
+            );
+            break;
+          case "processing":
+            userOrders = userOrders.filter(
+              ([, order]) => order.paymentStatus === "paid" && !order.isPrinted
+            );
+            break;
+          case "completed":
+            // Đã in VÀ không phải là đơn bị thay thế
+            userOrders = userOrders.filter(
+              ([, order]) =>
+                order.isPrinted && order.paymentStatus !== "replaced"
+            );
+            break;
+          case "replaced":
+            userOrders = userOrders.filter(
+              ([, order]) => order.paymentStatus === "replaced"
+            );
+            break;
+          // 'all' không cần lọc
+        }
+
+        userOrders.sort(([, a], [, b]) => b.timestamp - a.timestamp); // Sắp xếp mới nhất trước
 
         if (userOrders.length === 0) {
           tbody.innerHTML =
-            '<tr><td colspan="7" class="text-center p-6 text-gray-500">Bạn chưa có đơn hàng nào.</td></tr>'; // Tăng colspan
+            '<tr><td colspan="7" class="text-center p-6 text-gray-500">Không có đơn hàng nào trong mục này.</td></tr>'; // Tăng colspan
           return;
         }
 
@@ -1819,12 +2153,18 @@
           const itemsHtml = order.items
             .map((item) => {
               let url = "#";
+              let name = item.docName;
               if (item.cloudinaryUrl) {
                 url = item.cloudinaryUrl; // Custom upload
               } else if (item.docId && allDocuments[item.docId]) {
                 url = allDocuments[item.docId].url; // Standard doc
               }
-              return `<div>- <a href="${url}" target="_blank" class="text-blue-600 hover:underline" title="Xem/Tải file">${item.docName}</a> (x${item.copies}, ${item.printType}, ${item.paperType})</div>`;
+
+              // THÊM: Áp dụng logic tải PDF
+              const fileUrl = getForcedDownloadLink(url, name);
+              const downloadAttr = getDownloadAttribute(url, name);
+
+              return `<div>- <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline" title="Xem/Tải file">${item.docName}</a> (x${item.copies}, ${item.printType}, ${item.paperType})</div>`;
             })
             .join("");
 
@@ -1922,8 +2262,10 @@
               showMessage("Lỗi", "Không thể hủy đơn hàng này.");
               return;
             }
+            // THAY ĐỔI: Không dùng confirm
             if (
-              confirm(
+              await showConfirm(
+                "Xác nhận hủy",
                 "Bạn có chắc muốn hủy đơn hàng này? Đơn hàng sẽ bị xóa vĩnh viễn."
               )
             ) {
@@ -1961,8 +2303,10 @@
               return;
             }
             const costToRefund = parseFloat(refundBtn.dataset.cost);
+            // THAY ĐỔI: Không dùng confirm
             if (
-              confirm(
+              await showConfirm(
+                "Xác nhận hủy",
                 `Bạn có chắc muốn hủy đơn hàng này? Số tiền ${formatCurrency(
                   costToRefund
                 )}đ sẽ được hoàn vào số dư của bạn.`
@@ -2009,6 +2353,10 @@
           uploadPreset: CLOUDINARY_UPLOAD_PRESET,
           multiple: false,
           folder: "admin_documents",
+          // === SỬA LỖI PREVIEW VÀ THÊM ĐẾM TRANG TỰ ĐỘNG ===
+          resourceType: "raw", // Đảm bảo file (PDF, DOCX) được upload ở dạng "raw", không phải "image"
+          imageMetadata: true, // Yêu cầu Cloudinary phân tích metadata (để lấy số trang PDF)
+          // === KẾT THÚC SỬA ===
         },
         (error, result) => {
           if (!error && result && result.event === "success") {
@@ -2022,6 +2370,29 @@
             document.getElementById("admin-doc-url").value = adminFile.url;
             document.getElementById("admin-doc-public-id").value =
               adminFile.publicId;
+
+            // FIX: Thêm log chẩn đoán
+            console.log("Admin upload success. info.pages:", result.info.pages);
+
+            // === THÊM TỰ ĐỘNG CẬP NHẬT SỐ TRANG ===
+            if (result.info.pages) {
+              // Nếu Cloudinary trả về số trang (thường là PDF)
+              document.getElementById("admin-doc-pages").value =
+                result.info.pages;
+              // Thêm style để báo là đã tự động
+              document
+                .getElementById("admin-doc-pages")
+                .classList.add("bg-green-50", "border-green-300");
+            } else {
+              // Nếu không có, reset style
+              console.warn(
+                "Cloudinary did not return page count for this file (admin upload)."
+              );
+              document
+                .getElementById("admin-doc-pages")
+                .classList.remove("bg-green-50", "border-green-300");
+            }
+            // === KẾT THÚC THÊM ===
           }
         }
       );
@@ -2085,7 +2456,22 @@
         const list = document.getElementById("admin-doc-list");
         list.innerHTML = "";
 
-        const sortedDocs = Object.entries(allDocuments).sort(([, a], [, b]) => {
+        // === THÊM LOGIC TÌM KIẾM ===
+        const searchTerm = document
+          .getElementById("admin-search-bar")
+          .value.toLowerCase();
+
+        const filteredDocs = Object.entries(allDocuments).filter(
+          ([id, doc]) => {
+            const name = doc.name?.toLowerCase() || "";
+            const folder = doc.folderPath?.toLowerCase() || "";
+            return name.includes(searchTerm) || folder.includes(searchTerm);
+          }
+        );
+        // === KẾT THÚC THÊM ===
+
+        // Sửa: Sắp xếp filteredDocs thay vì allDocuments
+        const sortedDocs = filteredDocs.sort(([, a], [, b]) => {
           const folderCompare = (a.folderPath || "").localeCompare(
             b.folderPath || ""
           );
@@ -2093,12 +2479,14 @@
           return (a.name || "").localeCompare(b.name || "");
         });
 
+        // Sửa: Check sortedDocs.length
         if (sortedDocs.length === 0) {
           list.innerHTML =
-            '<p class="text-sm text-gray-500">Chưa có tài liệu nào.</p>';
+            '<p class="text-sm text-gray-500">Không tìm thấy tài liệu nào.</p>';
           return;
         }
 
+        // Sửa: Lặp qua sortedDocs
         sortedDocs.forEach(([id, doc]) => {
           const item = document.createElement("div");
           item.className =
@@ -2128,9 +2516,11 @@
           // Nút Xóa
           item
             .querySelector("button.text-red-600")
-            .addEventListener("click", () => {
+            .addEventListener("click", async () => {
+              // THAY ĐỔI: Không dùng confirm
               if (
-                confirm(
+                await showConfirm(
+                  "Xác nhận xóa",
                   `Bạn có chắc chắn muốn xóa tài liệu "${doc.name}" không?`
                 )
               ) {
@@ -2176,6 +2566,10 @@
         document.getElementById("admin-doc-public-id").value = "";
         document.getElementById("admin-file-url").textContent = "";
         document.getElementById("admin-cancel-edit").classList.add("hidden");
+        // THÊM: Reset style ô số trang
+        document
+          .getElementById("admin-doc-pages")
+          .classList.remove("bg-green-50", "border-green-300");
         adminFile = {};
       }
 
@@ -2232,12 +2626,18 @@
           const itemsHtml = order.items
             .map((item) => {
               let url = "#";
+              let name = item.docName;
               if (item.cloudinaryUrl) {
                 url = item.cloudinaryUrl; // Custom upload
               } else if (item.docId && allDocuments[item.docId]) {
                 url = allDocuments[item.docId].url; // Standard doc
               }
-              return `<div>- <a href="${url}" target="_blank" class="text-blue-600 hover:underline" title="Xem/Tải file">${item.docName}</a> (x${item.copies})</div>`;
+
+              // THÊM: Áp dụng logic tải PDF
+              const fileUrl = getForcedDownloadLink(url, name);
+              const downloadAttr = getDownloadAttribute(url, name);
+
+              return `<div>- <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline" title="Xem/Tải file">${item.docName}</a> (x${item.copies})</div>`;
             })
             .join("");
 
@@ -2345,7 +2745,9 @@
             const amountDue = order.amountDue || 0;
             const amountPaidFromBalance = order.amountPaid || 0;
 
-            const amountPaidStr = prompt(
+            // THAY ĐỔI: Không dùng prompt, dùng modal tự tạo
+            const amountPaidStr = await showPrompt(
+              "Xác Nhận Thanh Toán",
               `Đơn hàng #${orderId.slice(-5)} - ${
                 order.userName
               }\nTổng tiền: ${formatCurrency(
@@ -2354,10 +2756,12 @@
                 amountPaidFromBalance
               )}đ\nCần thu thêm: ${formatCurrency(
                 amountDue
-              )}đ\n\nNhập số tiền khách trả (ví dụ: ${amountDue}):`
+              )}đ\n\nNhập số tiền khách trả:`,
+              amountDue // Giá trị mặc định
             );
 
-            if (amountPaidStr) {
+            if (amountPaidStr !== null) {
+              // Check
               const amountCollected = parseFloat(amountPaidStr);
               if (!isNaN(amountCollected) && amountCollected >= amountDue) {
                 markOrderAsPaid(
@@ -2368,7 +2772,8 @@
                   amountCollected
                 );
               } else {
-                alert(
+                showMessage(
+                  "Lỗi",
                   `Số tiền trả phải là một số và lớn hơn hoặc bằng số tiền còn thiếu (${formatCurrency(
                     amountDue
                   )}đ).`
@@ -2381,8 +2786,10 @@
           const printBtn = e.target.closest(".admin-mark-printed");
           if (printBtn) {
             const orderId = printBtn.dataset.id;
+            // THAY ĐỔI: Không dùng confirm
             if (
-              confirm(
+              await showConfirm(
+                "Xác nhận đã in",
                 "Xác nhận đơn hàng này đã được in xong? User sẽ không thể hủy hoặc sửa đơn này nữa."
               )
             ) {
@@ -2646,7 +3053,11 @@
               if (item.cloudinaryUrl) url = item.cloudinaryUrl;
               else if (item.docId && allDocuments[item.docId])
                 url = allDocuments[item.docId].url;
-              return `- [${item.docName}](${url}) (x${item.copies}, ${item.pages} trang, ${item.printType}, ${item.paperType})`;
+
+              // THÊM: Dùng link đã sửa
+              const fileUrl = getForcedDownloadLink(url, item.docName);
+
+              return `- [${item.docName}](${fileUrl}) (x${item.copies}, ${item.pages} trang, ${item.printType}, ${item.paperType})`;
             })
             .join("\n");
 
@@ -2738,7 +3149,10 @@
             uploadPreset: CLOUDINARY_UPLOAD_PRESET,
             multiple: true,
             folder: "user_uploads_edited", // Thư mục khác cho file edit
+            // === SỬA LỖI PREVIEW VÀ THÊM ĐẾM TRANG ===
+            resourceType: "raw",
             imageMetadata: true,
+            // === KẾT THÚC SỬA ===
             sources: ["local", "url"],
             clientAllowedFormats: [
               "pdf",
@@ -2756,12 +3170,23 @@
           },
           (error, result) => {
             if (!error && result && result.event === "success") {
+              // FIX: Thêm log chẩn đoán
+              console.log(
+                "Edit modal upload success. info.pages:",
+                result.info.pages
+              );
+              if (!result.info.pages) {
+                console.warn(
+                  "Cloudinary did not return page count for this file (edit upload)."
+                );
+              }
+
               // Thêm file mới vào mảng đang sửa
               filesBeingEdited.push({
                 docName: result.info.original_filename, // Dùng docName
                 cloudinaryUrl: result.info.secure_url, // Dùng cloudinaryUrl
                 publicId: result.info.public_id,
-                pages: result.info.pages || 1,
+                pages: result.info.pages || 1, // Tự động lấy số trang
               });
               renderEditFileList();
               updateEditOrderCost();
@@ -2855,13 +3280,18 @@
 
           // Lấy URL (ưu tiên custom, sau đó đến doc)
           let url = file.cloudinaryUrl || "#";
+          let name = file.docName;
           if (!file.cloudinaryUrl && file.docId && allDocuments[file.docId]) {
             url = allDocuments[file.docId].url;
           }
 
+          // THÊM: Áp dụng logic tải PDF
+          const fileUrl = getForcedDownloadLink(url, name);
+          const downloadAttr = getDownloadAttribute(url, name);
+
           fileEl.innerHTML = `
                       <div class="flex-1 min-w-0 mr-4">
-                          <a href="${url}" target="_blank" class="text-sm font-medium text-blue-600 truncate" title="${file.docName}">${file.docName}</a>
+                          <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-blue-600 truncate" title="${file.docName}">${file.docName}</a>
                       </div>
                       <div class="flex items-center space-x-2 flex-shrink-0">
                           <label class="text-sm">Trang:</label>
@@ -3100,6 +3530,105 @@
           switchAdminTab(adminTab.dataset.tab);
         }
       });
+
+      // --- HÀM THAY THẾ CHO ALERT/CONFIRM/PROMPT ---
+      // (Do alert/confirm/prompt không hoạt động tốt trong iframe)
+
+      /**
+       * Hiển thị một modal xác nhận (thay thế cho confirm())
+       * @param {string} title - Tiêu đề modal
+       * @param {string} content - Nội dung câu hỏi
+       * @returns {Promise<boolean>} - Trả về true nếu user nhấn "Đồng ý", false nếu nhấn "Hủy"
+       */
+      function showConfirm(title, content) {
+        return new Promise((resolve) => {
+          const modal = document.createElement("div");
+          modal.className =
+            "view fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[10001]"; // z-index cao hơn
+          modal.style.display = "block";
+
+          modal.innerHTML = `
+                      <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                          <div class="mt-3 text-center">
+                              <h3 class="text-lg leading-6 font-medium text-gray-900">${title}</h3>
+                              <div class="mt-2 px-7 py-3">
+                                  <p class="text-sm text-gray-500">${content}</p>
+                              </div>
+                              <div class="items-center px-4 py-3 flex space-x-4">
+                                  <button id="confirm-btn-cancel" class="flex-1 px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none">Hủy</button>
+                                  <button id="confirm-btn-ok" class="flex-1 px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none">Đồng ý</button>
+                              </div>
+                          </div>
+                      </div>
+                  `;
+
+          document.body.appendChild(modal);
+
+          const close = (value) => {
+            document.body.removeChild(modal);
+            resolve(value);
+          };
+
+          modal
+            .querySelector("#confirm-btn-ok")
+            .addEventListener("click", () => close(true));
+          modal
+            .querySelector("#confirm-btn-cancel")
+            .addEventListener("click", () => close(false));
+        });
+      }
+
+      /**
+       * Hiển thị một modal nhập liệu (thay thế cho prompt())
+       * @param {string} title - Tiêu đề modal
+       * @param {string} content - Nội dung câu hỏi
+       * @param {string|number} [defaultValue=""] - Giá trị mặc định
+       * @returns {Promise<string|null>} - Trả về chuỗi user nhập, hoặc null nếu nhấn "Hủy"
+       */
+      function showPrompt(title, content, defaultValue = "") {
+        return new Promise((resolve) => {
+          const modal = document.createElement("div");
+          modal.className =
+            "view fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[10001]";
+          modal.style.display = "block";
+
+          modal.innerHTML = `
+                      <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                          <form id="prompt-form" class="mt-3">
+                              <h3 class="text-lg leading-6 font-medium text-gray-900 text-center">${title}</h3>
+                              <div class="mt-2 px-7 py-3">
+                                  <label class="text-sm text-gray-500 block whitespace-pre-wrap">${content}</label>
+                                  <input type="text" id="prompt-input" class="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" value="${defaultValue}">
+                              </div>
+                              <div class="items-center px-4 py-3 flex space-x-4">
+                                  <button id="prompt-btn-cancel" type="button" class="flex-1 px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none">Hủy</button>
+                                  <button id="prompt-btn-ok" type="submit" class="flex-1 px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md shadow-sm hover:bg-blue-600 focus:outline-none">OK</button>
+                              </div>
+                          </form>
+                      </div>
+                  `;
+
+          document.body.appendChild(modal);
+          const input = modal.querySelector("#prompt-input");
+          input.focus();
+          input.select();
+
+          const close = (value) => {
+            document.body.removeChild(modal);
+            resolve(value);
+          };
+
+          modal
+            .querySelector("#prompt-form")
+            .addEventListener("submit", (e) => {
+              e.preventDefault();
+              close(input.value);
+            });
+          modal
+            .querySelector("#prompt-btn-cancel")
+            .addEventListener("click", () => close(null));
+        });
+      }
 
       // --- KHỞI CHẠY ỨNG DỤNG ---
       initializeAppLogic();
