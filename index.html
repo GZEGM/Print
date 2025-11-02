@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dịch Vụ In Ấn</title>
+    <title>Dienkon In Ấn Mọi Thứ</title>
     <!-- Tải Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Tải thư viện SheetJS (xlsx) để xuất Excel -->
@@ -62,6 +62,16 @@
         opacity: 0.5;
         cursor: not-allowed;
       }
+      /* Style cho menu mobile */
+      #mobile-menu {
+        transition: transform 0.3s ease-in-out;
+      }
+      #mobile-menu.open {
+        transform: translateX(0);
+      }
+      #mobile-menu.closed {
+        transform: translateX(100%);
+      }
     </style>
     <!-- Tải font Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -77,20 +87,17 @@
       <div class="spinner"></div>
     </div>
 
-    <!-- Thanh Điều Hướng (Navbar) -->
+    <!-- Thanh Điều Hướng (Navbar) - ĐÃ SỬA -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- FIX 1: Thêm 'flex-col sm:flex-row' để stack trên mobile và 'py-3' -->
-        <div
-          class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 sm:py-0 sm:h-16"
-        >
-          <div class="flex-shrink-0 flex items-center justify-center">
-            <span class="text-2xl font-bold text-blue-600">PrintService</span>
+        <div class="flex justify-between items-center h-16">
+          <!-- Logo -->
+          <div class="flex-shrink-0 flex items-center">
+            <span class="text-2xl font-bold text-blue-600">DienkonPrint
           </div>
-          <!-- FIX 1: Thêm 'flex-col sm:flex-row' và 'gap-y-2', 'mt-3 sm:mt-0' -->
-          <div
-            class="flex flex-col sm:flex-row sm:items-center gap-y-2 sm:gap-y-0 sm:space-x-4 mt-3 sm:mt-0"
-          >
+
+          <!-- Nav Links (Desktop) -->
+          <div class="hidden sm:flex sm:items-center sm:space-x-4">
             <button
               data-view="home-view"
               class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
@@ -98,10 +105,16 @@
               Trang Chủ
             </button>
             <button
+              data-view="quick-print-view"
+              class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              In Nhanh
+            </button>
+            <button
               data-view="custom-order-view"
               class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
             >
-              In Tùy Chọn
+              Tải File In
             </button>
             <button
               data-view="history-view"
@@ -116,31 +129,165 @@
             >
               Quản Trị
             </button>
-            <!-- Căn giữa trên mobile -->
+
+            <!-- User Info (Desktop) -->
             <div
-              id="user-info"
-              class="flex flex-col sm:flex-row items-center sm:space-x-2 text-sm"
+              id="user-info-desktop"
+              class="flex items-center space-x-2 text-sm pl-4 border-l border-gray-200"
             >
-              <span id="user-name-display" class="font-medium"></span>
-              <span id="user-class-display" class_name="text-gray-600"></span>
+              <div>
+                <span id="user-name-display" class="font-medium block"></span>
+                <span
+                  id="user-class-display"
+                  class="text-gray-600 block"
+                ></span>
+              </div>
               <span
                 id="user-balance-display"
-                class="bg-green-100 text-green-800 px-2 py-1 rounded-full font-bold mt-1 sm:mt-0"
+                class="bg-green-100 text-green-800 px-2 py-1 rounded-full font-bold"
               ></span>
             </div>
+
+            <!-- THAY ĐỔI: Nút đăng nhập cho khách (Desktop) -->
+            <button
+              id="login-nav-link"
+              data-view="login-view"
+              class="nav-link hidden text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium pl-4 border-l border-gray-200"
+            >
+              Khách (Đăng Nhập)
+            </button>
+            <!-- KẾT THÚC THAY ĐỔI -->
+          </div>
+
+          <!-- Hamburger Toggle (Mobile) -->
+          <div class="flex sm:hidden">
+            <button
+              id="menu-toggle"
+              class="text-gray-500 hover:text-gray-700 focus:outline-none"
+            >
+              <svg
+                class="h-6 w-6"
+                stroke="currentColor"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
+
+      <!-- Mobile Menu (Slide-in from right) -->
+      <div
+        id="mobile-menu"
+        class="closed fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-[60] p-4"
+      >
+        <!-- Close Button -->
+        <div class="flex justify-end mb-4">
+          <button
+            id="menu-close"
+            class="text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            <svg
+              class="h-6 w-6"
+              stroke="currentColor"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Links (Vertical) -->
+        <div class="flex flex-col space-y-2">
+          <!-- User Info (Mobile) -->
+          <div
+            id="user-info-mobile"
+            class="flex flex-col items-start space-y-1 text-sm p-3 bg-gray-50 rounded-lg mb-4"
+          >
+            <span id="user-name-display-mobile" class="font-medium"></span>
+            <span id="user-class-display-mobile" class="text-gray-600"></span>
+            <span
+              id="user-balance-display-mobile"
+              class="bg-green-100 text-green-800 px-2 py-1 rounded-full font-bold"
+            ></span>
+          </div>
+
+          <!-- THAY ĐỔI: Nút đăng nhập cho khách (Mobile) -->
+          <button
+            id="login-nav-link-mobile"
+            data-view="login-view"
+            class="nav-link hidden text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium text-left bg-gray-50 mb-4"
+          >
+            Khách (Đăng Nhập)
+          </button>
+          <!-- KẾT THÚC THAY ĐỔI -->
+
+          <button
+            data-view="home-view"
+            class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium text-left"
+          >
+            Trang Chủ
+          </button>
+          <button
+            data-view="quick-print-view"
+            class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium text-left"
+          >
+            In Nhanh
+          </button>
+          <button
+            data-view="custom-order-view"
+            class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium text-left"
+          >
+            Tải File In
+          </button>
+          <button
+            data-view="history-view"
+            class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium text-left"
+          >
+            Lịch Sử In
+          </button>
+          <button
+            data-view="admin-view"
+            id="admin-nav-link-mobile"
+            class="nav-link text-red-500 hover:text-red-700 px-3 py-2 rounded-md text-base font-medium hidden text-left"
+          >
+            Quản Trị
+          </button>
+        </div>
+      </div>
+      <!-- Overlay -->
+      <div
+        id="menu-overlay"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-[59]"
+      ></div>
     </nav>
+    <!-- KẾT THÚC: Thanh Điều Hướng (Navbar) -->
 
     <!-- Nội dung chính của ứng dụng -->
     <main id="app" class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
       <!-- View: Đăng Nhập (Chỉ hiện khi chưa có thông tin) -->
-      <div id="login-view" class="view active">
+      <!-- THAY ĐỔI: Sẽ không active mặc định, chỉ active khi được gọi -->
+      <div id="login-view" class="view">
         <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg mt-10">
           <h2 class="text-2xl font-bold text-center mb-6">
             Thông Tin Người Dùng
           </h2>
+          <p class="text-center text-gray-600 mb-6">
+            Vui lòng nhập Họ Tên và Lớp để sử dụng các chức năng in ấn.
+          </p>
           <form id="login-form">
             <div class="mb-4">
               <label
@@ -179,18 +326,34 @@
       </div>
 
       <!-- View: Trang Chủ (Danh sách tài liệu) -->
-      <div id="home-view" class="view">
-        <div class="mb-6">
+      <!-- THAY ĐỔI: Sẽ active mặc định -->
+      <div id="home-view" class="view active">
+        <!-- ĐÃ SỬA: Thêm nút In Nhanh -->
+        <div
+          class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4"
+        >
           <input
             type="text"
             id="search-bar"
             class="w-full p-3 border border-gray-300 rounded-lg"
             placeholder="Tìm kiếm tài liệu..."
           />
-          <div id="folder-breadcrumbs" class="mt-2 text-sm text-gray-600"></div>
+          <div class="flex-shrink-0 w-full sm:w-auto flex gap-2">
+            <button
+              id="quick-print-toggle"
+              class="flex-1 sm:w-auto text-center font-semibold text-white bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg"
+            >
+              Bật In Nhanh
+            </button>
+            <button
+              id="quick-print-cart-btn"
+              class="hidden flex-1 sm:w-auto text-center font-semibold text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg"
+            >
+              Giỏ In (0)
+            </button>
+          </div>
         </div>
-        <!-- FIX 2: Thay đổi grid-cols-4 thành responsive grid -->
-        <!-- 1 cột trên mobile, 2 trên sm, 3 trên md, 4 trên lg. Dùng gap-6 như trong comment cũ -->
+        <div id="folder-breadcrumbs" class="mt-2 text-sm text-gray-600"></div>
         <div
           id="document-grid"
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
@@ -205,13 +368,23 @@
           <h2 class="text-3xl font-bold mb-4" id="order-doc-name">
             Tên Tài Liệu
           </h2>
-          <p class="text-lg text-gray-600 mb-6">
+          <p class="text-lg text-gray-600 mb-2">
             Số trang: <span id="order-doc-pages" class="font-medium">0</span>
           </p>
 
+          <!-- ĐÃ THÊM: Nút Xem Trước File -->
+          <a
+            id="order-preview-btn"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block bg-green-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-600 transition duration-300 mb-6"
+          >
+            Xem Trước File
+          </a>
+
           <form id="order-form">
             <input type="hidden" id="order-doc-id" />
-            <!-- Lớp grid này đã responsive (md:grid-cols-2) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <!-- Số bản in -->
               <div>
@@ -312,10 +485,10 @@
         </div>
       </div>
 
-      <!-- View: In Tùy Chọn (User tự tải file) -->
+      <!-- View: In Tùy Chọn (User tự tải file) - Đổi tên thành Tải File In -->
       <div id="custom-order-view" class="view">
         <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-          <h2 class="text-3xl font-bold mb-6">In Tùy Chọn</h2>
+          <h2 class="text-3xl font-bold mb-6">Tải File Lên & In</h2>
 
           <!-- Khu vực tải file -->
           <div class="mb-6">
@@ -339,9 +512,8 @@
             <!-- File tải lên sẽ hiện ở đây -->
           </div>
 
-          <!-- Form tùy chọn in (giống form ở trên) -->
+          <!-- Form tùy chọn in -->
           <form id="custom-order-form">
-            <!-- Lớp grid này đã responsive (md:grid-cols-2) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <!-- Số bản in -->
               <div>
@@ -443,11 +615,149 @@
         </div>
       </div>
 
+      <!-- THÊM: View In Nhanh -->
+      <div id="quick-print-view" class="view">
+        <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+          <h2 class="text-3xl font-bold mb-6">In Nhanh (Giỏ Hàng)</h2>
+
+          <!-- Danh sách file đã chọn -->
+          <div id="quick-print-list" class="mb-6 space-y-3">
+            <!-- Các file trong giỏ hàng sẽ render ở đây -->
+          </div>
+
+          <!-- Form tùy chọn in -->
+          <form id="quick-print-form">
+            <h3 class="text-xl font-semibold mb-4">Tùy chọn chung</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Số bản in -->
+              <div>
+                <label
+                  for="quick-print-copies"
+                  class="block text-sm font-medium text-gray-700"
+                  >Số bản in (cho mỗi file)</label
+                >
+                <input
+                  type="number"
+                  id="quick-print-copies"
+                  value="1"
+                  min="1"
+                  class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+              <!-- Size giấy -->
+              <div>
+                <label
+                  for="quick-print-paper-size"
+                  class="block text-sm font-medium text-gray-700"
+                  >Size giấy</label
+                >
+                <select
+                  id="quick-print-paper-size"
+                  class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="A4">A4</option>
+                  <option value="A5">A5</option>
+                  <option value="A6">A6</option>
+                </select>
+              </div>
+              <!-- Loại in -->
+              <div>
+                <label
+                  for="quick-print-print-type"
+                  class="block text-sm font-medium text-gray-700"
+                  >Loại in</label
+                >
+                <select
+                  id="quick-print-print-type"
+                  class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="Thường">In thường (400đ/tờ)</option>
+                  <option value="Màu">In màu (3000đ/tờ)</option>
+                </select>
+              </div>
+              <!-- Loại giấy -->
+              <div>
+                <label
+                  for="quick-print-paper-type"
+                  class="block text-sm font-medium text-gray-700"
+                  >Loại giấy</label
+                >
+                <select
+                  id="quick-print-paper-type"
+                  class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="A4">Giấy A4 thường</option>
+                  <option value="Giấy bóng">Giấy bóng (+1000đ/tờ)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Ghi chú -->
+            <div class="mt-6">
+              <label
+                for="quick-print-note"
+                class="block text-sm font-medium text-gray-700"
+                >Ghi chú (tùy chọn)</label
+              >
+              <textarea
+                id="quick-print-note"
+                rows="3"
+                class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Ví dụ: Đóng gáy xoắn cho tất cả..."
+              ></textarea>
+            </div>
+
+            <!-- Tổng tiền -->
+            <div class="mt-8 text-right">
+              <h3 class="text-2xl font-bold">
+                Tổng cộng:
+                <span id="quick-print-total-cost" class="text-blue-600">0</span>
+                VND
+              </h3>
+            </div>
+
+            <!-- Nút đặt hàng -->
+            <div class="mt-6">
+              <button
+                type="submit"
+                class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold text-lg hover:bg-blue-700 transition duration-300"
+              >
+                Xác Nhận Đặt In (Tất cả)
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <!-- View: Lịch Sử Đơn Hàng -->
       <div id="history-view" class="view">
         <h2 class="text-3xl font-bold mb-6">Lịch Sử Đơn Hàng</h2>
 
-        <!-- Tab Lịch Sử (đã có overflow-x-auto, tốt cho mobile) -->
+        <!-- THÊM: Thống kê tổng tiền -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div class="bg-white p-4 rounded-lg shadow">
+            <h3 class="text-sm font-medium text-gray-500">Tổng Tiền Đã Chi</h3>
+            <p
+              id="history-total-spent"
+              class="mt-1 text-2xl font-semibold text-green-600"
+            >
+              0đ
+            </p>
+          </div>
+          <div class="bg-white p-4 rounded-lg shadow">
+            <h3 class="text-sm font-medium text-gray-500">
+              Tổng Tiền Còn Thiếu
+            </h3>
+            <p
+              id="history-total-due"
+              class="mt-1 text-2xl font-semibold text-red-600"
+            >
+              0đ
+            </p>
+          </div>
+        </div>
+
+        <!-- Tab Lịch Sử -->
         <div class="mb-6 border-b border-gray-200">
           <nav
             class="-mb-px flex space-x-8 overflow-x-auto"
@@ -488,7 +798,7 @@
         </div>
         <!-- KẾT THÚC: Tab Lịch Sử -->
 
-        <!-- Bảng Lịch Sử (đã có overflow-x-auto, tốt cho mobile) -->
+        <!-- Bảng Lịch Sử -->
         <div class="bg-white shadow-lg rounded-lg overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -517,7 +827,6 @@
                 >
                   Trạng Thái
                 </th>
-                <!-- THAY ĐỔI CỘT -->
                 <th
                   scope="col"
                   class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -567,6 +876,13 @@
             >
               Đơn Hàng Hiện Tại
             </button>
+            <!-- THÊM: Tab Quản Lý User -->
+            <button
+              class="admin-tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              data-tab="admin-users"
+            >
+              Quản Lý User
+            </button>
             <button
               class="admin-tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               data-tab="admin-reports"
@@ -578,7 +894,6 @@
 
         <!-- Admin Tab Content: Quản Lý Tài Liệu -->
         <div id="admin-docs" class="admin-tab-content">
-          <!-- Lớp grid này đã responsive (lg:grid-cols-2) -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <!-- Form thêm/sửa tài liệu -->
             <div class="bg-white p-6 rounded-lg shadow">
@@ -637,7 +952,7 @@
                     id="admin-upload-widget"
                     class="mt-1 w-full bg-green-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-600"
                   >
-                    Tải File Lên Cloudinary
+                    Tải File 
                   </button>
                   <span
                     id="admin-file-url"
@@ -665,7 +980,6 @@
             </div>
             <!-- Danh sách tài liệu -->
             <div class="bg-white p-6 rounded-lg shadow">
-              <!-- ==== THÊM THANH TÌM KIẾM ADMIN ==== -->
               <div class="mb-4">
                 <input
                   type="text"
@@ -674,7 +988,6 @@
                   placeholder="Tìm kiếm trong danh sách tài liệu..."
                 />
               </div>
-              <!-- ==== KẾT THÚC THÊM ==== -->
 
               <h3 class="text-xl font-semibold mb-4">Danh Sách Tài Liệu</h3>
               <div
@@ -687,7 +1000,7 @@
           </div>
         </div>
 
-        <!-- Admin Tab Content: Đơn Hàng Hiện Tại (đã có overflow-x-auto) -->
+        <!-- Admin Tab Content: Đơn Hàng Hiện Tại -->
         <div id="admin-orders" class="admin-tab-content hidden">
           <div class="bg-white shadow-lg rounded-lg overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
@@ -723,7 +1036,6 @@
                   >
                     Xem
                   </th>
-                  <!-- THÊM CỘT SỬA -->
                   <th
                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
                   >
@@ -751,15 +1063,59 @@
           </div>
         </div>
 
+        <!-- THÊM: Admin Tab Content: Quản Lý User -->
+        <div id="admin-users" class="admin-tab-content hidden">
+          <div class="bg-white shadow-lg rounded-lg overflow-x-auto">
+            <table
+              class="min-w-full divide-y divide-gray-200"
+              id="admin-users-table"
+            >
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Họ Tên
+                  </th>
+                  <th
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Lớp
+                  </th>
+                  <th
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Số Dư
+                  </th>
+                  <th
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Tổng Đã Chi
+                  </th>
+                  <th
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    Tổng Còn Thiếu
+                  </th>
+                </tr>
+              </thead>
+              <tbody
+                id="admin-users-table-body"
+                class="bg-white divide-y divide-gray-200"
+              >
+                <!-- Dữ liệu user sẽ render ở đây -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         <!-- Admin Tab Content: Báo Cáo Doanh Thu -->
         <div id="admin-reports" class="admin-tab-content hidden">
           <div class="bg-white p-6 rounded-lg shadow">
-            <!-- FIX 3: Thêm 'flex-col sm:flex-row' và 'gap-3' -->
             <div
               class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3"
             >
               <h3 class="text-xl font-semibold">Báo Cáo Doanh Thu</h3>
-              <!-- FIX 3: Thêm 'flex-col sm:flex-row', 'space-y-2 sm:space-y-0', 'w-full sm:w-auto' -->
               <div
                 class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto"
               >
@@ -788,7 +1144,6 @@
             <h4 class="text-lg font-semibold mb-2">
               Các Đơn Đã Thanh Toán (trong tháng)
             </h4>
-            <!-- FIX 4: Thêm 'overflow-x-auto' cho bảng -->
             <div
               class="max-h-64 overflow-y-auto overflow-x-auto mb-6 border rounded-lg"
             >
@@ -825,7 +1180,6 @@
             <h4 class="text-lg font-semibold mb-2 text-red-600">
               Các Đơn Chưa Thanh Toán (tất cả)
             </h4>
-            <!-- FIX 4: Thêm 'overflow-x-auto' cho bảng -->
             <div
               class="max-h-64 overflow-y-auto overflow-x-auto border rounded-lg"
             >
@@ -868,7 +1222,6 @@
       id="message-modal"
       class="view fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[10000]"
     >
-      <!-- FIX 5: Thay 'w-96' bằng 'w-full max-w-md mx-4' để responsive -->
       <div
         class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white mx-4 sm:mx-auto"
       >
@@ -894,7 +1247,7 @@
       </div>
     </div>
 
-    <!-- Modal Chi Tiết Đơn Hàng (Đã responsive: max-w-lg) -->
+    <!-- Modal Chi Tiết Đơn Hàng -->
     <div
       id="order-details-modal"
       class="view fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[10000]"
@@ -927,7 +1280,7 @@
       </div>
     </div>
 
-    <!-- THÊM: Modal Chỉnh Sửa Đơn Hàng (Đã responsive: max-w-2xl) -->
+    <!-- Modal Chỉnh Sửa Đơn Hàng -->
     <div
       id="edit-order-modal"
       class="view fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[10000]"
@@ -945,7 +1298,6 @@
           <input type="hidden" id="edit-order-id" />
           <input type="hidden" id="edit-order-original-cost" />
           <input type="hidden" id="edit-order-user-id" />
-          <!-- FIX BUG 2: Thêm 2 trường ẩn để lưu trạng thái thanh toán gốc -->
           <input type="hidden" id="edit-order-original-payment-status" />
           <input type="hidden" id="edit-order-original-amount-paid" />
 
@@ -1138,7 +1490,12 @@
       let currentUserData = null;
       let allDocuments = {}; // Cache lại danh sách tài liệu
       let allOrders = {}; // Cache lại danh sách đơn hàng
+      let allUsersData = {}; // THÊM: Cache lại danh sách user
       let customUploadedFiles = []; // Mảng lưu file user tự upload
+
+      // THÊM: Biến cho In Nhanh
+      let isQuickPrintMode = false;
+      let quickPrintCart = []; // Mảng lưu các docId
 
       // THÊM: Biến cho modal chỉnh sửa
       let filesBeingEdited = []; // Mảng lưu file đang được sửa
@@ -1157,10 +1514,15 @@
       const orderDetailsModalContent = document.getElementById(
         "order-details-modal-content"
       );
-      // THÊM: DOM Elements cho Edit Modal
       const editOrderModal = document.getElementById("edit-order-modal");
       const editOrderForm = document.getElementById("edit-order-form");
       const editFileList = document.getElementById("edit-file-list");
+
+      // THÊM: DOM Elements cho Menu Mobile
+      const menuToggle = document.getElementById("menu-toggle");
+      const menuClose = document.getElementById("menu-close");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const menuOverlay = document.getElementById("menu-overlay");
 
       // --- HÀM TIỆN ÍCH ---
 
@@ -1180,29 +1542,32 @@
           document.getElementById("message-modal").style.display = "none";
         });
 
-      // THÊM: Hàm copy link chia sẻ (Sử dụng execCommand cho tương thích iframe)
-      /**
-       * Sao chép link chia sẻ vào clipboard
-       * @param {string} docId - ID của tài liệu
-       */
+      // THÊM: Hàm kiểm tra đăng nhập trước khi hành động
+      function checkAuthAndShowLogin() {
+        if (currentUserData && currentUserData.isGuest) {
+          showMessage(
+            "Yêu Cầu Đăng Nhập",
+            "Bạn cần đăng nhập để thực hiện chức năng này. Vui lòng cập nhật thông tin Họ Tên và Lớp."
+          );
+          showView("login-view");
+          return false;
+        }
+        return true;
+      }
+
+      // Hàm copy link chia sẻ
       function copyShareLink(docId) {
-        // 1. Lấy URL gốc (không bao gồm hash)
         const url = window.location.href.split("#")[0];
         const shareLink = url + "#doc=" + docId;
-
-        // 2. Tạo một textarea ẩn
         const textarea = document.createElement("textarea");
         textarea.value = shareLink;
-        textarea.style.position = "fixed"; // Đặt ngoài màn hình
+        textarea.style.position = "fixed";
         textarea.style.top = 0;
         textarea.style.left = 0;
         textarea.style.opacity = 0;
         document.body.appendChild(textarea);
-
-        // 3. Chọn và copy
         textarea.focus();
         textarea.select();
-
         try {
           const successful = document.execCommand("copy");
           if (successful) {
@@ -1214,49 +1579,32 @@
           console.error("Lỗi copy clipboard:", err);
           showMessage("Lỗi", "Không thể copy link.");
         }
-
-        // 4. Xóa textarea
         document.body.removeChild(textarea);
       }
 
-      // THÊM: Hàm trợ giúp xử lý link PDF (tải về)
-      /**
-       * Tạo URL để buộc tải xuống file PDF từ Cloudinary
-       * @param {string} url - URL gốc
-       * @param {string} [name=""] - Tên file (để kiểm tra .pdf)
-       * @returns {string} - URL đã sửa đổi (nếu là PDF) hoặc URL gốc
-       */
+      // Hàm trợ giúp xử lý link PDF (tải về)
       function getForcedDownloadLink(url, name = "") {
         if (!url) return "#";
         const fileName = name.toLowerCase();
         const fileUrl = url.toLowerCase();
-        // Kiểm tra cả url và tên file
         const isPdf = fileUrl.endsWith(".pdf") || fileName.endsWith(".pdf");
 
-        // Chỉ áp dụng cho link Cloudinary và là file PDF
         if (isPdf && url.includes("res.cloudinary.com")) {
           const parts = url.split("/upload/");
-          // Đảm bảo URL hợp lệ và chưa có cờ fl_attachment
           if (parts.length === 2 && !parts[1].startsWith("fl_attachment")) {
             return parts[0] + "/upload/fl_attachment/" + parts[1];
           }
         }
-        return url; // Trả về URL gốc nếu không phải PDF hoặc không phải Cloudinary
+        return url;
       }
 
-      /**
-       * Thêm thuộc tính 'download' nếu file là PDF nhưng *không* phải từ Cloudinary
-       * @param {string} url - URL gốc
-       * @param {string} [name=""] - Tên file
-       * @returns {string} - 'download' hoặc ""
-       */
+      // Hàm thêm thuộc tính download
       function getDownloadAttribute(url, name = "") {
         if (!url) return "";
         const fileName = name.toLowerCase();
         const fileUrl = url.toLowerCase();
         const isPdf = fileUrl.endsWith(".pdf") || fileName.endsWith(".pdf");
 
-        // Chỉ thêm 'download' nếu là PDF và KHÔNG phải link Cloudinary (vì Cloudinary đã xử lý bằng URL)
         if (isPdf && !url.includes("res.cloudinary.com")) {
           return "download";
         }
@@ -1271,21 +1619,17 @@
         });
 
       function showOrderDetailsModal(order) {
-        // Tạo HTML chi tiết
         const itemsHtml = order.items
           .map((item) => {
             let url = "#";
             let name = item.docName;
             if (item.cloudinaryUrl) {
-              url = item.cloudinaryUrl; // Custom upload
+              url = item.cloudinaryUrl;
             } else if (item.docId && allDocuments[item.docId]) {
-              url = allDocuments[item.docId].url; // Standard doc
+              url = allDocuments[item.docId].url;
             }
-
-            // THÊM: Áp dụng logic tải PDF
             const fileUrl = getForcedDownloadLink(url, name);
             const downloadAttr = getDownloadAttribute(url, name);
-
             return `
                       <div class="p-3 bg-gray-50 rounded-md border">
                           <p class="font-semibold text-gray-800">Tên file: <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">${item.docName}</a></p>
@@ -1296,7 +1640,6 @@
           })
           .join("");
 
-        // Trạng thái
         let paymentStatusHtml = "";
         if (order.paymentStatus === "paid") {
           paymentStatusHtml = `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Đã thanh toán</span>`;
@@ -1305,7 +1648,6 @@
             order.amountDue || 0
           )}đ)</span>`;
         } else if (order.paymentStatus === "replaced") {
-          // FIX BUG 2
           paymentStatusHtml = `<span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Đã thay thế</span>`;
         }
 
@@ -1343,8 +1685,15 @@
         orderDetailsModal.style.display = "block";
       }
 
+      // --- HÀM ĐIỀU HƯỚNG & MENU ---
+
       // Hàm chuyển đổi view
       function showView(viewId) {
+        // THÊM: Kiểm tra đăng nhập cho các view cần thiết
+        if (["history-view", "admin-view"].includes(viewId)) {
+          if (!checkAuthAndShowLogin()) return;
+        }
+
         allViews.forEach((view) => view.classList.remove("active"));
         document.getElementById(viewId)?.classList.add("active");
 
@@ -1358,12 +1707,14 @@
           }
         });
 
-        // Nếu là admin view, xử lý active tab
+        // Đóng menu mobile khi chuyển view
+        closeMobileMenu();
+
+        // Xử lý logic riêng cho từng view
         if (viewId === "admin-view") {
           const firstTab = document.querySelector(".admin-tab");
           switchAdminTab(firstTab.dataset.tab);
         }
-        // THÊM: Nếu là history view, active tab đầu tiên
         if (viewId === "history-view") {
           // Đặt lại tab 'all' là active khi chuyển view
           document.querySelectorAll(".history-tab").forEach((tab, index) => {
@@ -1375,7 +1726,6 @@
               "hover:border-gray-300"
             );
             if (index === 0) {
-              // Tab "Tất Cả"
               tab.classList.add("border-blue-500", "text-blue-600");
               tab.classList.remove(
                 "border-transparent",
@@ -1386,6 +1736,10 @@
             }
           });
           renderUserHistory(); // Render lại lịch sử
+        }
+        // THÊM: Render view In Nhanh
+        if (viewId === "quick-print-view") {
+          renderQuickPrintView();
         }
       }
 
@@ -1416,6 +1770,25 @@
         });
       }
 
+      // THÊM: Hàm cho Menu Mobile
+      function openMobileMenu() {
+        mobileMenu.classList.remove("closed");
+        mobileMenu.classList.add("open");
+        menuOverlay.classList.remove("hidden");
+      }
+
+      function closeMobileMenu() {
+        mobileMenu.classList.remove("open");
+        mobileMenu.classList.add("closed");
+        menuOverlay.classList.add("hidden");
+      }
+
+      menuToggle.addEventListener("click", openMobileMenu);
+      menuClose.addEventListener("click", closeMobileMenu);
+      menuOverlay.addEventListener("click", closeMobileMenu);
+
+      // --- HÀM ĐỊNH DẠNG ---
+
       // Hàm định dạng tiền tệ
       function formatCurrency(value) {
         return new Intl.NumberFormat("vi-VN").format(value);
@@ -1428,26 +1801,20 @@
 
       // Hàm tính toán chi phí (đã sửa theo logic 2 trang = 1 tờ)
       function calculateCost(pages, copies, printType, paperType) {
-        // Tính số tờ (sheets) based on pages. 1-2 pages = 1 sheet, 3-4 = 2 sheets.
         const sheets = Math.ceil(parseInt(pages) / 2); // Làm tròn lên
-
         const baseCost = printType === "Màu" ? 3000 : 400;
         const glossyBonus = paperType === "Giấy bóng" ? 1000 : 0;
-
-        // Tính tiền dựa trên số TỜ (sheets), không phải số trang (pages)
         const total = (baseCost + glossyBonus) * sheets * parseInt(copies);
         return total;
       }
 
       // --- HÀM XÁC THỰC & KHỞI TẠO ---
 
+      // THAY ĐỔI: Logic khởi tạo
       async function initializeAppLogic() {
-        // --- THÊM LOGIC DEEP LINK (PHẦN 1) ---
-        // Kiểm tra hash khi tải trang và lưu vào session
         if (window.location.hash.startsWith("#doc=")) {
           const initialDocId = window.location.hash.substring(5);
           sessionStorage.setItem("deepLinkDocId", initialDocId);
-          // Xóa hash ngay lập tức để tránh lỗi
           try {
             history.replaceState(
               null,
@@ -1455,14 +1822,12 @@
               window.location.pathname + window.location.search
             );
           } catch (e) {
-            window.location.hash = ""; // Fallback
+            window.location.hash = "";
           }
         }
-        // --- KẾT THÚC THÊM ---
 
         showLoading(true);
         try {
-          // 1. Xác thực Firebase
           const userCredential =
             typeof __initial_auth_token !== "undefined"
               ? await signInWithCustomToken(auth, __initial_auth_token)
@@ -1471,21 +1836,26 @@
           currentUser = userCredential.user;
           currentUserId = currentUser.uid;
 
-          // 2. Kiểm tra thông tin user (Tên, Lớp) trong RTDB
           const userRef = ref(db, `artifacts/${appId}/users/${currentUserId}`);
           const snapshot = await get(userRef);
 
           if (snapshot.exists()) {
-            // 3a. Nếu có, tải dữ liệu và vào app
             currentUserData = snapshot.val();
-            updateUserInfoUI();
-            showView("home-view");
-            setupListeners(); // Bắt đầu lắng nghe dữ liệu
-            // (Phần 2 của deep link sẽ nằm trong setupListeners)
+            currentUserData.isGuest = false; // Người dùng đã đăng ký
           } else {
-            // 3b. Nếu không, hiển thị form đăng nhập
-            showView("login-view");
+            // Người dùng mới, tạo tài khoản Khách
+            currentUserData = {
+              name: "Khách",
+              class: "Vãng lai",
+              balance: 0,
+              isGuest: true, // Đánh dấu là khách
+            };
+            // Không show login-view
           }
+
+          updateUserInfoUI();
+          showView("home-view"); // Luôn bắt đầu ở trang chủ
+          setupListeners();
         } catch (error) {
           console.error("Lỗi khởi tạo:", error);
           showMessage(
@@ -1515,9 +1885,9 @@
             currentUserData = {
               name: name,
               class: lop,
-              balance: 0, // Số dư ban đầu
+              balance: 0,
+              isGuest: false, // ĐÃ THAY ĐỔI: không còn là khách
             };
-            // Lưu thông tin user mới vào RTDB
             const userRef = ref(
               db,
               `artifacts/${appId}/users/${currentUserId}`
@@ -1525,9 +1895,10 @@
             await set(userRef, currentUserData);
 
             updateUserInfoUI();
-            showView("home-view");
-            setupListeners(); // Bắt đầu lắng nghe dữ liệu
-            // (Phần 2 của deep link sẽ nằm trong setupListeners)
+            showView("home-view"); // Quay lại trang chủ
+            // setupListeners() đã được gọi trong initializeAppLogic,
+            // nhưng gọi lại ở đây để đảm bảo listener onValue(userRef) được kích hoạt ngay
+            setupListeners();
           } catch (error) {
             console.error("Lỗi lưu thông tin:", error);
             showMessage("Lỗi", "Không thể lưu thông tin. Vui lòng thử lại.");
@@ -1536,34 +1907,88 @@
           }
         });
 
-      // Cập nhật UI thông tin user
+      // Cập nhật UI thông tin user (cho cả desktop và mobile)
+      // THAY ĐỔI: Logic hiển thị dựa trên isGuest
       function updateUserInfoUI() {
         if (!currentUserData) return;
-        document.getElementById("user-name-display").textContent =
-          currentUserData.name;
-        document.getElementById(
-          "user-class-display"
-        ).textContent = `(${currentUserData.class})`;
-        document.getElementById(
-          "user-balance-display"
-        ).textContent = `${formatCurrency(currentUserData.balance || 0)}đ`;
 
-        // Kiểm tra Admin
-        if (currentUserData.name === "Admin") {
-          document.getElementById("admin-nav-link").classList.remove("hidden");
-        } else {
+        const loginNavLink = document.getElementById("login-nav-link");
+        const loginNavLinkMobile = document.getElementById(
+          "login-nav-link-mobile"
+        );
+        const userInfoDesktop = document.getElementById("user-info-desktop");
+        const userInfoMobile = document.getElementById("user-info-mobile");
+
+        if (currentUserData.isGuest) {
+          // Là khách
+          loginNavLink.classList.remove("hidden");
+          loginNavLinkMobile.classList.remove("hidden");
+          userInfoDesktop.classList.add("hidden");
+          userInfoMobile.classList.add("hidden");
+
+          // Ẩn link admin (khách không thể là admin)
           document.getElementById("admin-nav-link").classList.add("hidden");
+          document
+            .getElementById("admin-nav-link-mobile")
+            .classList.add("hidden");
+        } else {
+          // Đã đăng nhập
+          loginNavLink.classList.add("hidden");
+          loginNavLinkMobile.classList.add("hidden");
+          userInfoDesktop.classList.remove("hidden");
+          userInfoMobile.classList.remove("hidden");
+
+          const name = currentUserData.name;
+          const lop = `(${currentUserData.class})`;
+          const balance = `${formatCurrency(currentUserData.balance || 0)}đ`;
+
+          // Desktop
+          document.getElementById("user-name-display").textContent = name;
+          document.getElementById("user-class-display").textContent = lop;
+          document.getElementById("user-balance-display").textContent = balance;
+
+          // Mobile
+          document.getElementById("user-name-display-mobile").textContent =
+            name;
+          document.getElementById("user-class-display-mobile").textContent =
+            lop;
+          document.getElementById("user-balance-display-mobile").textContent =
+            balance;
+
+          // Admin Links
+          if (currentUserData.name === "Admin") {
+            document
+              .getElementById("admin-nav-link")
+              .classList.remove("hidden");
+            document
+              .getElementById("admin-nav-link-mobile")
+              .classList.remove("hidden");
+          } else {
+            document.getElementById("admin-nav-link").classList.add("hidden");
+            document
+              .getElementById("admin-nav-link-mobile")
+              .classList.add("hidden");
+          }
         }
       }
 
       // --- HÀM LẮNG NGHE DỮ LIỆU (LISTENERS) ---
 
       function setupListeners() {
-        // Lắng nghe thay đổi thông tin user (chủ yếu là số dư)
+        // Lắng nghe thay đổi thông tin user
         const userRef = ref(db, `artifacts/${appId}/users/${currentUserId}`);
         onValue(userRef, (snapshot) => {
           if (snapshot.exists()) {
-            currentUserData = snapshot.val();
+            // Chỉ cập nhật nếu user không còn là khách
+            // hoặc nếu dữ liệu mới tồn tại (nghĩa là họ vừa đăng ký)
+            if (!currentUserData.isGuest || snapshot.exists()) {
+              currentUserData = snapshot.val();
+              currentUserData.isGuest = false;
+              updateUserInfoUI();
+            }
+          } else if (currentUserData && !currentUserData.isGuest) {
+            // Trường hợp hiếm: user đã đăng nhập bị xóa, coi họ như khách
+            currentUserData.isGuest = true;
             updateUserInfoUI();
           }
         });
@@ -1572,55 +1997,63 @@
         const docsRef = ref(db, `artifacts/${appId}/public/documents`);
         onValue(docsRef, (snapshot) => {
           allDocuments = snapshot.val() || {};
-          renderDocumentGrid(); // Sẽ render lại khi đơn hàng thay đổi
-          if (currentUserData.name === "Admin") {
+          renderDocumentGrid();
+          if (currentUserData && currentUserData.name === "Admin") {
             renderAdminDocList();
           }
 
-          // --- THÊM LOGIC DEEP LINK (PHẦN 2) ---
-          // Xử lý deep link (nếu có) sau khi tài liệu đã tải
           const pendingDocId = sessionStorage.getItem("deepLinkDocId");
           if (pendingDocId && allDocuments[pendingDocId]) {
-            console.log("Tài liệu đã tải, xử lý deep link...");
-            // Đảm bảo user đã login (currentUserData tồn tại)
-            if (currentUserData) {
-              openOrderView(pendingDocId);
-              sessionStorage.removeItem("deepLinkDocId"); // Xóa sau khi xử lý
-            } else {
-              console.log("Chờ user login... (Lỗi logic: đáng lẽ đã login)");
-            }
+            // Không cần check currentUserData nữa vì khách cũng xem được
+            openOrderView(pendingDocId);
+            sessionStorage.removeItem("deepLinkDocId");
           }
-          // --- KẾT THÚC THÊM ---
         });
 
-        // Lắng nghe danh sách đơn hàng (cho Admin)
+        // Lắng nghe danh sách đơn hàng
         const ordersRef = ref(db, `artifacts/${appId}/public/orders`);
         onValue(ordersRef, (snapshot) => {
           allOrders = snapshot.val() || {};
-          // THÊM: Render lại trang chủ để cập nhật lượt in
-          renderDocumentGrid();
-          if (currentUserData.name === "Admin") {
-            renderAdminOrdersTable();
-            renderAdminReports(); // Cập nhật báo cáo khi đơn hàng thay đổi
+          renderDocumentGrid(); // Cập nhật lượt in
+
+          // Chỉ render history/admin nếu user đã đăng nhập
+          if (currentUserData && !currentUserData.isGuest) {
+            renderUserHistory(); // Cập nhật lịch sử user
+            if (currentUserData.name === "Admin") {
+              renderAdminOrdersTable();
+              renderAdminReports();
+              renderAdminUsersTable(); // Cập nhật tổng tiền user
+            }
           }
-          renderUserHistory(); // Cập nhật lịch sử user
         });
 
-        // ==== THÊM TÌM KIẾM ADMIN ====
-        // Thêm listener cho thanh tìm kiếm admin
+        // THÊM: Lắng nghe danh sách user (cho Admin)
+        const allUsersRef = ref(db, `artifacts/${appId}/users`);
+        onValue(allUsersRef, (snapshot) => {
+          allUsersData = snapshot.val() || {};
+          if (currentUserData && currentUserData.name === "Admin") {
+            renderAdminUsersTable();
+          }
+        });
+
+        // Listeners cho tìm kiếm
         document
           .getElementById("admin-search-bar")
           .addEventListener("input", renderAdminDocList);
-        // ==== KẾT THÚC THÊM ====
+        document
+          .getElementById("search-bar")
+          .addEventListener("input", renderDocumentGrid);
 
-        // THÊM: Listener cho các tab lịch sử
+        // Listener cho tab lịch sử
         document
           .getElementById("history-tabs-nav")
           .addEventListener("click", (e) => {
             const tabButton = e.target.closest(".history-tab");
             if (!tabButton) return;
 
-            // Cập nhật UI tabs
+            // THÊM: Check auth khi click tab
+            if (!checkAuthAndShowLogin()) return;
+
             document.querySelectorAll(".history-tab").forEach((tab) => {
               tab.classList.remove("border-blue-500", "text-blue-600");
               tab.classList.add(
@@ -1637,29 +2070,33 @@
               "hover:text-gray-700",
               "hover:border-gray-300"
             );
-
-            // Render lại bảng
             renderUserHistory();
           });
 
-        // Thiết lập tháng cho báo cáo (chỉ chạy 1 lần)
+        // THÊM: Listeners cho In Nhanh
+        document
+          .getElementById("quick-print-toggle")
+          .addEventListener("click", toggleQuickPrintMode);
+        document
+          .getElementById("quick-print-cart-btn")
+          .addEventListener("click", () => showView("quick-print-view"));
+
+        // Thiết lập tháng cho báo cáo
         setupReportMonths();
       }
 
-      // --- LOGIC TRANG CHỦ (HOME) ---
+      // --- LOGIC TRANG CHỦ (HOME) & IN NHANH ---
 
+      // ĐÃ SỬA: Hàm render chính
       function renderDocumentGrid() {
         const grid = document.getElementById("document-grid");
         grid.innerHTML = "";
 
-        // THÊM: Tính toán lượt in
         const printCounts = {};
         Object.values(allOrders).forEach((order) => {
-          // Chỉ đếm đơn chưa bị thay thế
           if (order.paymentStatus !== "replaced") {
             order.items.forEach((item) => {
               if (item.docId) {
-                // Chỉ đếm tài liệu chuẩn, không đếm custom upload
                 printCounts[item.docId] = (printCounts[item.docId] || 0) + 1;
               }
             });
@@ -1669,7 +2106,6 @@
         const searchTerm = document
           .getElementById("search-bar")
           .value.toLowerCase();
-
         const filteredDocs = Object.entries(allDocuments).filter(
           ([id, doc]) => {
             const name = doc.name?.toLowerCase() || "";
@@ -1684,7 +2120,6 @@
           return;
         }
 
-        // Sắp xếp theo folderPath rồi đến tên
         filteredDocs.sort(([, a], [, b]) => {
           const folderCompare = (a.folderPath || "").localeCompare(
             b.folderPath || ""
@@ -1695,7 +2130,6 @@
 
         let currentFolder = null;
         filteredDocs.forEach(([id, doc]) => {
-          // Thêm tiêu đề thư mục
           if (doc.folderPath && doc.folderPath !== currentFolder) {
             currentFolder = doc.folderPath;
             const folderHeader = document.createElement("h3");
@@ -1705,20 +2139,17 @@
             grid.appendChild(folderHeader);
           }
 
-          // THÊM: Lấy lượt in
           const printCount = printCounts[id] || 0;
-
-          // THÊM: Lấy link PDF
           const fileUrl = getForcedDownloadLink(doc.url, doc.name);
           const downloadAttr = getDownloadAttribute(doc.url, doc.name);
 
-          // Thẻ tài liệu
           const card = document.createElement("div");
+          // SỬA: Thêm `relative` cho checkbox, xóa 2 nút
           card.className =
-            "bg-white rounded-lg shadow-md overflow-hidden transform transition-all hover:shadow-xl hover:-translate-y-1";
+            "bg-white rounded-lg shadow-md overflow-hidden transform transition-all hover:shadow-xl hover:-translate-y-1 relative";
 
-          // CẬP NHẬT: Thêm nút Share
-          card.innerHTML = `
+          // SỬA: Bỏ 2 nút, chỉ còn P-5
+          let cardHTML = `
                       <div class="p-5">
                           <div class="flex justify-between items-start">
                               <h3 class="text-lg font-semibold text-gray-800 truncate flex-1 mr-2" title="${
@@ -1738,37 +2169,130 @@
                             <span class="text-blue-500">${printCount} lượt in</span>
                           </div>
                       </div>
-                      <div class="bg-gray-50 px-5 py-3 flex items-center justify-between space-x-2">
-                          <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="flex-1 text-center text-sm font-semibold text-green-600 hover:text-green-800 px-3 py-1 bg-green-50 rounded-md border border-green-200 hover:bg-green-100">Xem File</a>
-                          <button class="flex-1 text-center text-sm font-semibold text-blue-600 hover:text-blue-800 px-3 py-1 bg-blue-50 rounded-md border border-blue-200 hover:bg-blue-100 select-print-btn" data-doc-id="${id}">Chọn In</button>
-                      </div>
                   `;
 
-          // CẬP NHẬT: Thêm listener cho nút Share
+          // Xử lý logic cho In Nhanh
+          if (isQuickPrintMode) {
+            card.classList.add("quick-print-card");
+            card.dataset.docId = id;
+            // Thêm checkbox
+            cardHTML += `
+                          <input type="checkbox" class="absolute top-3 right-3 h-6 w-6 text-blue-600 border-gray-300 rounded focus:ring-blue-500 quick-print-checkbox" data-doc-id="${id}" ${
+              quickPrintCart.includes(id) ? "checked" : ""
+            }>
+                      `;
+            // Thêm nút Xem File ở footer
+            cardHTML += `
+                          <div class="bg-gray-50 px-5 py-3">
+                              <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="w-full text-center text-sm font-semibold text-green-600 hover:text-green-800 px-3 py-1 bg-green-50 rounded-md border border-green-200 hover:bg-green-100">Xem File</a>
+                          </div>
+                      `;
+          } else {
+            // Chế độ thường: Thẻ có thể click
+            card.classList.add("select-doc-card", "cursor-pointer");
+            card.dataset.docId = id;
+          }
+
+          card.innerHTML = cardHTML;
+
           card
             .querySelector(".share-doc-btn")
             .addEventListener("click", (e) => {
-              e.stopPropagation(); // Ngăn sự kiện click khác (nếu có)
+              e.stopPropagation();
               copyShareLink(id);
-            });
-
-          // CẬP NHẬT: Listener cho "Chọn In" (dùng class)
-          card
-            .querySelector(".select-print-btn")
-            .addEventListener("click", () => {
-              openOrderView(id);
             });
 
           grid.appendChild(card);
         });
       }
 
+      // THÊM: Listener chung cho Grid (xử lý cả 2 chế độ)
       document
-        .getElementById("search-bar")
-        .addEventListener("input", renderDocumentGrid);
+        .getElementById("document-grid")
+        .addEventListener("click", (e) => {
+          // Ngăn click vào link "Xem File" hoặc "Share" trigger chọn thẻ
+          if (e.target.closest("a") || e.target.closest(".share-doc-btn")) {
+            return;
+          }
+
+          if (isQuickPrintMode) {
+            const card = e.target.closest(".quick-print-card");
+            if (!card) return;
+
+            const docId = card.dataset.docId;
+            const checkbox = card.querySelector(".quick-print-checkbox");
+            if (docId && checkbox) {
+              // Đảo ngược trạng thái
+              const newCheckedState = !checkbox.checked;
+              checkbox.checked = newCheckedState;
+              toggleQuickPrintItem(docId, newCheckedState);
+            }
+          } else {
+            // Chế độ thường
+            const card = e.target.closest(".select-doc-card");
+            if (card) {
+              const docId = card.dataset.docId;
+              if (docId) {
+                openOrderView(docId);
+              }
+            }
+          }
+        });
+
+      // THÊM: Xử lý click vào checkbox (để tránh trigger click vào card)
+      document
+        .getElementById("document-grid")
+        .addEventListener("change", (e) => {
+          if (
+            isQuickPrintMode &&
+            e.target.classList.contains("quick-print-checkbox")
+          ) {
+            const docId = e.target.dataset.docId;
+            toggleQuickPrintItem(docId, e.target.checked);
+          }
+        });
+
+      // THÊM: Hàm bật/tắt In Nhanh
+      function toggleQuickPrintMode() {
+        isQuickPrintMode = !isQuickPrintMode;
+        const toggleBtn = document.getElementById("quick-print-toggle");
+        const cartBtn = document.getElementById("quick-print-cart-btn");
+
+        if (isQuickPrintMode) {
+          toggleBtn.textContent = "Tắt In Nhanh";
+          toggleBtn.classList.remove("bg-purple-600", "hover:bg-purple-700");
+          toggleBtn.classList.add("bg-gray-500", "hover:bg-gray-600");
+          cartBtn.classList.remove("hidden");
+        } else {
+          toggleBtn.textContent = "Bật In Nhanh";
+          toggleBtn.classList.add("bg-purple-600", "hover:bg-purple-700");
+          toggleBtn.classList.remove("bg-gray-500", "hover:bg-gray-600");
+          cartBtn.classList.add("hidden");
+        }
+        updateQuickPrintCartCount();
+        renderDocumentGrid(); // Vẽ lại grid
+      }
+
+      // THÊM: Hàm cập nhật giỏ hàng In Nhanh
+      function toggleQuickPrintItem(docId, isChecked) {
+        const index = quickPrintCart.indexOf(docId);
+        if (isChecked && index === -1) {
+          quickPrintCart.push(docId);
+        } else if (!isChecked && index > -1) {
+          quickPrintCart.splice(index, 1);
+        }
+        updateQuickPrintCartCount();
+      }
+
+      // THÊM: Hàm cập nhật số lượng trên nút giỏ hàng
+      function updateQuickPrintCartCount() {
+        const cartBtn = document.getElementById("quick-print-cart-btn");
+        cartBtn.textContent = `Giỏ In (${quickPrintCart.length})`;
+      }
 
       // --- LOGIC ĐẶT IN (THƯỜNG) ---
 
+      // ĐÃ SỬA: Thêm logic cho nút Xem Trước
       function openOrderView(docId) {
         const doc = allDocuments[docId];
         if (!doc) return;
@@ -1777,17 +2301,22 @@
         document.getElementById("order-doc-name").textContent = doc.name;
         document.getElementById("order-doc-pages").textContent = doc.pages;
 
-        // Reset form
+        // THÊM: Cập nhật nút xem trước
+        const fileUrl = getForcedDownloadLink(doc.url, doc.name);
+        const downloadAttr = getDownloadAttribute(doc.url, doc.name);
+        const previewBtn = document.getElementById("order-preview-btn");
+        previewBtn.href = fileUrl;
+        if (downloadAttr) {
+          previewBtn.setAttribute("download", downloadAttr);
+        } else {
+          previewBtn.removeAttribute("download");
+        }
+
         document.getElementById("order-form").reset();
-
-        // Cập nhật chi phí
         updateOrderCost();
-
-        // Chuyển view
         showView("order-view");
       }
 
-      // Cập nhật chi phí khi thay đổi tùy chọn
       document
         .getElementById("order-form")
         .addEventListener("change", updateOrderCost);
@@ -1800,12 +2329,10 @@
           const copies = parseInt(document.getElementById("copies").value) || 1;
           const printType = document.getElementById("print-type").value;
           const paperType = document.getElementById("paper-type").value;
-
           const total = calculateCost(pages, copies, printType, paperType);
           document.getElementById("total-cost").textContent =
             formatCurrency(total);
         } catch (e) {
-          console.error("Lỗi tính toán:", e);
           document.getElementById("total-cost").textContent = "Lỗi";
         }
       }
@@ -1816,6 +2343,9 @@
         .addEventListener("submit", async (e) => {
           e.preventDefault();
 
+          // THÊM: Kiểm tra đăng nhập
+          if (!checkAuthAndShowLogin()) return;
+
           const docId = document.getElementById("order-doc-id").value;
           const doc = allDocuments[docId];
           const pages = parseInt(doc.pages);
@@ -1824,7 +2354,6 @@
           const printType = document.getElementById("print-type").value;
           const paperType = document.getElementById("paper-type").value;
           const note = document.getElementById("order-note").value.trim();
-
           const totalCost = calculateCost(pages, copies, printType, paperType);
 
           const orderDetails = {
@@ -1844,25 +2373,21 @@
             ],
             totalCost: totalCost,
             timestamp: serverTimestamp(),
-            createdAt: Date.now(), // Thêm JS timestamp để gửi thông báo
-            ghiChu: note, // Thêm ghi chú
+            createdAt: Date.now(),
+            ghiChu: note,
           };
-
           await processOrderPayment(orderDetails, totalCost);
         });
 
-      // --- LOGIC ĐẶT IN (TÙY CHỌN) ---
-
+      // --- LOGIC ĐẶT IN (TÙY CHỌN - Tải File) ---
       const customUploadWidget = cloudinary.createUploadWidget(
         {
           cloudName: CLOUDINARY_CLOUD_NAME,
           uploadPreset: CLOUDINARY_UPLOAD_PRESET,
           multiple: true,
           folder: "user_uploads",
-          // === SỬA LỖI PREVIEW VÀ ĐẾM TRANG TỰ ĐỘNG ===
-          resourceType: "raw", // Đảm bảo file (PDF, DOCX) được upload ở dạng "raw"
-          imageMetadata: true, // Yêu cầu phân tích metadata (bao gồm số trang PDF)
-          // === KẾT THÚC SỬA ===
+          resourceType: "raw",
+          imageMetadata: true,
           sources: ["local", "url"],
           clientAllowedFormats: [
             "pdf",
@@ -1880,26 +2405,14 @@
         },
         (error, result) => {
           if (!error && result && result.event === "success") {
-            // FIX: Thêm log chẩn đoán
-            console.log(
-              "Custom upload success. info.pages:",
-              result.info.pages
-            );
-            if (!result.info.pages) {
-              console.warn(
-                "Cloudinary did not return page count for this file (custom upload)."
-              );
-            }
-
             customUploadedFiles.push({
               name: result.info.original_filename,
               url: result.info.secure_url,
               publicId: result.info.public_id,
-              pages: result.info.pages || 1, // Tự động đọc số trang PDF, file khác (docx) mặc định là 1
+              pages: result.info.pages || 1,
             });
             renderCustomFileList();
-            updateCustomOrderCost(); // Cập nhật chi phí
-            // Bật nút submit
+            updateCustomOrderCost();
             document.querySelector(
               '#custom-order-form button[type="submit"]'
             ).disabled = false;
@@ -1910,7 +2423,10 @@
       document.getElementById("custom-upload-widget").addEventListener(
         "click",
         () => {
-          customUploadedFiles = []; // Reset mỗi lần mở widget
+          // THÊM: Kiểm tra đăng nhập trước khi tải file
+          if (!checkAuthAndShowLogin()) return;
+
+          customUploadedFiles = [];
           customUploadWidget.open();
         },
         false
@@ -1924,16 +2440,12 @@
             '<p class="text-sm text-gray-500 text-center">Chưa có file nào được tải lên.</p>';
           return;
         }
-
         customUploadedFiles.forEach((file, index) => {
-          // THÊM: Áp dụng logic tải PDF
           const fileUrl = getForcedDownloadLink(file.url, file.name);
           const downloadAttr = getDownloadAttribute(file.url, file.name);
-
           const fileEl = document.createElement("div");
           fileEl.className =
             "flex items-center justify-between bg-gray-50 p-3 rounded-md border";
-          // CẬP NHẬT: Thêm link download
           fileEl.innerHTML = `
                       <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-blue-600 truncate flex-1 mr-4">${file.name}</a>
                       <div class="flex items-center space-x-2">
@@ -1945,7 +2457,6 @@
         });
       }
 
-      // Cập nhật số trang khi user nhập
       document
         .getElementById("custom-file-list")
         .addEventListener("change", (e) => {
@@ -1958,7 +2469,6 @@
           }
         });
 
-      // Cập nhật chi phí cho đơn hàng tùy chọn
       document
         .getElementById("custom-order-form")
         .addEventListener("change", updateCustomOrderCost);
@@ -1969,26 +2479,25 @@
             parseInt(document.getElementById("custom-copies").value) || 1;
           const printType = document.getElementById("custom-print-type").value;
           const paperType = document.getElementById("custom-paper-type").value;
-
           let totalPages = 0;
           customUploadedFiles.forEach((file) => {
             totalPages += parseInt(file.pages) || 0;
           });
-
           const total = calculateCost(totalPages, copies, printType, paperType);
           document.getElementById("custom-total-cost").textContent =
             formatCurrency(total);
         } catch (e) {
-          console.error("Lỗi tính toán (tùy chọn):", e);
           document.getElementById("custom-total-cost").textContent = "Lỗi";
         }
       }
 
-      // Submit đơn hàng tùy chọn
       document
         .getElementById("custom-order-form")
         .addEventListener("submit", async (e) => {
           e.preventDefault();
+
+          // THÊM: Kiểm tra đăng nhập
+          if (!checkAuthAndShowLogin()) return;
 
           if (customUploadedFiles.length === 0) {
             showMessage("Lỗi", "Vui lòng tải lên ít nhất một file.");
@@ -2009,7 +2518,6 @@
               cloudinaryUrl: file.url,
               publicId: file.publicId,
               pages: pages,
-              // Các thuộc tính khác sẽ được thêm bên dưới
             };
           });
 
@@ -2022,7 +2530,6 @@
           const note = document
             .getElementById("custom-order-note")
             .value.trim();
-
           const totalCost = calculateCost(
             totalPages,
             copies,
@@ -2030,7 +2537,6 @@
             paperType
           );
 
-          // Gán các tùy chọn chung cho tất cả items
           const finalItems = items.map((item) => ({
             ...item,
             copies: copies,
@@ -2046,13 +2552,12 @@
             items: finalItems,
             totalCost: totalCost,
             timestamp: serverTimestamp(),
-            createdAt: Date.now(), // Thêm JS timestamp để gửi thông báo
-            ghiChu: note, // Thêm ghi chú
+            createdAt: Date.now(),
+            ghiChu: note,
           };
 
           try {
             await processOrderPayment(orderDetails, totalCost);
-            // Reset form sau khi đặt hàng
             customUploadedFiles = [];
             renderCustomFileList();
             document.getElementById("custom-order-form").reset();
@@ -2060,6 +2565,166 @@
             document.querySelector(
               '#custom-order-form button[type="submit"]'
             ).disabled = true;
+          } catch (error) {
+            showMessage("Lỗi Đặt Hàng", error.message);
+          }
+        });
+
+      // --- THÊM: LOGIC VIEW IN NHANH ---
+
+      // Render view In Nhanh
+      function renderQuickPrintView() {
+        const list = document.getElementById("quick-print-list");
+        list.innerHTML = "";
+
+        if (quickPrintCart.length === 0) {
+          list.innerHTML =
+            '<p class="text-gray-500 text-center">Giỏ hàng In Nhanh của bạn đang trống. Vui lòng quay lại Trang Chủ và bật chế độ "In Nhanh" để thêm tài liệu.</p>';
+          document.getElementById("quick-print-form").reset();
+          updateQuickPrintCost();
+          return;
+        }
+
+        quickPrintCart.forEach((docId) => {
+          const doc = allDocuments[docId];
+          if (!doc) return;
+
+          const fileUrl = getForcedDownloadLink(doc.url, doc.name);
+          const downloadAttr = getDownloadAttribute(doc.url, doc.name);
+
+          const itemEl = document.createElement("div");
+          itemEl.className =
+            "flex items-center justify-between bg-gray-50 p-3 rounded-md border";
+          itemEl.innerHTML = `
+                      <div class="flex-1 min-w-0 mr-4">
+                          <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-blue-600 truncate" title="${doc.name}">${doc.name}</a>
+                          <p class="text-xs text-gray-500">${doc.pages} trang</p>
+                      </div>
+                      <button type="button" class="remove-quick-print-item text-red-500 hover:text-red-700 font-bold text-lg" data-doc-id="${docId}">&times;</button>
+                  `;
+          list.appendChild(itemEl);
+        });
+        updateQuickPrintCost();
+      }
+
+      // Xóa item khỏi giỏ In Nhanh
+      document
+        .getElementById("quick-print-list")
+        .addEventListener("click", (e) => {
+          const removeBtn = e.target.closest(".remove-quick-print-item");
+          if (removeBtn) {
+            const docId = removeBtn.dataset.docId;
+            toggleQuickPrintItem(docId, false); // Tắt (false)
+            renderQuickPrintView(); // Vẽ lại list
+            updateQuickPrintCartCount(); // Cập nhật nút
+          }
+        });
+
+      // Cập nhật chi phí In Nhanh
+      document
+        .getElementById("quick-print-form")
+        .addEventListener("change", updateQuickPrintCost);
+
+      function updateQuickPrintCost() {
+        try {
+          const copies =
+            parseInt(document.getElementById("quick-print-copies").value) || 1;
+          const printType = document.getElementById(
+            "quick-print-print-type"
+          ).value;
+          const paperType = document.getElementById(
+            "quick-print-paper-type"
+          ).value;
+
+          let totalPages = 0;
+          quickPrintCart.forEach((docId) => {
+            const doc = allDocuments[docId];
+            if (doc) {
+              totalPages += parseInt(doc.pages) || 0;
+            }
+          });
+
+          const total = calculateCost(totalPages, copies, printType, paperType);
+          document.getElementById("quick-print-total-cost").textContent =
+            formatCurrency(total);
+        } catch (e) {
+          document.getElementById("quick-print-total-cost").textContent = "Lỗi";
+        }
+      }
+
+      // Submit đơn hàng In Nhanh
+      document
+        .getElementById("quick-print-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          // THÊM: Kiểm tra đăng nhập
+          if (!checkAuthAndShowLogin()) return;
+
+          if (quickPrintCart.length === 0) {
+            showMessage("Lỗi", "Giỏ hàng In Nhanh đang trống.");
+            return;
+          }
+
+          const copies = parseInt(
+            document.getElementById("quick-print-copies").value
+          );
+          const paperSize = document.getElementById(
+            "quick-print-paper-size"
+          ).value;
+          const printType = document.getElementById(
+            "quick-print-print-type"
+          ).value;
+          const paperType = document.getElementById(
+            "quick-print-paper-type"
+          ).value;
+          const note = document.getElementById("quick-print-note").value.trim();
+
+          let totalCost = 0;
+          const items = [];
+          quickPrintCart.forEach((docId) => {
+            const doc = allDocuments[docId];
+            if (doc) {
+              const pages = parseInt(doc.pages);
+              totalCost += calculateCost(pages, copies, printType, paperType);
+              items.push({
+                docId: docId,
+                docName: doc.name,
+                pages: pages,
+                copies: copies,
+                paperSize: paperSize,
+                printType: printType,
+                paperType: paperType,
+              });
+            }
+          });
+
+          if (items.length === 0) {
+            showMessage("Lỗi", "Không có tài liệu hợp lệ trong giỏ.");
+            return;
+          }
+
+          const orderDetails = {
+            userId: currentUserId,
+            userName: currentUserData.name,
+            userClass: currentUserData.class,
+            items: items,
+            totalCost: totalCost,
+            timestamp: serverTimestamp(),
+            createdAt: Date.now(),
+            ghiChu: note,
+          };
+
+          try {
+            await processOrderPayment(orderDetails, totalCost);
+            // Reset giỏ hàng
+            quickPrintCart = [];
+            updateQuickPrintCartCount();
+            if (isQuickPrintMode) {
+              toggleQuickPrintMode(); // Tắt chế độ In Nhanh
+            } else {
+              renderDocumentGrid(); // Cập nhật lại grid
+            }
           } catch (error) {
             showMessage("Lỗi Đặt Hàng", error.message);
           }
@@ -2074,30 +2739,26 @@
           const userRef = ref(db, `artifacts/${appId}/users/${currentUserId}`);
 
           if (userBalance >= totalCost) {
-            // Đủ số dư
             const newBalance = userBalance - totalCost;
             await update(userRef, { balance: newBalance });
-            orderDetails.paymentStatus = "paid"; // Trả bằng số dư
-            orderDetails.amountPaid = totalCost; // Đã trả đủ
-            orderDetails.amountDue = 0; // Không còn nợ
-            orderDetails.isPrinted = false; // Trạng thái in ban đầu
-
+            orderDetails.paymentStatus = "paid";
+            orderDetails.amountPaid = totalCost;
+            orderDetails.amountDue = 0;
+            orderDetails.isPrinted = false;
             showMessage(
               "Thành Công",
-              `Đặt hàng thành công! Đơn hàng đã được thanh toán bằng số dư. Số dư còn lại: ${formatCurrency(
+              `Đặt hàng thành công! Đã thanh toán bằng số dư. Số dư còn lại: ${formatCurrency(
                 newBalance
               )}đ`
             );
           } else {
-            // Không đủ số dư
             const amountDue = totalCost - userBalance;
             const amountPaidFromBalance = userBalance;
-            await update(userRef, { balance: 0 }); // Dùng hết số dư
-            orderDetails.paymentStatus = "pending"; // Chờ thanh toán
-            orderDetails.amountPaid = amountPaidFromBalance; // Ghi lại số tiền đã trả
-            orderDetails.amountDue = amountDue; // Ghi lại số tiền còn nợ
-            orderDetails.isPrinted = false; // Trạng thái in ban đầu
-
+            await update(userRef, { balance: 0 });
+            orderDetails.paymentStatus = "pending";
+            orderDetails.amountPaid = amountPaidFromBalance;
+            orderDetails.amountDue = amountDue;
+            orderDetails.isPrinted = false;
             showMessage(
               "Đặt Hàng Thành Công",
               `Đã dùng ${formatCurrency(
@@ -2108,13 +2769,10 @@
             );
           }
 
-          // Lưu đơn hàng vào public/orders
           const newOrderRef = push(ref(db, `artifacts/${appId}/public/orders`));
           await set(newOrderRef, orderDetails);
 
-          // Gửi thông báo Discord (không-chặn)
           sendDiscordNotification(orderDetails, newOrderRef.key);
-
           showView("history-view");
         } catch (error) {
           console.error("Lỗi xử lý thanh toán:", error);
@@ -2126,11 +2784,20 @@
 
       // --- LOGIC LỊCH SỬ USER ---
 
+      // ĐÃ SỬA: Thêm tính toán tổng tiền
       function renderUserHistory() {
+        // THÊM: Nếu là khách, không render gì cả
+        if (currentUserData.isGuest) {
+          document.getElementById("history-table-body").innerHTML =
+            '<tr><td colspan="7" class="text-center p-6 text-gray-500">Vui lòng đăng nhập để xem lịch sử.</td></tr>';
+          document.getElementById("history-total-spent").textContent = "0đ";
+          document.getElementById("history-total-due").textContent = "0đ";
+          return;
+        }
+
         const tbody = document.getElementById("history-table-body");
         tbody.innerHTML = "";
 
-        // THÊM: Lấy tab đang active
         const activeTab =
           document.querySelector(".history-tab.text-blue-600")?.dataset.tab ||
           "all";
@@ -2139,7 +2806,25 @@
           ([id, order]) => order.userId === currentUserId
         );
 
-        // THÊM: Lọc theo tab
+        // THÊM: Tính toán tổng chi và tổng nợ (trước khi lọc theo tab)
+        let totalSpent = 0;
+        let totalDue = 0;
+        userOrders.forEach(([, order]) => {
+          if (order.paymentStatus !== "replaced") {
+            totalSpent += order.amountPaid || 0;
+            if (order.paymentStatus === "pending") {
+              totalDue += order.amountDue || 0;
+            }
+          }
+        });
+        document.getElementById(
+          "history-total-spent"
+        ).textContent = `${formatCurrency(totalSpent)}đ`;
+        document.getElementById(
+          "history-total-due"
+        ).textContent = `${formatCurrency(totalDue)}đ`;
+
+        // Lọc theo tab
         switch (activeTab) {
           case "pending":
             userOrders = userOrders.filter(
@@ -2152,7 +2837,6 @@
             );
             break;
           case "completed":
-            // Đã in VÀ không phải là đơn bị thay thế
             userOrders = userOrders.filter(
               ([, order]) =>
                 order.isPrinted && order.paymentStatus !== "replaced"
@@ -2163,14 +2847,13 @@
               ([, order]) => order.paymentStatus === "replaced"
             );
             break;
-          // 'all' không cần lọc
         }
 
-        userOrders.sort(([, a], [, b]) => b.timestamp - a.timestamp); // Sắp xếp mới nhất trước
+        userOrders.sort(([, a], [, b]) => b.timestamp - a.timestamp);
 
         if (userOrders.length === 0) {
           tbody.innerHTML =
-            '<tr><td colspan="7" class="text-center p-6 text-gray-500">Không có đơn hàng nào trong mục này.</td></tr>'; // Tăng colspan
+            '<tr><td colspan="7" class="text-center p-6 text-gray-500">Không có đơn hàng nào trong mục này.</td></tr>';
           return;
         }
 
@@ -2182,15 +2865,12 @@
               let url = "#";
               let name = item.docName;
               if (item.cloudinaryUrl) {
-                url = item.cloudinaryUrl; // Custom upload
+                url = item.cloudinaryUrl;
               } else if (item.docId && allDocuments[item.docId]) {
-                url = allDocuments[item.docId].url; // Standard doc
+                url = allDocuments[item.docId].url;
               }
-
-              // THÊM: Áp dụng logic tải PDF
               const fileUrl = getForcedDownloadLink(url, name);
               const downloadAttr = getDownloadAttribute(url, name);
-
               return `<div>- <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline" title="Xem/Tải file">${item.docName}</a> (x${item.copies}, ${item.printType}, ${item.paperType})</div>`;
             })
             .join("");
@@ -2199,7 +2879,6 @@
             ? `<div class="mt-2 text-xs text-red-600"><strong>Ghi chú:</strong> ${order.ghiChu}</div>`
             : "";
 
-          // Cập nhật logic trạng thái
           let paymentStatusHtml = "";
           if (order.paymentStatus === "paid") {
             paymentStatusHtml = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Đã thanh toán</span>`;
@@ -2208,21 +2887,15 @@
               order.amountDue || 0
             )}đ)</span>`;
           } else if (order.paymentStatus === "replaced") {
-            // FIX BUG 2
             paymentStatusHtml = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Đã thay thế</span>`;
           }
 
-          let printStatusHtml = "";
-          if (order.isPrinted) {
-            printStatusHtml = `<span class="mt-1 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Đã In</span>`;
-          } else {
-            printStatusHtml = `<span class="mt-1 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Chưa In</span>`;
-          }
+          let printStatusHtml = order.isPrinted
+            ? `<span class="mt-1 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Đã In</span>`
+            : `<span class="mt-1 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Chưa In</span>`;
           const statusHtml = `<div class="flex flex-col items-start">${paymentStatusHtml}${printStatusHtml}</div>`;
 
-          // Logic nút hành động
           let cancelActionHtml = "";
-          // FIX BUG 2: Thêm check `replaced`
           if (order.paymentStatus === "replaced") {
             cancelActionHtml = `<span class="text-xs text-gray-500">Đã thay thế</span>`;
           } else if (order.isPrinted) {
@@ -2230,7 +2903,6 @@
           } else if (order.paymentStatus === "pending") {
             cancelActionHtml = `<button class="text-xs font-medium text-red-600 hover:text-red-800 user-cancel-order" data-order-id="${id}">Hủy Đơn</button>`;
           } else if (order.paymentStatus === "paid") {
-            // FIX BUG 2: Thêm check `isEdited` (mặc dù logic mới đã thay thế, giữ lại để an toàn)
             if (order.isEdited) {
               cancelActionHtml = `<span class="text-xs text-gray-500">Không thể hủy (Đã sửa)</span>`;
             } else {
@@ -2239,9 +2911,6 @@
           }
 
           const viewButtonHtml = `<button class="text-xs font-medium text-blue-600 hover:text-blue-800 view-order-details" data-order-id="${id}">Xem</button>`;
-
-          // THÊM NÚT SỬA
-          // FIX BUG 2: Thêm check `replaced`
           const canEdit =
             !order.isPrinted && order.paymentStatus !== "replaced";
           const editButtonHtml = `<button class="text-xs font-medium text-blue-600 hover:text-blue-800 user-edit-order" data-order-id="${id}" ${
@@ -2265,23 +2934,20 @@
         });
       }
 
-      // THÊM: Event Listeners cho nút Hủy/Hoàn tiền/Sửa của User
       document
         .getElementById("history-table-body")
         .addEventListener("click", async (e) => {
-          // Nút Sửa
           const editBtn = e.target.closest(".user-edit-order:not(:disabled)");
           if (editBtn) {
             const orderId = editBtn.dataset.orderId;
             openEditOrderModal(orderId);
-            return; // Dừng lại để không trigger các nút khác
+            return;
           }
 
-          // Hủy đơn (Pending)
           const cancelBtn = e.target.closest(".user-cancel-order");
           if (cancelBtn) {
             const orderId = cancelBtn.dataset.orderId;
-            const order = allOrders[orderId]; // Lấy đơn hàng
+            const order = allOrders[orderId];
             if (
               order &&
               (order.isPrinted || order.paymentStatus === "replaced")
@@ -2289,7 +2955,6 @@
               showMessage("Lỗi", "Không thể hủy đơn hàng này.");
               return;
             }
-            // THAY ĐỔI: Không dùng confirm
             if (
               await showConfirm(
                 "Xác nhận hủy",
@@ -2298,13 +2963,11 @@
             ) {
               showLoading(true);
               try {
-                // Chỉ cần xóa đơn hàng
                 await remove(
                   ref(db, `artifacts/${appId}/public/orders/${orderId}`)
                 );
                 showMessage("Thành Công", "Đã hủy đơn hàng.");
               } catch (error) {
-                console.error("Lỗi hủy đơn hàng:", error);
                 showMessage("Lỗi", "Không thể hủy đơn hàng.");
               } finally {
                 showLoading(false);
@@ -2312,11 +2975,10 @@
             }
           }
 
-          // Hủy & Hoàn tiền (Paid)
           const refundBtn = e.target.closest(".user-refund-order");
           if (refundBtn) {
             const orderId = refundBtn.dataset.orderId;
-            const order = allOrders[orderId]; // Lấy đơn hàng
+            const order = allOrders[orderId];
             if (
               order &&
               (order.isPrinted ||
@@ -2330,7 +2992,6 @@
               return;
             }
             const costToRefund = parseFloat(refundBtn.dataset.cost);
-            // THAY ĐỔI: Không dùng confirm
             if (
               await showConfirm(
                 "Xác nhận hủy",
@@ -2341,19 +3002,15 @@
             ) {
               showLoading(true);
               try {
-                // 1. Hoàn tiền vào số dư
                 const userBalance = currentUserData.balance || 0;
                 const newBalance = userBalance + costToRefund;
                 await update(
                   ref(db, `artifacts/${appId}/users/${currentUserId}`),
                   { balance: newBalance }
                 );
-
-                // 2. Xóa đơn hàng
                 await remove(
                   ref(db, `artifacts/${appId}/public/orders/${orderId}`)
                 );
-
                 showMessage(
                   "Thành Công",
                   `Đã hủy đơn và hoàn ${formatCurrency(
@@ -2361,7 +3018,6 @@
                   )}đ vào số dư. Số dư mới: ${formatCurrency(newBalance)}đ`
                 );
               } catch (error) {
-                console.error("Lỗi hoàn tiền:", error);
                 showMessage("Lỗi", "Không thể hủy và hoàn tiền.");
               } finally {
                 showLoading(false);
@@ -2372,7 +3028,6 @@
 
       // --- LOGIC ADMIN: QUẢN LÝ TÀI LIỆU ---
 
-      // Cloudinary Widget cho Admin
       let adminFile = {};
       const adminUploadWidget = cloudinary.createUploadWidget(
         {
@@ -2380,10 +3035,8 @@
           uploadPreset: CLOUDINARY_UPLOAD_PRESET,
           multiple: false,
           folder: "admin_documents",
-          // === SỬA LỖI PREVIEW VÀ THÊM ĐẾM TRANG TỰ ĐỘNG ===
-          resourceType: "raw", // Đảm bảo file (PDF, DOCX) được upload ở dạng "raw", không phải "image"
-          imageMetadata: true, // Yêu cầu Cloudinary phân tích metadata (để lấy số trang PDF)
-          // === KẾT THÚC SỬA ===
+          resourceType: "raw",
+          imageMetadata: true,
         },
         (error, result) => {
           if (!error && result && result.event === "success") {
@@ -2398,28 +3051,17 @@
             document.getElementById("admin-doc-public-id").value =
               adminFile.publicId;
 
-            // FIX: Thêm log chẩn đoán
-            console.log("Admin upload success. info.pages:", result.info.pages);
-
-            // === THÊM TỰ ĐỘNG CẬP NHẬT SỐ TRANG ===
             if (result.info.pages) {
-              // Nếu Cloudinary trả về số trang (thường là PDF)
               document.getElementById("admin-doc-pages").value =
                 result.info.pages;
-              // Thêm style để báo là đã tự động
               document
                 .getElementById("admin-doc-pages")
                 .classList.add("bg-green-50", "border-green-300");
             } else {
-              // Nếu không có, reset style
-              console.warn(
-                "Cloudinary did not return page count for this file (admin upload)."
-              );
               document
                 .getElementById("admin-doc-pages")
                 .classList.remove("bg-green-50", "border-green-300");
             }
-            // === KẾT THÚC THÊM ===
           }
         }
       );
@@ -2428,13 +3070,11 @@
         .getElementById("admin-upload-widget")
         .addEventListener("click", () => adminUploadWidget.open(), false);
 
-      // Submit form tài liệu (thêm/sửa)
       document
         .getElementById("admin-doc-form")
         .addEventListener("submit", async (e) => {
           e.preventDefault();
-
-          const docId = document.getElementById("admin-doc-id").value; // ID này dùng để Sửa
+          const docId = document.getElementById("admin-doc-id").value;
           const name = document.getElementById("admin-doc-name").value;
           const folderPath = document
             .getElementById("admin-doc-folder")
@@ -2452,10 +3092,8 @@
 
           const docData = { name, folderPath, pages, url, publicId };
           showLoading(true);
-
           try {
             if (docId) {
-              // Cập nhật (Edit)
               const docRef = ref(
                 db,
                 `artifacts/${appId}/public/documents/${docId}`
@@ -2463,7 +3101,6 @@
               await update(docRef, docData);
               showMessage("Thành Công", "Đã cập nhật tài liệu.");
             } else {
-              // Thêm mới (Add)
               const docsRef = ref(db, `artifacts/${appId}/public/documents`);
               const newDocRef = push(docsRef);
               await set(newDocRef, docData);
@@ -2471,23 +3108,18 @@
             }
             resetAdminDocForm();
           } catch (error) {
-            console.error("Lỗi lưu tài liệu:", error);
             showMessage("Lỗi", "Không thể lưu tài liệu.");
           } finally {
             showLoading(false);
           }
         });
 
-      // Render danh sách tài liệu cho Admin
       function renderAdminDocList() {
         const list = document.getElementById("admin-doc-list");
         list.innerHTML = "";
-
-        // === THÊM LOGIC TÌM KIẾM ===
         const searchTerm = document
           .getElementById("admin-search-bar")
           .value.toLowerCase();
-
         const filteredDocs = Object.entries(allDocuments).filter(
           ([id, doc]) => {
             const name = doc.name?.toLowerCase() || "";
@@ -2495,9 +3127,7 @@
             return name.includes(searchTerm) || folder.includes(searchTerm);
           }
         );
-        // === KẾT THÚC THÊM ===
 
-        // Sửa: Sắp xếp filteredDocs thay vì allDocuments
         const sortedDocs = filteredDocs.sort(([, a], [, b]) => {
           const folderCompare = (a.folderPath || "").localeCompare(
             b.folderPath || ""
@@ -2506,14 +3136,12 @@
           return (a.name || "").localeCompare(b.name || "");
         });
 
-        // Sửa: Check sortedDocs.length
         if (sortedDocs.length === 0) {
           list.innerHTML =
             '<p class="text-sm text-gray-500">Không tìm thấy tài liệu nào.</p>';
           return;
         }
 
-        // Sửa: Lặp qua sortedDocs
         sortedDocs.forEach(([id, doc]) => {
           const item = document.createElement("div");
           item.className =
@@ -2532,19 +3160,14 @@
                           <button class="text-xs text-red-600 hover:text-red-800" data-id="${id}">Xóa</button>
                       </div>
                   `;
-
-          // Nút Sửa
           item
             .querySelector("button.text-blue-600")
             .addEventListener("click", () => {
               prepareEditDoc(id, doc);
             });
-
-          // Nút Xóa
           item
             .querySelector("button.text-red-600")
             .addEventListener("click", async () => {
-              // THAY ĐỔI: Không dùng confirm
               if (
                 await showConfirm(
                   "Xác nhận xóa",
@@ -2554,12 +3177,10 @@
                 deleteDocument(id, doc.publicId);
               }
             });
-
           list.appendChild(item);
         });
       }
 
-      // Chuẩn bị form để Sửa
       function prepareEditDoc(id, doc) {
         document.getElementById("admin-form-title").textContent =
           "Sửa Tài Liệu";
@@ -2574,12 +3195,9 @@
           "admin-file-url"
         ).textContent = `File hiện tại: ${doc.url.split("/").pop()}`;
         document.getElementById("admin-cancel-edit").classList.remove("hidden");
-
-        // Scroll lên đầu trang
         window.scrollTo(0, 0);
       }
 
-      // Nút Hủy Sửa
       document
         .getElementById("admin-cancel-edit")
         .addEventListener("click", resetAdminDocForm);
@@ -2593,28 +3211,22 @@
         document.getElementById("admin-doc-public-id").value = "";
         document.getElementById("admin-file-url").textContent = "";
         document.getElementById("admin-cancel-edit").classList.add("hidden");
-        // THÊM: Reset style ô số trang
         document
           .getElementById("admin-doc-pages")
           .classList.remove("bg-green-50", "border-green-300");
         adminFile = {};
       }
 
-      // Xóa tài liệu
       async function deleteDocument(id, publicId) {
-        // (Lưu ý: Xóa file trên Cloudinary cần có API backend, không thể làm từ client an toàn)
-        // Tạm thời chỉ xóa trên RTDB
         showLoading(true);
         try {
           const docRef = ref(db, `artifacts/${appId}/public/documents/${id}`);
           await remove(docRef);
           showMessage("Thành Công", "Đã xóa tài liệu.");
-          // (Thêm log để admin biết cần xóa file trên Cloudinary thủ công)
           console.warn(
             `Đã xóa doc ${id} trên RTDB. Vui lòng xóa file trên Cloudinary với public_id: ${publicId}`
           );
         } catch (error) {
-          console.error("Lỗi xóa tài liệu:", error);
           showMessage("Lỗi", "Không thể xóa tài liệu.");
         } finally {
           showLoading(false);
@@ -2626,24 +3238,22 @@
       function renderAdminOrdersTable() {
         const tbody = document.getElementById("admin-orders-table-body");
         tbody.innerHTML = "";
-
         const sortedOrders = Object.entries(allOrders).sort(
           ([, a], [, b]) => b.timestamp - a.timestamp
-        ); // Mới nhất trước
+        );
 
         if (sortedOrders.length === 0) {
           tbody.innerHTML =
-            '<tr><td colspan="9" class="text-center p-6 text-gray-500">Không có đơn hàng nào.</td></tr>'; // Tăng colspan
+            '<tr><td colspan="9" class="text-center p-6 text-gray-500">Không có đơn hàng nào.</td></tr>';
           return;
         }
 
         sortedOrders.forEach(([id, order]) => {
           const tr = document.createElement("tr");
-          // FIX BUG 2: Thêm check `replaced`
           if (order.paymentStatus === "replaced") {
             tr.className = "bg-gray-100 opacity-60";
           } else if (order.isPrinted) {
-            tr.className = "bg-blue-50"; // Ưu tiên màu đã in
+            tr.className = "bg-blue-50";
           } else if (order.paymentStatus === "pending") {
             tr.className = "bg-yellow-50";
           } else {
@@ -2655,15 +3265,12 @@
               let url = "#";
               let name = item.docName;
               if (item.cloudinaryUrl) {
-                url = item.cloudinaryUrl; // Custom upload
+                url = item.cloudinaryUrl;
               } else if (item.docId && allDocuments[item.docId]) {
-                url = allDocuments[item.docId].url; // Standard doc
+                url = allDocuments[item.docId].url;
               }
-
-              // THÊM: Áp dụng logic tải PDF
               const fileUrl = getForcedDownloadLink(url, name);
               const downloadAttr = getDownloadAttribute(url, name);
-
               return `<div>- <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline" title="Xem/Tải file">${item.docName}</a> (x${item.copies})</div>`;
             })
             .join("");
@@ -2672,7 +3279,6 @@
             ? `<div class="mt-2 text-sm text-red-600 font-medium"><strong>Ghi chú:</strong> ${order.ghiChu}</div>`
             : "";
 
-          // Cập nhật logic trạng thái
           let paymentStatusHtml = "";
           if (order.paymentStatus === "paid") {
             paymentStatusHtml = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Đã thanh toán</span>`;
@@ -2681,24 +3287,18 @@
               order.amountDue || 0
             )}đ)</span>`;
           } else if (order.paymentStatus === "replaced") {
-            // FIX BUG 2
             paymentStatusHtml = `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Đã thay thế</span>`;
           }
 
-          let printStatusHtml = "";
-          if (order.isPrinted) {
-            printStatusHtml = `<span class="mt-1 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Đã In</span>`;
-          } else {
-            printStatusHtml = `<span class="mt-1 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Chưa In</span>`;
-          }
+          let printStatusHtml = order.isPrinted
+            ? `<span class="mt-1 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Đã In</span>`
+            : `<span class="mt-1 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Chưa In</span>`;
           const statusHtml = `<div class="flex flex-col items-start">${paymentStatusHtml}${printStatusHtml}</div>`;
 
-          // Cập nhật logic hành động
           let paymentActionHtml = "";
           if (order.paymentStatus === "pending") {
             paymentActionHtml = `<button class="text-sm font-medium text-blue-600 hover:text-blue-800 admin-mark-paid" data-id="${id}" data-user-id="${order.userId}">Đánh Dấu Đã Trả</button>`;
           } else if (order.paymentStatus === "replaced") {
-            // FIX BUG 2
             paymentActionHtml = `<span class="text-xs text-gray-500">Đã thay thế</span>`;
           } else {
             paymentActionHtml = `<span class="text-xs text-gray-500">Đã Trả</span>`;
@@ -2706,7 +3306,6 @@
 
           let printActionHtml = "";
           if (order.paymentStatus === "replaced") {
-            // FIX BUG 2
             printActionHtml = `<span class="text-xs text-gray-500">Đã thay thế</span>`;
           } else if (!order.isPrinted) {
             printActionHtml = `<button class="text-sm font-medium text-green-600 hover:text-green-800 admin-mark-printed" data-id="${id}">Đánh Dấu Đã In</button>`;
@@ -2715,9 +3314,6 @@
           }
 
           const viewButtonHtml = `<button class="text-sm font-medium text-gray-600 hover:text-blue-600 view-order-details" data-order-id="${id}">Xem</button>`;
-
-          // THÊM NÚT SỬA CỦA ADMIN
-          // FIX BUG 2: Thêm check `replaced`
           const canEdit =
             !order.isPrinted && order.paymentStatus !== "replaced";
           const editButtonHtml = `<button class="text-sm font-medium text-blue-600 hover:text-blue-800 admin-edit-order" data-order-id="${id}" ${
@@ -2741,38 +3337,31 @@
                       <td class="px-6 py-4 whitespace-nowrap text-sm">${paymentActionHtml}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm">${printActionHtml}</td>
                   `;
-
           tbody.appendChild(tr);
         });
       }
 
-      // Cập nhật Event Listener cho Bảng Admin
       document
         .getElementById("admin-orders-table-body")
         .addEventListener("click", async (e) => {
-          // Nút Sửa (Admin)
-          // FIX BUG 1: Thay `dataset.id` thành `dataset.orderId`
           const editBtn = e.target.closest(".admin-edit-order:not(:disabled)");
           if (editBtn) {
-            const orderId = editBtn.dataset.orderId; // <-- ĐÃ SỬA
+            const orderId = editBtn.dataset.orderId;
             openEditOrderModal(orderId);
-            return; // Dừng
+            return;
           }
 
-          // Nút "Đánh Dấu Đã Trả"
           const paidBtn = e.target.closest(".admin-mark-paid");
           if (paidBtn) {
             const orderId = paidBtn.dataset.id;
             const userId = paidBtn.dataset.userId;
-            const order = allOrders[orderId]; // Lấy chi tiết đơn hàng
-
+            const order = allOrders[orderId];
             if (!order) return;
 
             const totalCost = order.totalCost;
             const amountDue = order.amountDue || 0;
             const amountPaidFromBalance = order.amountPaid || 0;
 
-            // THAY ĐỔI: Không dùng prompt, dùng modal tự tạo
             const amountPaidStr = await showPrompt(
               "Xác Nhận Thanh Toán",
               `Đơn hàng #${orderId.slice(-5)} - ${
@@ -2784,11 +3373,10 @@
               )}đ\nCần thu thêm: ${formatCurrency(
                 amountDue
               )}đ\n\nNhập số tiền khách trả:`,
-              amountDue // Giá trị mặc định
+              amountDue
             );
 
             if (amountPaidStr !== null) {
-              // Check
               const amountCollected = parseFloat(amountPaidStr);
               if (!isNaN(amountCollected) && amountCollected >= amountDue) {
                 markOrderAsPaid(
@@ -2809,11 +3397,9 @@
             }
           }
 
-          // Nút "Đánh Dấu Đã In"
           const printBtn = e.target.closest(".admin-mark-printed");
           if (printBtn) {
             const orderId = printBtn.dataset.id;
-            // THAY ĐỔI: Không dùng confirm
             if (
               await showConfirm(
                 "Xác nhận đã in",
@@ -2822,7 +3408,6 @@
             ) {
               showLoading(true);
               try {
-                // Cập nhật `isPrinted`
                 await update(
                   ref(db, `artifacts/${appId}/public/orders/${orderId}`),
                   { isPrinted: true }
@@ -2832,7 +3417,6 @@
                   "Đã cập nhật trạng thái đơn hàng thành 'Đã In'."
                 );
               } catch (error) {
-                console.error("Lỗi cập nhật trạng thái:", error);
                 showMessage("Lỗi", "Không thể cập nhật trạng thái.");
               } finally {
                 showLoading(false);
@@ -2841,7 +3425,6 @@
           }
         });
 
-      // Hàm đánh dấu đã trả tiền và cộng số dư (CẬP NHẬT)
       async function markOrderAsPaid(
         orderId,
         userId,
@@ -2851,33 +3434,26 @@
       ) {
         showLoading(true);
         try {
-          // Tiền dư = Tiền khách đưa - Tiền khách còn nợ
           const balanceToAdd = amountCollected - amountDue;
-
-          // 1. Lấy số dư hiện tại của user
           const userRef = ref(db, `artifacts/${appId}/users/${userId}`);
           const userSnap = await get(userRef);
           let currentBalance = 0;
           if (userSnap.exists()) {
             currentBalance = userSnap.val().balance || 0;
           }
-
-          // 2. Cập nhật số dư mới
           const newBalance = currentBalance + balanceToAdd;
           await update(userRef, { balance: newBalance });
 
-          // 3. Cập nhật trạng thái đơn hàng
           const orderRef = ref(
             db,
             `artifacts/${appId}/public/orders/${orderId}`
           );
           await update(orderRef, {
-            paymentStatus: "paid", // SỬA: Dùng paymentStatus
-            amountPaid: totalCost, // Tổng đơn hàng đã được trả đủ
-            amountDue: 0, // Không còn nợ
-            amountCollected: amountCollected, // Ghi lại số tiền mặt đã thu
+            paymentStatus: "paid",
+            amountPaid: totalCost,
+            amountDue: 0,
+            amountCollected: amountCollected,
           });
-
           showMessage(
             "Thành Công",
             `Đã xác nhận thanh toán. Cộng ${formatCurrency(
@@ -2885,11 +3461,63 @@
             )}đ vào số dư của user. Số dư mới: ${formatCurrency(newBalance)}đ`
           );
         } catch (error) {
-          console.error("Lỗi xác nhận thanh toán:", error);
           showMessage("Lỗi", "Không thể xác nhận thanh toán.");
         } finally {
           showLoading(false);
         }
+      }
+
+      // --- THÊM: LOGIC ADMIN - QUẢN LÝ USER ---
+      // THAY ĐỔI: Gỡ bỏ điều kiện lọc "Admin"
+      function renderAdminUsersTable() {
+        // Chờ cả 2 nguồn dữ liệu
+        if (!allUsersData || !allOrders) return;
+
+        const tbody = document.getElementById("admin-users-table-body");
+        tbody.innerHTML = "";
+
+        // Sắp xếp user theo tên
+        const sortedUsers = Object.entries(allUsersData).sort(([, a], [, b]) =>
+          (a.name || "").localeCompare(b.name || "")
+        );
+
+        sortedUsers.forEach(([userId, user]) => {
+          // BỎ LỌC ADMIN: if (user.name === "Admin") return;
+
+          let totalSpent = 0;
+          let totalDue = 0;
+
+          // Tính toán từ allOrders
+          Object.values(allOrders).forEach((order) => {
+            if (order.userId === userId && order.paymentStatus !== "replaced") {
+              totalSpent += order.amountPaid || 0;
+              if (order.paymentStatus === "pending") {
+                totalDue += order.amountDue || 0;
+              }
+            }
+          });
+
+          const tr = document.createElement("tr");
+          tr.className = "hover:bg-gray-50";
+          tr.innerHTML = `
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${
+                        user.name
+                      }</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${
+                        user.class
+                      }</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">${formatCurrency(
+                        user.balance || 0
+                      )}đ</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-700">${formatCurrency(
+                        totalSpent
+                      )}đ</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-red-700">${formatCurrency(
+                        totalDue
+                      )}đ</td>
+                  `;
+          tbody.appendChild(tr);
+        });
       }
 
       // --- LOGIC ADMIN: BÁO CÁO ---
@@ -2897,7 +3525,6 @@
       function setupReportMonths() {
         const select = document.getElementById("report-month");
         select.innerHTML = '<option value="all">Toàn bộ thời gian</option>';
-        const months = [];
         const monthNames = [
           "1",
           "2",
@@ -2913,9 +3540,7 @@
           "12",
         ];
         const now = new Date();
-
         for (let i = 0; i < 12; i++) {
-          // Lấy 12 tháng gần nhất
           const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
           const monthYear = `${d.getFullYear()}-${String(
             d.getMonth() + 1
@@ -2925,7 +3550,6 @@
           } / ${d.getFullYear()}`;
           select.innerHTML += `<option value="${monthYear}">${monthName}</option>`;
         }
-
         select.addEventListener("change", renderAdminReports);
       }
 
@@ -2939,35 +3563,30 @@
         const unpaidOrders = [];
 
         Object.values(allOrders).forEach((order) => {
-          // FIX BUG 2: Không tính đơn 'replaced' vào báo cáo
           if (order.paymentStatus === "replaced") {
             return;
           }
-
           const orderDate = new Date(order.timestamp);
           const orderMonthYear = `${orderDate.getFullYear()}-${String(
             orderDate.getMonth() + 1
           ).padStart(2, "0")}`;
 
-          // Đã thanh toán hoặc đã in đều tính là doanh thu
           if (
             order.paymentStatus === "paid" ||
-            order.paymentStatus === "printed" // 'printed' là trạng thái cũ, giữ lại để tương thích
+            order.paymentStatus === "printed"
           ) {
             if (selectedMonth === "all" || orderMonthYear === selectedMonth) {
-              totalRevenue += order.totalCost; // Chỉ tính doanh thu dựa trên giá trị đơn hàng
+              totalRevenue += order.totalCost;
               paidOrders.push(order);
             }
           } else if (order.paymentStatus === "pending") {
-            unpaidOrders.push(order); // Hiển thị tất cả đơn chưa trả
+            unpaidOrders.push(order);
           }
         });
 
-        // Cập nhật tổng doanh thu
         document.getElementById("report-total-revenue").textContent =
           formatCurrency(totalRevenue);
 
-        // Render bảng Đã Thanh Toán
         const paidBody = document.getElementById("report-paid-body");
         paidBody.innerHTML = "";
         paidOrders
@@ -2988,7 +3607,6 @@
             paidBody.appendChild(tr);
           });
 
-        // Render bảng Chưa Thanh Toán
         const unpaidBody = document.getElementById("report-unpaid-body");
         unpaidBody.innerHTML = "";
         unpaidOrders
@@ -3010,15 +3628,11 @@
           });
       }
 
-      // Xuất Excel
       document
         .getElementById("export-excel-btn")
         .addEventListener("click", () => {
           try {
-            // Tạo workbook
             const wb = XLSX.utils.book_new();
-
-            // Sheet 1: Đơn đã thanh toán (lọc theo tháng)
             const paidData = Array.from(
               document.getElementById("report-paid-body").rows
             ).map((row) => ({
@@ -3031,18 +3645,16 @@
             const wsPaid = XLSX.utils.json_to_sheet(paidData);
             XLSX.utils.book_append_sheet(wb, wsPaid, "DaThanhToan");
 
-            // Sheet 2: Đơn chưa thanh toán (tất cả)
             const unpaidData = Array.from(
               document.getElementById("report-unpaid-body").rows
             ).map((row) => ({
               Ngày: row.cells[0].textContent,
               "Người Đặt": row.cells[1].textContent,
-              "Số Tiền (VND)": row.cells[2].textContent, // Giữ text (Còn nợ...)
+              "Số Tiền (VND)": row.cells[2].textContent,
             }));
             const wsUnpaid = XLSX.utils.json_to_sheet(unpaidData);
             XLSX.utils.book_append_sheet(wb, wsUnpaid, "ChuaThanhToan");
 
-            // Sheet 3: Tổng quan
             const revenue = document.getElementById(
               "report-total-revenue"
             ).textContent;
@@ -3055,7 +3667,6 @@
             ]);
             XLSX.utils.book_append_sheet(wb, wsSummary, "TongQuan");
 
-            // Tải file
             const fileName = `BaoCao_InAn_Thang_${
               document.getElementById("report-month").value
             }.xlsx`;
@@ -3071,24 +3682,18 @@
           console.log("Chưa cấu hình Discord Webhook, bỏ qua thông báo.");
           return;
         }
-
         try {
-          // Tạo chi tiết đơn hàng
           const itemsDescription = order.items
             .map((item) => {
               let url = "#";
               if (item.cloudinaryUrl) url = item.cloudinaryUrl;
               else if (item.docId && allDocuments[item.docId])
                 url = allDocuments[item.docId].url;
-
-              // THÊM: Dùng link đã sửa
               const fileUrl = getForcedDownloadLink(url, item.docName);
-
               return `- [${item.docName}](${fileUrl}) (x${item.copies}, ${item.pages} trang, ${item.printType}, ${item.paperType})`;
             })
             .join("\n");
 
-          // Cập nhật trạng thái
           let statusText = "";
           if (order.paymentStatus === "paid") {
             statusText = "✅ Đã thanh toán (Bằng số dư)";
@@ -3098,18 +3703,13 @@
             )}đ)`;
           }
 
-          // Tạo các trường (fields)
           const fields = [
             {
               name: "Người Đặt",
               value: `${order.userName} (${order.userClass})`,
               inline: true,
             },
-            {
-              name: "Trạng Thái",
-              value: statusText,
-              inline: true,
-            },
+            { name: "Trạng Thái", value: statusText, inline: true },
             {
               name: "Tổng Tiền",
               value: `${formatCurrency(order.totalCost)}đ`,
@@ -3121,8 +3721,6 @@
               inline: false,
             },
           ];
-
-          // Thêm trường Ghi Chú nếu có
           if (order.ghiChu) {
             fields.push({
               name: "📝 Ghi Chú Đặc Biệt",
@@ -3142,7 +3740,7 @@
             embeds: [
               {
                 title: "Thông Tin Đơn Hàng",
-                color: order.paymentStatus === "paid" ? 3066993 : 15105570, // Xanh lá / Vàng
+                color: order.paymentStatus === "paid" ? 3066993 : 15105570,
                 fields: fields,
                 timestamp: new Date(
                   order.createdAt || Date.now()
@@ -3153,33 +3751,26 @@
 
           await fetch(DISCORD_WEBHOOK_URL, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
           });
         } catch (error) {
           console.error("Lỗi gửi thông báo Discord:", error);
-          // Không cần showMessage cho user, chỉ log lỗi
         }
       }
 
-      // --- THÊM: LOGIC MODAL CHỈNH SỬA ---
+      // --- LOGIC MODAL CHỈNH SỬA ---
 
-      // Khởi tạo Cloudinary Widget cho Edit
       function initializeEditWidget() {
-        if (editUploadWidget) return; // Chỉ khởi tạo 1 lần
-
+        if (editUploadWidget) return;
         editUploadWidget = cloudinary.createUploadWidget(
           {
             cloudName: CLOUDINARY_CLOUD_NAME,
             uploadPreset: CLOUDINARY_UPLOAD_PRESET,
             multiple: true,
-            folder: "user_uploads_edited", // Thư mục khác cho file edit
-            // === SỬA LỖI PREVIEW VÀ THÊM ĐẾM TRANG ===
+            folder: "user_uploads_edited",
             resourceType: "raw",
             imageMetadata: true,
-            // === KẾT THÚC SỬA ===
             sources: ["local", "url"],
             clientAllowedFormats: [
               "pdf",
@@ -3197,44 +3788,28 @@
           },
           (error, result) => {
             if (!error && result && result.event === "success") {
-              // FIX: Thêm log chẩn đoán
-              console.log(
-                "Edit modal upload success. info.pages:",
-                result.info.pages
-              );
-              if (!result.info.pages) {
-                console.warn(
-                  "Cloudinary did not return page count for this file (edit upload)."
-                );
-              }
-
-              // Thêm file mới vào mảng đang sửa
               filesBeingEdited.push({
-                docName: result.info.original_filename, // Dùng docName
-                cloudinaryUrl: result.info.secure_url, // Dùng cloudinaryUrl
+                docName: result.info.original_filename,
+                cloudinaryUrl: result.info.secure_url,
                 publicId: result.info.public_id,
-                pages: result.info.pages || 1, // Tự động lấy số trang
+                pages: result.info.pages || 1,
               });
               renderEditFileList();
               updateEditOrderCost();
             }
           }
         );
-
         document
           .getElementById("edit-upload-widget")
           .addEventListener("click", () => editUploadWidget.open(), false);
       }
 
-      // Mở modal
       function openEditOrderModal(orderId) {
         const order = allOrders[orderId];
         if (!order) {
           showMessage("Lỗi", "Không tìm thấy đơn hàng.");
           return;
         }
-
-        // FIX BUG 2: Không cho sửa đơn đã in hoặc đã thay thế
         if (order.isPrinted || order.paymentStatus === "replaced") {
           showMessage(
             "Thông báo",
@@ -3242,25 +3817,16 @@
           );
           return;
         }
-
-        initializeEditWidget(); // Đảm bảo widget đã được khởi tạo
-
-        // Lưu thông tin gốc
+        initializeEditWidget();
         document.getElementById("edit-order-id").value = orderId;
         document.getElementById("edit-order-user-id").value = order.userId;
-        // FIX BUG 2: Lưu lại trạng thái thanh toán gốc
         document.getElementById("edit-order-original-cost").value =
           order.totalCost;
         document.getElementById("edit-order-original-payment-status").value =
           order.paymentStatus;
         document.getElementById("edit-order-original-amount-paid").value =
           order.amountPaid || 0;
-
-        // Sao chép sâu (deep copy) mảng items để chỉnh sửa
         filesBeingEdited = JSON.parse(JSON.stringify(order.items));
-
-        // Điền thông tin form
-        // Giả định tất cả item trong 1 đơn hàng có chung tùy chọn (theo logic hiện tại)
         const firstItem = order.items[0] || {};
         document.getElementById("edit-copies").value = firstItem.copies || 1;
         document.getElementById("edit-paper-size").value =
@@ -3270,28 +3836,21 @@
         document.getElementById("edit-paper-type").value =
           firstItem.paperType || "A4";
         document.getElementById("edit-order-note").value = order.ghiChu || "";
-
-        // Render danh sách file
         renderEditFileList();
-        // Cập nhật tổng tiền
         updateEditOrderCost();
-
-        // Hiển thị modal
         editOrderModal.style.display = "block";
       }
 
-      // Đóng modal
       function closeEditOrderModal() {
         editOrderModal.style.display = "none";
         editOrderForm.reset();
-        filesBeingEdited = []; // Xóa mảng
+        filesBeingEdited = [];
       }
 
       document
         .getElementById("edit-order-modal-close")
         .addEventListener("click", closeEditOrderModal);
 
-      // Render danh sách file trong modal edit
       function renderEditFileList() {
         editFileList.innerHTML = "";
         if (filesBeingEdited.length === 0) {
@@ -3299,23 +3858,17 @@
             '<p class="text-sm text-gray-500 text-center">Đơn hàng rỗng. Vui lòng thêm file.</p>';
           return;
         }
-
         filesBeingEdited.forEach((file, index) => {
           const fileEl = document.createElement("div");
           fileEl.className =
             "flex items-center justify-between bg-gray-50 p-3 rounded-md border";
-
-          // Lấy URL (ưu tiên custom, sau đó đến doc)
           let url = file.cloudinaryUrl || "#";
           let name = file.docName;
           if (!file.cloudinaryUrl && file.docId && allDocuments[file.docId]) {
             url = allDocuments[file.docId].url;
           }
-
-          // THÊM: Áp dụng logic tải PDF
           const fileUrl = getForcedDownloadLink(url, name);
           const downloadAttr = getDownloadAttribute(url, name);
-
           fileEl.innerHTML = `
                       <div class="flex-1 min-w-0 mr-4">
                           <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-blue-600 truncate" title="${file.docName}">${file.docName}</a>
@@ -3330,33 +3883,27 @@
         });
       }
 
-      // Cập nhật chi phí cho modal edit
       function updateEditOrderCost() {
         try {
           const copies =
             parseInt(document.getElementById("edit-copies").value) || 1;
           const printType = document.getElementById("edit-print-type").value;
           const paperType = document.getElementById("edit-paper-type").value;
-
           let totalPages = 0;
           filesBeingEdited.forEach((file) => {
             totalPages += parseInt(file.pages) || 0;
           });
-
           const total = calculateCost(totalPages, copies, printType, paperType);
           document.getElementById("edit-total-cost").textContent =
             formatCurrency(total);
-          return total; // Trả về tổng tiền mới
+          return total;
         } catch (e) {
-          console.error("Lỗi tính toán (edit):", e);
           document.getElementById("edit-total-cost").textContent = "Lỗi";
           return 0;
         }
       }
 
-      // Bắt sự kiện thay đổi trong form edit
       editOrderForm.addEventListener("change", (e) => {
-        // Thay đổi tùy chọn in
         if (
           ["edit-copies", "edit-print-type", "edit-paper-type"].includes(
             e.target.id
@@ -3364,7 +3911,6 @@
         ) {
           updateEditOrderCost();
         }
-        // Thay đổi số trang
         if (e.target.classList.contains("edit-file-pages")) {
           const index = parseInt(e.target.dataset.index);
           let pages = parseInt(e.target.value) || 1;
@@ -3375,30 +3921,23 @@
         }
       });
 
-      // Bắt sự kiện click (để xóa file)
       editFileList.addEventListener("click", (e) => {
         if (e.target.classList.contains("remove-edit-file")) {
           const index = parseInt(e.target.dataset.index);
-          filesBeingEdited.splice(index, 1); // Xóa khỏi mảng
-          renderEditFileList(); // Vẽ lại danh sách
-          updateEditOrderCost(); // Cập nhật lại tiền
+          filesBeingEdited.splice(index, 1);
+          renderEditFileList();
+          updateEditOrderCost();
         }
       });
 
-      // Xử lý LƯU THAY ĐỔI
-      // FIX BUG 2: Viết lại toàn bộ hàm này
       editOrderForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-
         if (filesBeingEdited.length === 0) {
           showMessage("Lỗi", "Đơn hàng phải có ít nhất 1 file.");
           return;
         }
-
         showLoading(true);
-
         try {
-          // Lấy thông tin đơn hàng GỐC
           const originalOrderId =
             document.getElementById("edit-order-id").value;
           const userId = document.getElementById("edit-order-user-id").value;
@@ -3409,7 +3948,6 @@
             document.getElementById("edit-order-original-amount-paid").value
           );
           const originalOrder = allOrders[originalOrderId];
-
           if (!originalOrder) {
             throw new Error("Không tìm thấy đơn hàng gốc!");
           }
@@ -3421,16 +3959,12 @@
               "Không thể chỉnh sửa đơn hàng đã in hoặc đã bị thay thế."
             );
           }
-
-          // Lấy thông tin đơn hàng MỚI
           const copies = parseInt(document.getElementById("edit-copies").value);
           const paperSize = document.getElementById("edit-paper-size").value;
           const printType = document.getElementById("edit-print-type").value;
           const paperType = document.getElementById("edit-paper-type").value;
           const note = document.getElementById("edit-order-note").value.trim();
           const newTotalCost = updateEditOrderCost();
-
-          // Cập nhật mảng items với tùy chọn mới
           const finalItems = filesBeingEdited.map((item) => ({
             docId: item.docId || null,
             docName: item.docName,
@@ -3442,20 +3976,14 @@
             printType: printType,
             paperType: paperType,
           }));
-
-          // 1. Lấy số dư user
           const userRef = ref(db, `artifacts/${appId}/users/${userId}`);
           const userSnap = await get(userRef);
           let userBalance = userSnap.val()?.balance || 0;
-
-          // 2. Hoàn tiền cho đơn hàng GỐC (chỉ khi đã thanh toán)
           let refundAmount = 0;
           if (originalPaymentStatus === "paid") {
             refundAmount = originalAmountPaid;
             userBalance += refundAmount;
           }
-
-          // 3. Chuẩn bị chi tiết đơn hàng MỚI
           const newOrderDetails = {
             userId: userId,
             userName: originalOrder.userName,
@@ -3467,46 +3995,33 @@
             ghiChu: note,
             isPrinted: false,
           };
-
-          // 4. Xử lý thanh toán cho đơn hàng MỚI
           if (userBalance >= newTotalCost) {
-            // Đủ số dư
             userBalance -= newTotalCost;
             newOrderDetails.paymentStatus = "paid";
             newOrderDetails.amountPaid = newTotalCost;
             newOrderDetails.amountDue = 0;
           } else {
-            // Không đủ số dư
             newOrderDetails.paymentStatus = "pending";
             newOrderDetails.amountPaid = userBalance;
             newOrderDetails.amountDue = newTotalCost - userBalance;
-            userBalance = 0; // Dùng hết số dư
+            userBalance = 0;
           }
-
-          // 5. Cập nhật Database (gần như giao dịch)
-          // 5.1. Cập nhật số dư user
           await update(userRef, { balance: userBalance });
-
-          // 5.2. Tạo đơn hàng MỚI
           const newOrderRef = push(ref(db, `artifacts/${appId}/public/orders`));
           await set(newOrderRef, newOrderDetails);
-
-          // 5.3. Cập nhật đơn hàng GỐC (đánh dấu là đã thay thế)
           const oldOrderRef = ref(
             db,
             `artifacts/${appId}/public/orders/${originalOrderId}`
           );
           await update(oldOrderRef, {
             paymentStatus: "replaced",
-            isPrinted: true, // Coi như đã "xử lý" xong đơn này
+            isPrinted: true,
             ghiChu: `Đã được thay thế bởi đơn hàng mới (ID: ${
               newOrderRef.key
             }). Ghi chú gốc: ${originalOrder.ghiChu || ""}`.trim(),
           });
-
-          // Gửi thông báo Discord
+          _;
           sendDiscordNotification(newOrderDetails, newOrderRef.key, true);
-
           showMessage(
             "Thành Công",
             "Đã cập nhật đơn hàng. Một đơn hàng mới đã được tạo và đơn hàng cũ đã bị hủy."
@@ -3522,26 +4037,22 @@
 
       // --- EVENT LISTENERS CHUNG ---
 
-      // Điều hướng chính
       document.addEventListener("click", (e) => {
         const navLink = e.target.closest(".nav-link");
         if (navLink && navLink.dataset.view) {
           e.preventDefault();
-          if (currentUserData) {
-            showView(navLink.dataset.view);
-          } else {
-            console.log(
-              "Người dùng chưa đăng nhập, không cho phép chuyển view."
-            );
-          }
+          // Xóa kiểm tra currentUserData ở đây
+          // vì showView sẽ tự kiểm tra quyền truy cập
+          showView(navLink.dataset.view);
         }
       });
 
-      // Điều hướng tab Admin VÀ xem chi tiết
       appElement.addEventListener("click", (e) => {
-        // Ưu tiên xem chi tiết
         const viewBtn = e.target.closest(".view-order-details");
         if (viewBtn) {
+          // THÊM: Check auth trước khi xem chi tiết
+          if (!checkAuthAndShowLogin()) return;
+
           const orderId = viewBtn.dataset.orderId;
           const order = allOrders[orderId];
           if (order) {
@@ -3549,8 +4060,6 @@
           }
           return;
         }
-
-        // Sau đó mới tới tab admin
         const adminTab = e.target.closest(".admin-tab");
         if (adminTab && adminTab.dataset.tab) {
           e.preventDefault();
@@ -3559,21 +4068,13 @@
       });
 
       // --- HÀM THAY THẾ CHO ALERT/CONFIRM/PROMPT ---
-      // (Do alert/confirm/prompt không hoạt động tốt trong iframe)
 
-      /**
-       * Hiển thị một modal xác nhận (thay thế cho confirm())
-       * @param {string} title - Tiêu đề modal
-       * @param {string} content - Nội dung câu hỏi
-       * @returns {Promise<boolean>} - Trả về true nếu user nhấn "Đồng ý", false nếu nhấn "Hủy"
-       */
       function showConfirm(title, content) {
         return new Promise((resolve) => {
           const modal = document.createElement("div");
           modal.className =
-            "view fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[10001]"; // z-index cao hơn
+            "view fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[10001]";
           modal.style.display = "block";
-
           modal.innerHTML = `
                       <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white mx-4 sm:mx-auto">
                           <div class="mt-3 text-center">
@@ -3588,14 +4089,11 @@
                           </div>
                       </div>
                   `;
-
           document.body.appendChild(modal);
-
           const close = (value) => {
             document.body.removeChild(modal);
             resolve(value);
           };
-
           modal
             .querySelector("#confirm-btn-ok")
             .addEventListener("click", () => close(true));
@@ -3605,20 +4103,12 @@
         });
       }
 
-      /**
-       * Hiển thị một modal nhập liệu (thay thế cho prompt())
-       * @param {string} title - Tiêu đề modal
-       * @param {string} content - Nội dung câu hỏi
-       * @param {string|number} [defaultValue=""] - Giá trị mặc định
-       * @returns {Promise<string|null>} - Trả về chuỗi user nhập, hoặc null nếu nhấn "Hủy"
-       */
       function showPrompt(title, content, defaultValue = "") {
         return new Promise((resolve) => {
           const modal = document.createElement("div");
           modal.className =
             "view fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[10001]";
           modal.style.display = "block";
-
           modal.innerHTML = `
                       <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white mx-4 sm:mx-auto">
                           <form id="prompt-form" class="mt-3">
@@ -3634,17 +4124,14 @@
                           </form>
                       </div>
                   `;
-
           document.body.appendChild(modal);
           const input = modal.querySelector("#prompt-input");
           input.focus();
           input.select();
-
           const close = (value) => {
             document.body.removeChild(modal);
             resolve(value);
           };
-
           modal
             .querySelector("#prompt-form")
             .addEventListener("submit", (e) => {
