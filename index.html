@@ -80,13 +80,17 @@
     <!-- Thanh Điều Hướng (Navbar) -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <div class="flex">
-            <div class="flex-shrink-0 flex items-center">
-              <span class="text-2xl font-bold text-blue-600">PrintService</span>
-            </div>
+        <!-- FIX 1: Thêm 'flex-col sm:flex-row' để stack trên mobile và 'py-3' -->
+        <div
+          class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 sm:py-0 sm:h-16"
+        >
+          <div class="flex-shrink-0 flex items-center justify-center">
+            <span class="text-2xl font-bold text-blue-600">PrintService</span>
           </div>
-          <div class="flex items-center space-x-4">
+          <!-- FIX 1: Thêm 'flex-col sm:flex-row' và 'gap-y-2', 'mt-3 sm:mt-0' -->
+          <div
+            class="flex flex-col sm:flex-row sm:items-center gap-y-2 sm:gap-y-0 sm:space-x-4 mt-3 sm:mt-0"
+          >
             <button
               data-view="home-view"
               class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
@@ -112,12 +116,16 @@
             >
               Quản Trị
             </button>
-            <div id="user-info" class="flex items-center space-x-2 text-sm">
+            <!-- Căn giữa trên mobile -->
+            <div
+              id="user-info"
+              class="flex flex-col sm:flex-row items-center sm:space-x-2 text-sm"
+            >
               <span id="user-name-display" class="font-medium"></span>
               <span id="user-class-display" class_name="text-gray-600"></span>
               <span
                 id="user-balance-display"
-                class="bg-green-100 text-green-800 px-2 py-1 rounded-full font-bold"
+                class="bg-green-100 text-green-800 px-2 py-1 rounded-full font-bold mt-1 sm:mt-0"
               ></span>
             </div>
           </div>
@@ -181,9 +189,12 @@
           />
           <div id="folder-breadcrumbs" class="mt-2 text-sm text-gray-600"></div>
         </div>
-        <!-- THAY ĐỔI: Đổi grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 -->
-        <!-- THÀNH: grid-cols-4 gap-4 để luôn 4 cột -->
-        <div id="document-grid" class="grid grid-cols-4 gap-4">
+        <!-- FIX 2: Thay đổi grid-cols-4 thành responsive grid -->
+        <!-- 1 cột trên mobile, 2 trên sm, 3 trên md, 4 trên lg. Dùng gap-6 như trong comment cũ -->
+        <div
+          id="document-grid"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+        >
           <!-- Các thẻ tài liệu sẽ được render vào đây -->
         </div>
       </div>
@@ -200,6 +211,7 @@
 
           <form id="order-form">
             <input type="hidden" id="order-doc-id" />
+            <!-- Lớp grid này đã responsive (md:grid-cols-2) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <!-- Số bản in -->
               <div>
@@ -329,6 +341,7 @@
 
           <!-- Form tùy chọn in (giống form ở trên) -->
           <form id="custom-order-form">
+            <!-- Lớp grid này đã responsive (md:grid-cols-2) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <!-- Số bản in -->
               <div>
@@ -434,7 +447,7 @@
       <div id="history-view" class="view">
         <h2 class="text-3xl font-bold mb-6">Lịch Sử Đơn Hàng</h2>
 
-        <!-- THÊM: Tab Lịch Sử -->
+        <!-- Tab Lịch Sử (đã có overflow-x-auto, tốt cho mobile) -->
         <div class="mb-6 border-b border-gray-200">
           <nav
             class="-mb-px flex space-x-8 overflow-x-auto"
@@ -475,6 +488,7 @@
         </div>
         <!-- KẾT THÚC: Tab Lịch Sử -->
 
+        <!-- Bảng Lịch Sử (đã có overflow-x-auto, tốt cho mobile) -->
         <div class="bg-white shadow-lg rounded-lg overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -538,9 +552,9 @@
       <div id="admin-view" class="view">
         <h2 class="text-3xl font-bold mb-6">Trang Quản Trị</h2>
 
-        <!-- Admin Tabs -->
+        <!-- Admin Tabs (đã có space-x-8, nên thêm overflow-x-auto) -->
         <div class="mb-6 border-b border-gray-200">
-          <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+          <nav class="-mb-px flex space-x-8 overflow-x-auto" aria-label="Tabs">
             <button
               class="admin-tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-blue-500 text-blue-600"
               data-tab="admin-docs"
@@ -564,7 +578,7 @@
 
         <!-- Admin Tab Content: Quản Lý Tài Liệu -->
         <div id="admin-docs" class="admin-tab-content">
-          <!-- THAY ĐỔI: Đổi gap-6 thành gap-4 -->
+          <!-- Lớp grid này đã responsive (lg:grid-cols-2) -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <!-- Form thêm/sửa tài liệu -->
             <div class="bg-white p-6 rounded-lg shadow">
@@ -673,7 +687,7 @@
           </div>
         </div>
 
-        <!-- Admin Tab Content: Đơn Hàng Hiện Tại -->
+        <!-- Admin Tab Content: Đơn Hàng Hiện Tại (đã có overflow-x-auto) -->
         <div id="admin-orders" class="admin-tab-content hidden">
           <div class="bg-white shadow-lg rounded-lg overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
@@ -740,9 +754,15 @@
         <!-- Admin Tab Content: Báo Cáo Doanh Thu -->
         <div id="admin-reports" class="admin-tab-content hidden">
           <div class="bg-white p-6 rounded-lg shadow">
-            <div class="flex justify-between items-center mb-4">
+            <!-- FIX 3: Thêm 'flex-col sm:flex-row' và 'gap-3' -->
+            <div
+              class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3"
+            >
               <h3 class="text-xl font-semibold">Báo Cáo Doanh Thu</h3>
-              <div class="flex space-x-2">
+              <!-- FIX 3: Thêm 'flex-col sm:flex-row', 'space-y-2 sm:space-y-0', 'w-full sm:w-auto' -->
+              <div
+                class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto"
+              >
                 <select
                   id="report-month"
                   class="border border-gray-300 rounded-md"
@@ -768,7 +788,10 @@
             <h4 class="text-lg font-semibold mb-2">
               Các Đơn Đã Thanh Toán (trong tháng)
             </h4>
-            <div class="max-h-64 overflow-y-auto mb-6 border rounded-lg">
+            <!-- FIX 4: Thêm 'overflow-x-auto' cho bảng -->
+            <div
+              class="max-h-64 overflow-y-auto overflow-x-auto mb-6 border rounded-lg"
+            >
               <table
                 class="min-w-full divide-y divide-gray-200"
                 id="report-paid-table"
@@ -802,7 +825,10 @@
             <h4 class="text-lg font-semibold mb-2 text-red-600">
               Các Đơn Chưa Thanh Toán (tất cả)
             </h4>
-            <div class="max-h-64 overflow-y-auto border rounded-lg">
+            <!-- FIX 4: Thêm 'overflow-x-auto' cho bảng -->
+            <div
+              class="max-h-64 overflow-y-auto overflow-x-auto border rounded-lg"
+            >
               <table
                 class="min-w-full divide-y divide-gray-200"
                 id="report-unpaid-table"
@@ -842,8 +868,9 @@
       id="message-modal"
       class="view fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[10000]"
     >
+      <!-- FIX 5: Thay 'w-96' bằng 'w-full max-w-md mx-4' để responsive -->
       <div
-        class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white"
+        class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white mx-4 sm:mx-auto"
       >
         <div class="mt-3 text-center">
           <h3
@@ -867,13 +894,13 @@
       </div>
     </div>
 
-    <!-- Modal Chi Tiết Đơn Hàng -->
+    <!-- Modal Chi Tiết Đơn Hàng (Đã responsive: max-w-lg) -->
     <div
       id="order-details-modal"
       class="view fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[10000]"
     >
       <div
-        class="relative top-10 mx-auto p-6 border w-full max-w-lg shadow-lg rounded-md bg-white"
+        class="relative top-10 mx-auto p-6 border w-full max-w-lg shadow-lg rounded-md bg-white m-4"
       >
         <div class="mt-3">
           <h3
@@ -900,13 +927,13 @@
       </div>
     </div>
 
-    <!-- THÊM: Modal Chỉnh Sửa Đơn Hàng -->
+    <!-- THÊM: Modal Chỉnh Sửa Đơn Hàng (Đã responsive: max-w-2xl) -->
     <div
       id="edit-order-modal"
       class="view fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[10000]"
     >
       <div
-        class="relative top-10 mx-auto p-6 border w-full max-w-2xl shadow-lg rounded-md bg-white"
+        class="relative top-10 mx-auto p-6 border w-full max-w-2xl shadow-lg rounded-md bg-white m-4"
       >
         <h3 class="text-2xl leading-6 font-bold text-gray-900 mb-6">
           Chỉnh Sửa Đơn Hàng
@@ -3548,7 +3575,7 @@
           modal.style.display = "block";
 
           modal.innerHTML = `
-                      <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                      <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white mx-4 sm:mx-auto">
                           <div class="mt-3 text-center">
                               <h3 class="text-lg leading-6 font-medium text-gray-900">${title}</h3>
                               <div class="mt-2 px-7 py-3">
@@ -3593,7 +3620,7 @@
           modal.style.display = "block";
 
           modal.innerHTML = `
-                      <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                      <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white mx-4 sm:mx-auto">
                           <form id="prompt-form" class="mt-3">
                               <h3 class="text-lg leading-6 font-medium text-gray-900 text-center">${title}</h3>
                               <div class="mt-2 px-7 py-3">
