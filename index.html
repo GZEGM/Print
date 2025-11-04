@@ -1,3 +1,29 @@
+<!-- Sửa lỗi quản lý user không hiện thông tin của các user đi.
+
+
+
+Làm cho khi admin bấm vào xem link đơn của khách hàng thì trình duyệt sẽ tải file đó trực tiếp về máy mà không cần phải xem file. Nếu có nhiều file thì sẽ có thể tải về hết tất cả các file đó.
+
+
+
+Phần in tùy chọn khách có thể gửi nhiều file cùng lúc.
+
+
+
+Fix lỗi bộ đếm trang không đếm file pdf.
+
+
+
+Thêm nút quay lại khi user bấm vào tài liệu từ trang chủ hoặc bất kì chỗ nào.
+
+
+
+Thêm tính năng đặt hàng lại trong phần xem của lịch sử in.
+
+
+
+Fix lỗi khi lưu thay đổi chỉnh sửa thì popup không tự tắt, hệ thống báo _ is not defined nhưng vẫn cập nhật được =)  -->
+
 <!DOCTYPE html>
 <html lang="vi">
   <head>
@@ -428,7 +454,7 @@
                   id="print-type"
                   class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="Thường">In thường (400đ/tờ)</option>
+                  <option value="Thường">In thường (350đ/tờ)</option>
                   <option value="Màu">In màu (3000đ/tờ)</option>
                 </select>
               </div>
@@ -557,7 +583,7 @@
                   id="custom-print-type"
                   class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="Thường">In thường (400đ/tờ)</option>
+                  <option value="Thường">In thường (350đ/tờ)</option>
                   <option value="Màu">In màu (3000đ/tờ)</option>
                 </select>
               </div>
@@ -671,7 +697,7 @@
                   id="quick-print-print-type"
                   class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="Thường">In thường (400đ/tờ)</option>
+                  <option value="Thường">In thường (350đ/tờ)</option>
                   <option value="Màu">In màu (3000đ/tờ)</option>
                 </select>
               </div>
@@ -1363,7 +1389,7 @@
                 id="edit-print-type"
                 class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
-                <option value="Thường">In thường (400đ/tờ)</option>
+                <option value="Thường">In thường (350đ/tờ)</option>
                 <option value="Màu">In màu (3000đ/tờ)</option>
               </select>
             </div>
@@ -1802,7 +1828,7 @@
       // Hàm tính toán chi phí (đã sửa theo logic 2 trang = 1 tờ)
       function calculateCost(pages, copies, printType, paperType) {
         const sheets = Math.ceil(parseInt(pages) / 2); // Làm tròn lên
-        const baseCost = printType === "Màu" ? 3000 : 400;
+        const baseCost = printType === "Màu" ? 3000 : 350;
         const glossyBonus = paperType === "Giấy bóng" ? 1000 : 0;
         const total = (baseCost + glossyBonus) * sheets * parseInt(copies);
         return total;
@@ -4020,7 +4046,7 @@
               newOrderRef.key
             }). Ghi chú gốc: ${originalOrder.ghiChu || ""}`.trim(),
           });
-          _;
+        
           sendDiscordNotification(newOrderDetails, newOrderRef.key, true);
           showMessage(
             "Thành Công",
@@ -4149,3 +4175,5 @@
     </script>
   </body>
 </html>
+
+
