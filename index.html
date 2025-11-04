@@ -409,6 +409,12 @@ Fix lỗi khi lưu thay đổi chỉnh sửa thì popup không tự tắt, hệ 
             Xem Trước File
           </a>
 
+          <p class="text-lg text-gray-600 mb-2">
+            Tổng số tờ hiện tại: <span id="total-order-doc-pages" class="font-medium">0</span>
+            <div class="text-lg text-gray-600 mb-2">Giá hiện tại: <span id="order-doc-price" class="font-medium">0</span>/tờ</div>
+            
+          </p>
+
           <form id="order-form">
             <input type="hidden" id="order-doc-id" />
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -533,6 +539,14 @@ Fix lỗi khi lưu thay đổi chỉnh sửa thì popup không tự tắt, hệ 
             </p>
           </div>
 
+          <div class="mb-6">
+            <h3 class="text-lg font-medium text-gray-700">
+              Tổng số tờ hiện tại: <span id="custom-total-doc-sheets" class="font-medium">0</span>
+            </h3>
+            <h3 class="text-lg font-medium text-gray-700">
+              Giá hiện tại: <span id="custom-doc-price" class="font-medium">0</span>/tờ
+          </div>
+
           <!-- Danh sách file đã tải -->
           <div id="custom-file-list" class="mb-6 space-y-3">
             <!-- File tải lên sẽ hiện ở đây -->
@@ -651,10 +665,21 @@ Fix lỗi khi lưu thay đổi chỉnh sửa thì popup không tự tắt, hệ 
             <!-- Các file trong giỏ hàng sẽ render ở đây -->
           </div>
 
+          <div class="mb-6"> 
+            <h3 class="text-lg font-medium text-gray-700">
+              Tổng số tờ hiện tại: <span id="quick-print-total-sheets" class="font-medium">0</span>
+            </h3>
+            <h3 class="text-lg font-medium text-gray-700">
+              Giá hiện tại: <span id="quick-print-price-per-sheet" class="font-medium">0</span>/tờ
+          </div>
+
+          
+
           <!-- Form tùy chọn in -->
           <form id="quick-print-form">
             <h3 class="text-xl font-semibold mb-4">Tùy chọn chung</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
               <!-- Số bản in -->
               <div>
                 <label
@@ -1825,6 +1850,28 @@ Fix lỗi khi lưu thay đổi chỉnh sửa thì popup không tự tắt, hệ 
         return new Date(timestamp).toLocaleString("vi-VN");
       }
 
+      function calculateDiscountedPrice(totalSheets) {
+        const initialCost = 350;
+        const discountStep = 45; // Bước tăng số tờ để giảm giá (50 tờ)
+        const discountAmount = 15; // Số tiền giảm cho mỗi bước (15đ)
+        const minCost = 300; // Mức giá tối thiểu
+
+        // Tính số lần giảm giá (mỗi lần 50 tờ)
+        // Ví dụ: 100 tờ -> Math.floor(100 / 50) = 2 lần giảm.
+        // 50 tờ -> Math.floor(50 / 50) = 1 lần giảm. 
+        // Lưu ý: Việc giảm giá bắt đầu từ TỜ ĐẦU TIÊN (0 tờ).
+        // Ví dụ: 50 tờ được tính là 1 lần giảm. 100 tờ là 2 lần giảm.
+        const numberOfDiscounts = Math.floor(totalSheets / discountStep);
+
+        // Tính giá đã giảm
+        let calculatedCost = initialCost - (numberOfDiscounts * discountAmount);
+
+        // Áp dụng mức giá tối thiểu
+        const baseCost = Math.max(calculatedCost, minCost); 
+
+        return baseCost;
+      }
+
       // Hàm tính toán chi phí (đã sửa theo logic 2 trang = 1 tờ)
      function calculateCost(pages, copies, printType, paperType) {
     const pagesInt = parseInt(pages);
@@ -1841,23 +1888,7 @@ Fix lỗi khi lưu thay đổi chỉnh sửa thì popup không tự tắt, hệ 
     if (printType === "Màu") {
         baseCost = 3000; // Giá in màu cố định
     } else { // In đen trắng
-        const initialCost = 350;
-        const discountStep = 50; // Bước tăng số tờ để giảm giá (50 tờ)
-        const discountAmount = 10; // Số tiền giảm cho mỗi bước (10đ)
-        const minCost = 300; // Mức giá tối thiểu
-
-        // Tính số lần giảm giá (mỗi lần 50 tờ)
-        // Ví dụ: 100 tờ -> Math.floor(100 / 50) = 2 lần giảm.
-        // 50 tờ -> Math.floor(50 / 50) = 1 lần giảm. 
-        // Lưu ý: Việc giảm giá bắt đầu từ TỜ ĐẦU TIÊN (0 tờ).
-        // Ví dụ: 50 tờ được tính là 1 lần giảm. 100 tờ là 2 lần giảm.
-        const numberOfDiscounts = Math.floor(totalSheets / discountStep);
-
-        // Tính giá đã giảm
-        let calculatedCost = initialCost - (numberOfDiscounts * discountAmount);
-
-        // Áp dụng mức giá tối thiểu
-        baseCost = Math.max(calculatedCost, minCost); 
+       baseCost = calculateDiscountedPrice(totalSheets);
     }
 
     // 3. Tính phí giấy bóng (glossyBonus)
@@ -2361,6 +2392,7 @@ Fix lỗi khi lưu thay đổi chỉnh sửa thì popup không tự tắt, hệ 
         document.getElementById("order-doc-id").value = docId;
         document.getElementById("order-doc-name").textContent = doc.name;
         document.getElementById("order-doc-pages").textContent = doc.pages;
+        
 
         // THÊM: Cập nhật nút xem trước
         const fileUrl = getForcedDownloadLink(doc.url, doc.name);
@@ -2391,8 +2423,17 @@ Fix lỗi khi lưu thay đổi chỉnh sửa thì popup không tự tắt, hệ 
           const printType = document.getElementById("print-type").value;
           const paperType = document.getElementById("paper-type").value;
           const total = calculateCost(pages, copies, printType, paperType);
+          const sheetsPerPage = Math.ceil(pages / 2); // Số tờ giấy cần cho 1 bản in
+          const totalSheets = sheetsPerPage * copies;
           document.getElementById("total-cost").textContent =
             formatCurrency(total);
+          document.getElementById("total-order-doc-pages").textContent =
+            totalSheets;
+
+          const baseCost = calculateDiscountedPrice(totalSheets);
+          document.getElementById("order-doc-price").textContent =
+            formatCurrency(baseCost);
+
         } catch (e) {
           document.getElementById("total-cost").textContent = "Lỗi";
         }
@@ -2547,6 +2588,17 @@ Fix lỗi khi lưu thay đổi chỉnh sửa thì popup không tự tắt, hệ 
           const total = calculateCost(totalPages, copies, printType, paperType);
           document.getElementById("custom-total-cost").textContent =
             formatCurrency(total);
+
+          const sheetsPerPage = Math.ceil(totalPages / 2); // Số tờ giấy cần cho 1 bản in
+          const totalSheets = sheetsPerPage * copies;
+
+          document.getElementById("custom-total-doc-sheets").textContent =
+            totalSheets;
+
+          document.getElementById("custom-doc-price").textContent =
+            formatCurrency(calculateDiscountedPrice(totalSheets));
+
+
         } catch (e) {
           document.getElementById("custom-total-cost").textContent = "Lỗi";
         }
@@ -2708,6 +2760,17 @@ Fix lỗi khi lưu thay đổi chỉnh sửa thì popup không tự tắt, hệ 
           const total = calculateCost(totalPages, copies, printType, paperType);
           document.getElementById("quick-print-total-cost").textContent =
             formatCurrency(total);
+
+          const sheetsPerPage = Math.ceil(totalPages / 2);
+          const totalSheets = sheetsPerPage * copies;
+          document.getElementById("quick-print-total-sheets").textContent =
+            totalSheets;
+
+          document.getElementById("quick-print-price-per-sheet").textContent =
+            formatCurrency(calculateDiscountedPrice(totalSheets));
+          
+          
+          
         } catch (e) {
           document.getElementById("quick-print-total-cost").textContent = "Lỗi";
         }
