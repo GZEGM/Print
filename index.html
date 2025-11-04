@@ -1826,14 +1826,49 @@ Fix lỗi khi lưu thay đổi chỉnh sửa thì popup không tự tắt, hệ 
       }
 
       // Hàm tính toán chi phí (đã sửa theo logic 2 trang = 1 tờ)
-      function calculateCost(pages, copies, printType, paperType) {
-        const sheets = Math.ceil(parseInt(pages) / 2); // Làm tròn lên
-        const baseCost = printType === "Màu" ? 3000 : 350;
-        const glossyBonus = paperType === "Giấy bóng" ? 1000 : 0;
-        const total = (baseCost + glossyBonus) * sheets * parseInt(copies);
-        return total;
-      }
+     function calculateCost(pages, copies, printType, paperType) {
+    const pagesInt = parseInt(pages);
+    const copiesInt = parseInt(copies);
 
+    // 1. Tính toán TỔNG SỐ TỜ giấy (totalSheets)
+    // Tổng số tờ giấy cần in cho TẤT CẢ các bản sao.
+    const sheetsPerPage = Math.ceil(pagesInt / 2); // Số tờ giấy cần cho 1 bản in
+    const totalSheets = sheetsPerPage * copiesInt; 
+
+    // 2. Xác định giá cơ bản (baseCost) và áp dụng quy tắc giảm giá
+    let baseCost = 0;
+    
+    if (printType === "Màu") {
+        baseCost = 3000; // Giá in màu cố định
+    } else { // In đen trắng
+        const initialCost = 350;
+        const discountStep = 50; // Bước tăng số tờ để giảm giá (50 tờ)
+        const discountAmount = 10; // Số tiền giảm cho mỗi bước (10đ)
+        const minCost = 300; // Mức giá tối thiểu
+
+        // Tính số lần giảm giá (mỗi lần 50 tờ)
+        // Ví dụ: 100 tờ -> Math.floor(100 / 50) = 2 lần giảm.
+        // 50 tờ -> Math.floor(50 / 50) = 1 lần giảm. 
+        // Lưu ý: Việc giảm giá bắt đầu từ TỜ ĐẦU TIÊN (0 tờ).
+        // Ví dụ: 50 tờ được tính là 1 lần giảm. 100 tờ là 2 lần giảm.
+        const numberOfDiscounts = Math.floor(totalSheets / discountStep);
+
+        // Tính giá đã giảm
+        let calculatedCost = initialCost - (numberOfDiscounts * discountAmount);
+
+        // Áp dụng mức giá tối thiểu
+        baseCost = Math.max(calculatedCost, minCost); 
+    }
+
+    // 3. Tính phí giấy bóng (glossyBonus)
+    const glossyBonus = paperType === "Giấy bóng" ? 1000 : 0;
+
+    // 4. Tính tổng chi phí
+    // Tổng = (Giá cơ bản + Phí giấy bóng) * Tổng số tờ giấy
+    const total = (baseCost + glossyBonus) * totalSheets;
+
+    return total;
+}
       // --- HÀM XÁC THỰC & KHỞI TẠO ---
 
       // THAY ĐỔI: Logic khởi tạo
