@@ -2182,9 +2182,9 @@
         const allUsersRef = ref(db, `artifacts/${appId}/users`);
         onValue(allUsersRef, (snapshot) => {
           allUsersData = snapshot.val() || {};
-         
+          if (currentUserData && currentUserData.name === "Admin") {
             renderAdminUsersTable();
-          
+          }
         });
 
         // Listeners cho tìm kiếm
