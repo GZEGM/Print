@@ -87,7 +87,7 @@
       <div class="spinner"></div>
     </div>
 
-    <!-- Thanh Điều Hướng (Navbar) - ĐÃ SỬA -->
+    <!-- Thanh Điều Hướng (Navbar) -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
@@ -148,7 +148,7 @@
               ></span>
             </div>
 
-            <!-- THAY ĐỔI: Nút đăng nhập cho khách (Desktop) -->
+            <!-- Nút đăng nhập cho khách (Desktop) -->
             <button
               id="login-nav-link"
               data-view="login-view"
@@ -156,7 +156,6 @@
             >
               Khách (Đăng Nhập)
             </button>
-            <!-- KẾT THÚC THAY ĐỔI -->
           </div>
 
           <!-- Hamburger Toggle (Mobile) -->
@@ -225,7 +224,7 @@
             ></span>
           </div>
 
-          <!-- THAY ĐỔI: Nút đăng nhập cho khách (Mobile) -->
+          <!-- Nút đăng nhập cho khách (Mobile) -->
           <button
             id="login-nav-link-mobile"
             data-view="login-view"
@@ -233,7 +232,6 @@
           >
             Khách (Đăng Nhập)
           </button>
-          <!-- KẾT THÚC THAY ĐỔI -->
 
           <button
             data-view="home-view"
@@ -274,12 +272,10 @@
         class="hidden fixed inset-0 bg-black bg-opacity-50 z-[59]"
       ></div>
     </nav>
-    <!-- KẾT THÚC: Thanh Điều Hướng (Navbar) -->
 
     <!-- Nội dung chính của ứng dụng -->
     <main id="app" class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
       <!-- View: Đăng Nhập (Chỉ hiện khi chưa có thông tin) -->
-      <!-- THAY ĐỔI: Sẽ không active mặc định, chỉ active khi được gọi -->
       <div id="login-view" class="view">
         <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg mt-10">
           <h2 class="text-2xl font-bold text-center mb-6">
@@ -326,9 +322,7 @@
       </div>
 
       <!-- View: Trang Chủ (Danh sách tài liệu) -->
-      <!-- THAY ĐỔI: Sẽ active mặc định -->
       <div id="home-view" class="view active">
-        <!-- ĐÃ SỬA: Thêm nút In Nhanh -->
         <div
           class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4"
         >
@@ -365,13 +359,13 @@
       <!-- View: Đặt In (Cho tài liệu có sẵn) -->
       <div id="order-view" class="view">
         <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-          
-          <!-- FIX: Thêm nút Quay Lại -->
-          <button data-view="home-view" class="nav-link text-sm text-blue-600 hover:text-blue-800 mb-4 font-medium">
+          <button
+            data-view="home-view"
+            class="nav-link text-sm text-blue-600 hover:text-blue-800 mb-4 font-medium"
+          >
             &larr; Quay Lại Danh Sách
           </button>
-          <!-- KẾT THÚC FIX -->
-          
+
           <h2 class="text-3xl font-bold mb-4" id="order-doc-name">
             Tên Tài Liệu
           </h2>
@@ -379,7 +373,6 @@
             Số trang: <span id="order-doc-pages" class="font-medium">0</span>
           </p>
 
-          <!-- ĐÃ THÊM: Nút Xem Trước File -->
           <a
             id="order-preview-btn"
             href="#"
@@ -391,10 +384,13 @@
           </a>
 
           <p class="text-lg text-gray-600 mb-2">
-            Tổng số tờ hiện tại: <span id="total-order-doc-pages" class="font-medium">0</span>
-            <div class="text-lg text-gray-600 mb-2">Giá hiện tại: <span id="order-doc-price" class="font-medium">0</span>/tờ</div>
-            
+            Tổng số tờ hiện tại:
+            <span id="total-order-doc-pages" class="font-medium">0</span>
           </p>
+          <div class="text-lg text-gray-600 mb-2">
+            Giá hiện tại:
+            <span id="order-doc-price" class="font-medium">0</span>/tờ
+          </div>
 
           <form id="order-form">
             <input type="hidden" id="order-doc-id" />
@@ -498,7 +494,7 @@
         </div>
       </div>
 
-      <!-- View: In Tùy Chọn (User tự tải file) - Đổi tên thành Tải File In -->
+      <!-- View: In Tùy Chọn (User tự tải file) -->
       <div id="custom-order-view" class="view">
         <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg">
           <h2 class="text-3xl font-bold mb-6">Tải File Lên & In</h2>
@@ -508,7 +504,6 @@
             <label class="block text-sm font-medium text-gray-700 mb-2"
               >Tải file của bạn</label
             >
-            <!-- FIX: Thay đổi text -->
             <button
               id="custom-upload-widget"
               class="w-full bg-green-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-600 transition duration-300"
@@ -523,10 +518,13 @@
 
           <div class="mb-6">
             <h3 class="text-lg font-medium text-gray-700">
-              Tổng số tờ hiện tại: <span id="custom-total-doc-sheets" class="font-medium">0</span>
+              Tổng số tờ hiện tại:
+              <span id="custom-total-doc-sheets" class="font-medium">0</span>
             </h3>
             <h3 class="text-lg font-medium text-gray-700">
-              Giá hiện tại: <span id="custom-doc-price" class="font-medium">0</span>/tờ
+              Giá hiện tại:
+              <span id="custom-doc-price" class="font-medium">0</span>/tờ
+            </h3>
           </div>
 
           <!-- Danh sách file đã tải -->
@@ -637,7 +635,7 @@
         </div>
       </div>
 
-      <!-- THÊM: View In Nhanh -->
+      <!-- View: In Nhanh -->
       <div id="quick-print-view" class="view">
         <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg">
           <h2 class="text-3xl font-bold mb-6">In Nhanh (Giỏ Hàng)</h2>
@@ -647,21 +645,22 @@
             <!-- Các file trong giỏ hàng sẽ render ở đây -->
           </div>
 
-          <div class="mb-6"> 
+          <div class="mb-6">
             <h3 class="text-lg font-medium text-gray-700">
-              Tổng số tờ hiện tại: <span id="quick-print-total-sheets" class="font-medium">0</span>
+              Tổng số tờ hiện tại:
+              <span id="quick-print-total-sheets" class="font-medium">0</span>
             </h3>
             <h3 class="text-lg font-medium text-gray-700">
-              Giá hiện tại: <span id="quick-print-price-per-sheet" class="font-medium">0</span>/tờ
+              Giá hiện tại:
+              <span id="quick-print-price-per-sheet" class="font-medium">0</span
+              >/tờ
+            </h3>
           </div>
-
-          
 
           <!-- Form tùy chọn in -->
           <form id="quick-print-form">
             <h3 class="text-xl font-semibold mb-4">Tùy chọn chung</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              
               <!-- Số bản in -->
               <div>
                 <label
@@ -766,7 +765,7 @@
       <div id="history-view" class="view">
         <h2 class="text-3xl font-bold mb-6">Lịch Sử Đơn Hàng</h2>
 
-        <!-- THÊM: Thống kê tổng tiền -->
+        <!-- Thống kê tổng tiền -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div class="bg-white p-4 rounded-lg shadow">
             <h3 class="text-sm font-medium text-gray-500">Tổng Tiền Đã Chi</h3>
@@ -829,7 +828,6 @@
             </button>
           </nav>
         </div>
-        <!-- KẾT THÚC: Tab Lịch Sử -->
 
         <!-- Bảng Lịch Sử -->
         <div class="bg-white shadow-lg rounded-lg overflow-x-auto">
@@ -902,7 +900,7 @@
       <div id="admin-view" class="view">
         <h2 class="text-3xl font-bold mb-6">Trang Quản Trị</h2>
 
-        <!-- Admin Tabs (đã có space-x-8, nên thêm overflow-x-auto) -->
+        <!-- Admin Tabs -->
         <div class="mb-6 border-b border-gray-200">
           <nav class="-mb-px flex space-x-8 overflow-x-auto" aria-label="Tabs">
             <button
@@ -917,7 +915,6 @@
             >
               Đơn Hàng Hiện Tại
             </button>
-            <!-- THÊM: Tab Quản Lý User -->
             <button
               class="admin-tab whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               data-tab="admin-users"
@@ -984,6 +981,24 @@
                     placeholder="Tự động điền khi tải PDF..."
                   />
                 </div>
+
+                <!-- TÍNH NĂNG MỚI: Set giá -->
+                <div class="mb-4">
+                  <label
+                    for="admin-doc-price"
+                    class="block text-sm font-medium text-gray-700"
+                    >Giá Gốc (tùy chọn, 350đ là mặc định)</label
+                  >
+                  <input
+                    type="number"
+                    id="admin-doc-price"
+                    class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md"
+                    placeholder="350"
+                    min="0"
+                  />
+                </div>
+                <!-- KẾT THÚC TÍNH NĂNG MỚI -->
+
                 <div class="mb-4">
                   <label class="block text-sm font-medium text-gray-700"
                     >File tài liệu</label
@@ -993,7 +1008,7 @@
                     id="admin-upload-widget"
                     class="mt-1 w-full bg-green-500 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-600"
                   >
-                    Tải File 
+                    Tải File
                   </button>
                   <span
                     id="admin-file-url"
@@ -1104,7 +1119,7 @@
           </div>
         </div>
 
-        <!-- THÊM: Admin Tab Content: Quản Lý User -->
+        <!-- Admin Tab Content: Quản Lý User -->
         <div id="admin-users" class="admin-tab-content hidden">
           <div class="bg-white shadow-lg rounded-lg overflow-x-auto">
             <table
@@ -1309,7 +1324,6 @@
           >
             <!-- Chi tiết sẽ được render vào đây -->
           </div>
-          <!-- FIX: Thêm nút Tải Tất Cả -->
           <div class="items-center px-4 py-3 mt-4 flex justify-end space-x-3">
             <button
               id="order-details-modal-download-all"
@@ -1538,20 +1552,13 @@
       let currentUserData = null;
       let allDocuments = {}; // Cache lại danh sách tài liệu
       let allOrders = {}; // Cache lại danh sách đơn hàng
-      let allUsersData = {}; // THÊM: Cache lại danh sách user
+      let allUsersData = {}; // Cache lại danh sách user
       let customUploadedFiles = []; // Mảng lưu file user tự upload
-
-      // THÊM: Biến cho In Nhanh
       let isQuickPrintMode = false;
       let quickPrintCart = []; // Mảng lưu các docId
-
-      // THÊM: Biến cho modal chỉnh sửa
       let filesBeingEdited = []; // Mảng lưu file đang được sửa
       let editUploadWidget = null; // Widget Cloudinary cho modal edit
-      
-      // THÊM: Biến để lưu ID đơn hàng cho modal chi tiết
-      let currentModalOrderId = null;
-
+      let currentModalOrderId = null; // ID đơn hàng cho modal chi tiết
 
       // DOM Elements
       const loadingOverlay = document.getElementById("loading-overlay");
@@ -1570,7 +1577,7 @@
       const editOrderForm = document.getElementById("edit-order-form");
       const editFileList = document.getElementById("edit-file-list");
 
-      // THÊM: DOM Elements cho Menu Mobile
+      // DOM Elements cho Menu Mobile
       const menuToggle = document.getElementById("menu-toggle");
       const menuClose = document.getElementById("menu-close");
       const mobileMenu = document.getElementById("mobile-menu");
@@ -1594,7 +1601,6 @@
           document.getElementById("message-modal").style.display = "none";
         });
 
-      // THÊM: Hàm kiểm tra đăng nhập trước khi hành động
       function checkAuthAndShowLogin() {
         if (currentUserData && currentUserData.isGuest) {
           showMessage(
@@ -1607,7 +1613,6 @@
         return true;
       }
 
-      // Hàm copy link chia sẻ
       function copyShareLink(docId) {
         const url = window.location.href.split("#")[0];
         const shareLink = url + "#doc=" + docId;
@@ -1634,7 +1639,6 @@
         document.body.removeChild(textarea);
       }
 
-      // Hàm trợ giúp xử lý link PDF (tải về)
       function getForcedDownloadLink(url, name = "") {
         if (!url) return "#";
         const fileName = name.toLowerCase();
@@ -1650,85 +1654,82 @@
         return url;
       }
 
-      // Hàm thêm thuộc tính download
       function getDownloadAttribute(url, name = "") {
         if (!url) return "";
         const fileName = name.toLowerCase();
         const fileUrl = url.toLowerCase();
         const isPdf = fileUrl.endsWith(".pdf") || fileName.endsWith(".pdf");
 
-        // FIX: Luôn trả về 'name' nếu nó được cung cấp, để trình duyệt biết tên file
-        // Thêm `download` cho các link không phải cloudinary (ví dụ: link blob, v.v.)
         if (isPdf && !url.includes("res.cloudinary.com")) {
           return name || "download";
         }
-        // Cho link Cloudinary (đã có fl_attachment), chỉ cần tên
         if (name) {
           return name;
         }
 
         return "";
       }
-      
-      // FIX: Hàm tải tất cả file
+
       function downloadAllFiles(orderId) {
-          const order = allOrders[orderId];
-          if (!order || !order.items || order.items.length === 0) {
-              showMessage("Lỗi", "Không tìm thấy file trong đơn hàng này.");
-              return;
+        const order = allOrders[orderId];
+        if (!order || !order.items || order.items.length === 0) {
+          showMessage("Lỗi", "Không tìm thấy file trong đơn hàng này.");
+          return;
+        }
+        if (order.items.length > 5) {
+          showMessage(
+            "Thông báo",
+            "Đang bắt đầu tải " +
+              order.items.length +
+              " file. Vui lòng cho phép trình duyệt mở nhiều pop-up nếu bị chặn."
+          );
+        }
+        order.items.forEach((item, index) => {
+          let url = "#";
+          let name = item.docName;
+          if (item.cloudinaryUrl) {
+            url = item.cloudinaryUrl;
+          } else if (item.docId && allDocuments[item.docId]) {
+            url = allDocuments[item.docId].url;
           }
-          if (order.items.length > 5) {
-              showMessage("Thông báo", "Đang bắt đầu tải " + order.items.length + " file. Vui lòng cho phép trình duyệt mở nhiều pop-up nếu bị chặn.");
-          }
-          order.items.forEach((item, index) => {
-              let url = "#";
-              let name = item.docName;
-              if (item.cloudinaryUrl) {
-                  url = item.cloudinaryUrl;
-              } else if (item.docId && allDocuments[item.docId]) {
-                  url = allDocuments[item.docId].url;
-              }
-              
-              if (url === "#") return; // Bỏ qua nếu không có link
 
-              const fileUrl = getForcedDownloadLink(url, name);
-              const downloadAttr = getDownloadAttribute(url, name) || name || `file-${index+1}`;
+          if (url === "#") return;
 
-              // Tạo link và click
-              // Thêm delay nhỏ để tránh bị trình duyệt block
-              setTimeout(() => {
-                  const a = document.createElement("a");
-                  a.href = fileUrl;
-                  a.target = "_blank"; // Cần thiết
-                  a.download = downloadAttr; // Thuộc tính 'download' quan trọng nhất
-                  document.body.appendChild(a);
-                  a.click();
-                  document.body.removeChild(a);
-              }, 200 * index); 
-          });
+          const fileUrl = getForcedDownloadLink(url, name);
+          const downloadAttr =
+            getDownloadAttribute(url, name) || name || `file-${index + 1}`;
+
+          setTimeout(() => {
+            const a = document.createElement("a");
+            a.href = fileUrl;
+            a.target = "_blank";
+            a.download = downloadAttr;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }, 200 * index);
+        });
       }
-
 
       // --- HÀM MODAL CHI TIẾT ĐƠN HÀNG ---
       document
         .getElementById("order-details-modal-close")
         .addEventListener("click", () => {
           orderDetailsModal.style.display = "none";
-          currentModalOrderId = null; // Reset ID
+          currentModalOrderId = null;
         });
 
-      // FIX: Thêm listener cho nút tải tất cả
       document
         .getElementById("order-details-modal-download-all")
         .addEventListener("click", () => {
-           if (currentModalOrderId) {
-             downloadAllFiles(currentModalOrderId);
-           }
+          if (currentModalOrderId) {
+            downloadAllFiles(currentModalOrderId);
+          }
         });
 
-      function showOrderDetailsModal(order, orderId) { // FIX: Thêm orderId
-        currentModalOrderId = orderId; // FIX: Lưu ID đơn hàng
-        
+      function showOrderDetailsModal(order, orderId) {
+        currentModalOrderId = orderId; // Lưu ID đơn hàng
+
         const itemsHtml = order.items
           .map((item) => {
             let url = "#";
@@ -1742,9 +1743,17 @@
             const downloadAttr = getDownloadAttribute(url, name);
             return `
                       <div class="p-3 bg-gray-50 rounded-md border">
-                          <p class="font-semibold text-gray-800">Tên file: <a href="${fileUrl}" ${downloadAttr ? `download="${downloadAttr}"` : ''} target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">${item.docName}</a></p>
-                          <p>Số trang: ${item.pages} | Số bản: ${item.copies}</p>
-                          <p>Tùy chọn: ${item.printType}, ${item.paperType}, ${item.paperSize}</p>
+                          <p class="font-semibold text-gray-800">Tên file: <a href="${fileUrl}" ${
+              downloadAttr ? `download="${downloadAttr}"` : ""
+            } target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">${
+              item.docName
+            }</a></p>
+                          <p>Số trang: ${item.pages} | Số bản: ${
+              item.copies
+            }</p>
+                          <p>Tùy chọn: ${item.printType}, ${item.paperType}, ${
+              item.paperSize
+            }</p>
                       </div>
                   `;
           })
@@ -1797,9 +1806,7 @@
 
       // --- HÀM ĐIỀU HƯỚNG & MENU ---
 
-      // Hàm chuyển đổi view
       function showView(viewId) {
-        // THÊM: Kiểm tra đăng nhập cho các view cần thiết
         if (["history-view", "admin-view"].includes(viewId)) {
           if (!checkAuthAndShowLogin()) return;
         }
@@ -1807,7 +1814,6 @@
         allViews.forEach((view) => view.classList.remove("active"));
         document.getElementById(viewId)?.classList.add("active");
 
-        // Cập nhật trạng thái active cho nav links
         allNavLinks.forEach((link) => {
           link.classList.remove("text-blue-600", "font-bold");
           link.classList.add("text-gray-700", "font-medium");
@@ -1817,16 +1823,13 @@
           }
         });
 
-        // Đóng menu mobile khi chuyển view
         closeMobileMenu();
 
-        // Xử lý logic riêng cho từng view
         if (viewId === "admin-view") {
           const firstTab = document.querySelector(".admin-tab");
           switchAdminTab(firstTab.dataset.tab);
         }
         if (viewId === "history-view") {
-          // Đặt lại tab 'all' là active khi chuyển view
           document.querySelectorAll(".history-tab").forEach((tab, index) => {
             tab.classList.remove("border-blue-500", "text-blue-600");
             tab.classList.add(
@@ -1845,15 +1848,13 @@
               );
             }
           });
-          renderUserHistory(); // Render lại lịch sử
+          renderUserHistory();
         }
-        // THÊM: Render view In Nhanh
         if (viewId === "quick-print-view") {
           renderQuickPrintView();
         }
       }
 
-      // Hàm chuyển đổi tab Admin
       function switchAdminTab(tabId) {
         allAdminTabContents.forEach((content) =>
           content.classList.add("hidden")
@@ -1880,7 +1881,6 @@
         });
       }
 
-      // THÊM: Hàm cho Menu Mobile
       function openMobileMenu() {
         mobileMenu.classList.remove("closed");
         mobileMenu.classList.add("open");
@@ -1899,69 +1899,73 @@
 
       // --- HÀM ĐỊNH DẠNG ---
 
-      // Hàm định dạng tiền tệ
       function formatCurrency(value) {
         return new Intl.NumberFormat("vi-VN").format(value);
       }
 
-      // Hàm định dạng ngày
       function formatDate(timestamp) {
         return new Date(timestamp).toLocaleString("vi-VN");
       }
 
-      function calculateDiscountedPrice(totalSheets) {
-        const initialCost = 350;
+      // --- LOGIC TÍNH GIÁ (ĐÃ CẬP NHẬT) ---
+
+      /**
+       * Tính giá đã giảm dựa trên tổng số tờ và giá gốc.
+       * @param {number} totalSheets Tổng số tờ giấy.
+       * @param {number} initialCost Giá gốc (mặc định 350).
+       */
+      function calculateDiscountedPrice(totalSheets, initialCost = 350) {
         const discountStep = 45; // Bước tăng số tờ để giảm giá (50 tờ)
         const discountAmount = 15; // Số tiền giảm cho mỗi bước (15đ)
-        const minCost = 300; // Mức giá tối thiểu
+        const minCost = initialCost - 50; // Mức giá tối thiểu (giảm tối đa 50đ)
 
-        // Tính số lần giảm giá (mỗi lần 50 tờ)
-        // Ví dụ: 100 tờ -> Math.floor(100 / 50) = 2 lần giảm.
-        // 50 tờ -> Math.floor(50 / 50) = 1 lần giảm. 
-        // Lưu ý: Việc giảm giá bắt đầu từ TỜ ĐẦU TIÊN (0 tờ).
-        // Ví dụ: 50 tờ được tính là 1 lần giảm. 100 tờ là 2 lần giảm.
         const numberOfDiscounts = Math.floor(totalSheets / discountStep);
-
-        // Tính giá đã giảm
-        let calculatedCost = initialCost - (numberOfDiscounts * discountAmount);
+        let calculatedCost = initialCost - numberOfDiscounts * discountAmount;
 
         // Áp dụng mức giá tối thiểu
-        const baseCost = Math.max(calculatedCost, minCost); 
+        const baseCost = Math.max(calculatedCost, minCost);
 
         return baseCost;
       }
 
-      // Hàm tính toán chi phí (đã sửa theo logic 2 trang = 1 tờ)
-     function calculateCost(pages, copies, printType, paperType) {
-    const pagesInt = parseInt(pages);
-    const copiesInt = parseInt(copies);
+      /**
+       * Tính tổng chi phí đơn hàng.
+       * @param {number} pages Tổng số trang.
+       * @param {number} copies Số bản in.
+       * @param {string} printType Loại in ('Thường' hoặc 'Màu').
+       * @param {string} paperType Loại giấy ('A4' hoặc 'Giấy bóng').
+       * @param {number} initialPrice Giá gốc cho in thường (mặc định 350).
+       */
+      function calculateCost(
+        pages,
+        copies,
+        printType,
+        paperType,
+        initialPrice = 350
+      ) {
+        const pagesInt = parseInt(pages);
+        const copiesInt = parseInt(copies);
 
-    // 1. Tính toán TỔNG SỐ TỜ giấy (totalSheets)
-    // Tổng số tờ giấy cần in cho TẤT CẢ các bản sao.
-    const sheetsPerPage = Math.ceil(pagesInt / 2); // Số tờ giấy cần cho 1 bản in
-    const totalSheets = sheetsPerPage * copiesInt; 
+        const sheetsPerPage = Math.ceil(pagesInt / 2); // Số tờ giấy cần cho 1 bản in
+        const totalSheets = sheetsPerPage * copiesInt;
 
-    // 2. Xác định giá cơ bản (baseCost) và áp dụng quy tắc giảm giá
-    let baseCost = 0;
-    
-    if (printType === "Màu") {
-        baseCost = 3000; // Giá in màu cố định
-    } else { // In đen trắng
-       baseCost = calculateDiscountedPrice(totalSheets);
-    }
+        let baseCost = 0;
 
-    // 3. Tính phí giấy bóng (glossyBonus)
-    const glossyBonus = paperType === "Giấy bóng" ? 1000 : 0;
+        if (printType === "Màu") {
+          baseCost = 3000; // Giá in màu cố định
+        } else {
+          // Pass giá gốc của tài liệu vào
+          baseCost = calculateDiscountedPrice(totalSheets, initialPrice);
+        }
 
-    // 4. Tính tổng chi phí
-    // Tổng = (Giá cơ bản + Phí giấy bóng) * Tổng số tờ giấy
-    const total = (baseCost + glossyBonus) * totalSheets;
+        const glossyBonus = paperType === "Giấy bóng" ? 1000 : 0;
+        const total = (baseCost + glossyBonus) * totalSheets;
 
-    return total;
-}
+        return total;
+      }
+
       // --- HÀM XÁC THỰC & KHỞI TẠO ---
 
-      // THAY ĐỔI: Logic khởi tạo
       async function initializeAppLogic() {
         if (window.location.hash.startsWith("#doc=")) {
           const initialDocId = window.location.hash.substring(5);
@@ -1992,20 +1996,18 @@
 
           if (snapshot.exists()) {
             currentUserData = snapshot.val();
-            currentUserData.isGuest = false; // Người dùng đã đăng ký
+            currentUserData.isGuest = false;
           } else {
-            // Người dùng mới, tạo tài khoản Khách
             currentUserData = {
               name: "Khách",
               class: "Vãng lai",
               balance: 0,
-              isGuest: true, // Đánh dấu là khách
+              isGuest: true,
             };
-            // Không show login-view
           }
 
           updateUserInfoUI();
-          showView("home-view"); // Luôn bắt đầu ở trang chủ
+          showView("home-view");
           setupListeners();
         } catch (error) {
           console.error("Lỗi khởi tạo:", error);
@@ -2018,7 +2020,6 @@
         }
       }
 
-      // Xử lý form đăng nhập
       document
         .getElementById("login-form")
         .addEventListener("submit", async (e) => {
@@ -2037,7 +2038,7 @@
               name: name,
               class: lop,
               balance: 0,
-              isGuest: false, // ĐÃ THAY ĐỔI: không còn là khách
+              isGuest: false,
             };
             const userRef = ref(
               db,
@@ -2046,9 +2047,7 @@
             await set(userRef, currentUserData);
 
             updateUserInfoUI();
-            showView("home-view"); // Quay lại trang chủ
-            // setupListeners() đã được gọi trong initializeAppLogic,
-            // nhưng gọi lại ở đây để đảm bảo listener onValue(userRef) được kích hoạt ngay
+            showView("home-view");
             setupListeners();
           } catch (error) {
             console.error("Lỗi lưu thông tin:", error);
@@ -2058,8 +2057,6 @@
           }
         });
 
-      // Cập nhật UI thông tin user (cho cả desktop và mobile)
-      // THAY ĐỔI: Logic hiển thị dựa trên isGuest
       function updateUserInfoUI() {
         if (!currentUserData) return;
 
@@ -2071,19 +2068,15 @@
         const userInfoMobile = document.getElementById("user-info-mobile");
 
         if (currentUserData.isGuest) {
-          // Là khách
           loginNavLink.classList.remove("hidden");
           loginNavLinkMobile.classList.remove("hidden");
           userInfoDesktop.classList.add("hidden");
           userInfoMobile.classList.add("hidden");
-
-          // Ẩn link admin (khách không thể là admin)
           document.getElementById("admin-nav-link").classList.add("hidden");
           document
             .getElementById("admin-nav-link-mobile")
             .classList.add("hidden");
         } else {
-          // Đã đăng nhập
           loginNavLink.classList.add("hidden");
           loginNavLinkMobile.classList.add("hidden");
           userInfoDesktop.classList.remove("hidden");
@@ -2093,12 +2086,9 @@
           const lop = `(${currentUserData.class})`;
           const balance = `${formatCurrency(currentUserData.balance || 0)}đ`;
 
-          // Desktop
           document.getElementById("user-name-display").textContent = name;
           document.getElementById("user-class-display").textContent = lop;
           document.getElementById("user-balance-display").textContent = balance;
-
-          // Mobile
           document.getElementById("user-name-display-mobile").textContent =
             name;
           document.getElementById("user-class-display-mobile").textContent =
@@ -2106,7 +2096,6 @@
           document.getElementById("user-balance-display-mobile").textContent =
             balance;
 
-          // Admin Links
           if (currentUserData.name === "Admin") {
             document
               .getElementById("admin-nav-link")
@@ -2126,25 +2115,20 @@
       // --- HÀM LẮNG NGHE DỮ LIỆU (LISTENERS) ---
 
       function setupListeners() {
-        // Lắng nghe thay đổi thông tin user
         const userRef = ref(db, `artifacts/${appId}/users/${currentUserId}`);
         onValue(userRef, (snapshot) => {
           if (snapshot.exists()) {
-            // Chỉ cập nhật nếu user không còn là khách
-            // hoặc nếu dữ liệu mới tồn tại (nghĩa là họ vừa đăng ký)
             if (!currentUserData.isGuest || snapshot.exists()) {
               currentUserData = snapshot.val();
               currentUserData.isGuest = false;
               updateUserInfoUI();
             }
           } else if (currentUserData && !currentUserData.isGuest) {
-            // Trường hợp hiếm: user đã đăng nhập bị xóa, coi họ như khách
             currentUserData.isGuest = true;
             updateUserInfoUI();
           }
         });
 
-        // Lắng nghe danh sách tài liệu
         const docsRef = ref(db, `artifacts/${appId}/public/documents`);
         onValue(docsRef, (snapshot) => {
           allDocuments = snapshot.val() || {};
@@ -2155,39 +2139,37 @@
 
           const pendingDocId = sessionStorage.getItem("deepLinkDocId");
           if (pendingDocId && allDocuments[pendingDocId]) {
-            // Không cần check currentUserData nữa vì khách cũng xem được
             openOrderView(pendingDocId);
             sessionStorage.removeItem("deepLinkDocId");
           }
         });
 
-        // Lắng nghe danh sách đơn hàng
         const ordersRef = ref(db, `artifacts/${appId}/public/orders`);
         onValue(ordersRef, (snapshot) => {
           allOrders = snapshot.val() || {};
-          renderDocumentGrid(); // Cập nhật lượt in
+          renderDocumentGrid();
 
-          // Chỉ render history/admin nếu user đã đăng nhập
           if (currentUserData && !currentUserData.isGuest) {
-            renderUserHistory(); // Cập nhật lịch sử user
+            renderUserHistory();
             if (currentUserData.name === "Admin") {
               renderAdminOrdersTable();
               renderAdminReports();
-              renderAdminUsersTable(); // Cập nhật tổng tiền user
+              renderAdminUsersTable();
             }
           }
         });
 
-        // THÊM: Lắng nghe danh sách user (cho Admin)
+        // Lắng nghe danh sách user (cho Admin)
         const allUsersRef = ref(db, `artifacts/${appId}/users`);
         onValue(allUsersRef, (snapshot) => {
           allUsersData = snapshot.val() || {};
-         
+          // FIX 4: Thêm log
+          console.log("Admin: allUsersData loaded", allUsersData);
+          if (currentUserData && currentUserData.name === "Admin") {
             renderAdminUsersTable();
-          
+          }
         });
 
-        // Listeners cho tìm kiếm
         document
           .getElementById("admin-search-bar")
           .addEventListener("input", renderAdminDocList);
@@ -2195,14 +2177,11 @@
           .getElementById("search-bar")
           .addEventListener("input", renderDocumentGrid);
 
-        // Listener cho tab lịch sử
         document
           .getElementById("history-tabs-nav")
           .addEventListener("click", (e) => {
             const tabButton = e.target.closest(".history-tab");
             if (!tabButton) return;
-
-            // THÊM: Check auth khi click tab
             if (!checkAuthAndShowLogin()) return;
 
             document.querySelectorAll(".history-tab").forEach((tab) => {
@@ -2224,7 +2203,6 @@
             renderUserHistory();
           });
 
-        // THÊM: Listeners cho In Nhanh
         document
           .getElementById("quick-print-toggle")
           .addEventListener("click", toggleQuickPrintMode);
@@ -2232,13 +2210,11 @@
           .getElementById("quick-print-cart-btn")
           .addEventListener("click", () => showView("quick-print-view"));
 
-        // Thiết lập tháng cho báo cáo
         setupReportMonths();
       }
 
       // --- LOGIC TRANG CHỦ (HOME) & IN NHANH ---
 
-      // ĐÃ SỬA: Hàm render chính
       function renderDocumentGrid() {
         const grid = document.getElementById("document-grid");
         grid.innerHTML = "";
@@ -2295,11 +2271,9 @@
           const downloadAttr = getDownloadAttribute(doc.url, doc.name);
 
           const card = document.createElement("div");
-          // SỬA: Thêm `relative` cho checkbox, xóa 2 nút
           card.className =
             "bg-white rounded-lg shadow-md overflow-hidden transform transition-all hover:shadow-xl hover:-translate-y-1 relative";
 
-          // SỬA: Bỏ 2 nút, chỉ còn P-5
           let cardHTML = `
                       <div class="p-5">
                           <div class="flex justify-between items-start">
@@ -2322,24 +2296,22 @@
                       </div>
                   `;
 
-          // Xử lý logic cho In Nhanh
           if (isQuickPrintMode) {
             card.classList.add("quick-print-card");
             card.dataset.docId = id;
-            // Thêm checkbox
             cardHTML += `
                           <input type="checkbox" class="absolute top-3 right-3 h-6 w-6 text-blue-600 border-gray-300 rounded focus:ring-blue-500 quick-print-checkbox" data-doc-id="${id}" ${
               quickPrintCart.includes(id) ? "checked" : ""
             }>
                       `;
-            // Thêm nút Xem File ở footer
             cardHTML += `
                           <div class="bg-gray-50 px-5 py-3">
-                              <a href="${fileUrl}" ${downloadAttr ? `download="${downloadAttr}"` : ''} target="_blank" rel="noopener noreferrer" class="w-full text-center text-sm font-semibold text-green-600 hover:text-green-800 px-3 py-1 bg-green-50 rounded-md border border-green-200 hover:bg-green-100">Xem File</a>
+                              <a href="${fileUrl}" ${
+              downloadAttr ? `download="${downloadAttr}"` : ""
+            } target="_blank" rel="noopener noreferrer" class="w-full text-center text-sm font-semibold text-green-600 hover:text-green-800 px-3 py-1 bg-green-50 rounded-md border border-green-200 hover:bg-green-100">Xem File</a>
                           </div>
                       `;
           } else {
-            // Chế độ thường: Thẻ có thể click
             card.classList.add("select-doc-card", "cursor-pointer");
             card.dataset.docId = id;
           }
@@ -2357,11 +2329,9 @@
         });
       }
 
-      // THÊM: Listener chung cho Grid (xử lý cả 2 chế độ)
       document
         .getElementById("document-grid")
         .addEventListener("click", (e) => {
-          // Ngăn click vào link "Xem File" hoặc "Share" trigger chọn thẻ
           if (e.target.closest("a") || e.target.closest(".share-doc-btn")) {
             return;
           }
@@ -2373,13 +2343,11 @@
             const docId = card.dataset.docId;
             const checkbox = card.querySelector(".quick-print-checkbox");
             if (docId && checkbox) {
-              // Đảo ngược trạng thái
               const newCheckedState = !checkbox.checked;
               checkbox.checked = newCheckedState;
               toggleQuickPrintItem(docId, newCheckedState);
             }
           } else {
-            // Chế độ thường
             const card = e.target.closest(".select-doc-card");
             if (card) {
               const docId = card.dataset.docId;
@@ -2390,7 +2358,6 @@
           }
         });
 
-      // THÊM: Xử lý click vào checkbox (để tránh trigger click vào card)
       document
         .getElementById("document-grid")
         .addEventListener("change", (e) => {
@@ -2403,7 +2370,6 @@
           }
         });
 
-      // THÊM: Hàm bật/tắt In Nhanh
       function toggleQuickPrintMode() {
         isQuickPrintMode = !isQuickPrintMode;
         const toggleBtn = document.getElementById("quick-print-toggle");
@@ -2421,10 +2387,9 @@
           cartBtn.classList.add("hidden");
         }
         updateQuickPrintCartCount();
-        renderDocumentGrid(); // Vẽ lại grid
+        renderDocumentGrid();
       }
 
-      // THÊM: Hàm cập nhật giỏ hàng In Nhanh
       function toggleQuickPrintItem(docId, isChecked) {
         const index = quickPrintCart.indexOf(docId);
         if (isChecked && index === -1) {
@@ -2435,7 +2400,6 @@
         updateQuickPrintCartCount();
       }
 
-      // THÊM: Hàm cập nhật số lượng trên nút giỏ hàng
       function updateQuickPrintCartCount() {
         const cartBtn = document.getElementById("quick-print-cart-btn");
         cartBtn.textContent = `Giỏ In (${quickPrintCart.length})`;
@@ -2443,7 +2407,6 @@
 
       // --- LOGIC ĐẶT IN (THƯỜNG) ---
 
-      // ĐÃ SỬA: Thêm logic cho nút Xem Trước
       function openOrderView(docId) {
         const doc = allDocuments[docId];
         if (!doc) return;
@@ -2451,9 +2414,7 @@
         document.getElementById("order-doc-id").value = docId;
         document.getElementById("order-doc-name").textContent = doc.name;
         document.getElementById("order-doc-pages").textContent = doc.pages;
-        
 
-        // THÊM: Cập nhật nút xem trước
         const fileUrl = getForcedDownloadLink(doc.url, doc.name);
         const downloadAttr = getDownloadAttribute(doc.url, doc.name);
         const previewBtn = document.getElementById("order-preview-btn");
@@ -2475,47 +2436,68 @@
 
       function updateOrderCost() {
         try {
+          // FEATURE 6: Lấy giá gốc
+          const docId = document.getElementById("order-doc-id").value;
+          const doc = allDocuments[docId];
+          const initialPrice = doc && doc.defaultPrice ? doc.defaultPrice : 350;
+
           const pages =
             parseInt(document.getElementById("order-doc-pages").textContent) ||
             0;
           const copies = parseInt(document.getElementById("copies").value) || 1;
           const printType = document.getElementById("print-type").value;
           const paperType = document.getElementById("paper-type").value;
-          const total = calculateCost(pages, copies, printType, paperType);
-          const sheetsPerPage = Math.ceil(pages / 2); // Số tờ giấy cần cho 1 bản in
+
+          // FEATURE 6: Pass giá gốc
+          const total = calculateCost(
+            pages,
+            copies,
+            printType,
+            paperType,
+            initialPrice
+          );
+          const sheetsPerPage = Math.ceil(pages / 2);
           const totalSheets = sheetsPerPage * copies;
+
           document.getElementById("total-cost").textContent =
             formatCurrency(total);
           document.getElementById("total-order-doc-pages").textContent =
             totalSheets;
 
-          const baseCost = calculateDiscountedPrice(totalSheets);
+          // FEATURE 6: Pass giá gốc
+          const baseCost = calculateDiscountedPrice(totalSheets, initialPrice);
           document.getElementById("order-doc-price").textContent =
             formatCurrency(baseCost);
-
         } catch (e) {
           document.getElementById("total-cost").textContent = "Lỗi";
         }
       }
 
-      // Xử lý submit đơn hàng
       document
         .getElementById("order-form")
         .addEventListener("submit", async (e) => {
           e.preventDefault();
-
-          // THÊM: Kiểm tra đăng nhập
           if (!checkAuthAndShowLogin()) return;
 
           const docId = document.getElementById("order-doc-id").value;
           const doc = allDocuments[docId];
+          // FEATURE 6: Lấy giá gốc
+          const initialPrice = doc && doc.defaultPrice ? doc.defaultPrice : 350;
           const pages = parseInt(doc.pages);
           const copies = parseInt(document.getElementById("copies").value);
           const paperSize = document.getElementById("paper-size").value;
           const printType = document.getElementById("print-type").value;
           const paperType = document.getElementById("paper-type").value;
           const note = document.getElementById("order-note").value.trim();
-          const totalCost = calculateCost(pages, copies, printType, paperType);
+
+          // FEATURE 6: Pass giá gốc
+          const totalCost = calculateCost(
+            pages,
+            copies,
+            printType,
+            paperType,
+            initialPrice
+          );
 
           const orderDetails = {
             userId: currentUserId,
@@ -2541,15 +2523,14 @@
         });
 
       // --- LOGIC ĐẶT IN (TÙY CHỌN - Tải File) ---
-      
-      // FIX: Đổi resourceType thành "auto"
+
       const customUploadWidget = cloudinary.createUploadWidget(
         {
           cloudName: CLOUDINARY_CLOUD_NAME,
           uploadPreset: CLOUDINARY_UPLOAD_PRESET,
           multiple: true,
           folder: "user_uploads",
-          resourceType: "auto", // FIX: "auto" để nhận diện PDF và đếm trang
+          resourceType: "auto", // Đã sửa
           imageMetadata: true,
           sources: ["local", "url"],
           clientAllowedFormats: [
@@ -2568,14 +2549,20 @@
         },
         (error, result) => {
           if (!error && result && result.event === "success") {
-            // FIX: Đảm bảo 'pages' được đọc chính xác, nếu không phải PDF thì default là 1
-            const pages = (result.info.pages || (result.info.resource_type === 'raw' ? 1 : (result.info.format === 'pdf' ? 1 : 1))) || 1;
-            
+            const pages =
+              result.info.pages ||
+              (result.info.resource_type === "raw"
+                ? 1
+                : result.info.format === "pdf"
+                ? 1
+                : 1) ||
+              1;
+
             customUploadedFiles.push({
               name: result.info.original_filename,
               url: result.info.secure_url,
               publicId: result.info.public_id,
-              pages: pages, // FIX: Sử dụng biến pages đã tính toán
+              pages: pages,
             });
             renderCustomFileList();
             updateCustomOrderCost();
@@ -2586,18 +2573,12 @@
         }
       );
 
-      document.getElementById("custom-upload-widget").addEventListener(
-        "click",
-        () => {
-          // THÊM: Kiểm tra đăng nhập trước khi tải file
+      document
+        .getElementById("custom-upload-widget")
+        .addEventListener("click", () => {
           if (!checkAuthAndShowLogin()) return;
-
-          // FIX: Không reset mảng ở đây, để user tải thêm
-          // customUploadedFiles = []; 
           customUploadWidget.open();
-        },
-        false
-      );
+        });
 
       function renderCustomFileList() {
         const list = document.getElementById("custom-file-list");
@@ -2613,16 +2594,43 @@
           const fileEl = document.createElement("div");
           fileEl.className =
             "flex items-center justify-between bg-gray-50 p-3 rounded-md border";
+          // FIX 5: Thêm nút xóa
           fileEl.innerHTML = `
-                      <a href="${fileUrl}" ${downloadAttr ? `download="${downloadAttr}"` : ''} target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-blue-600 truncate flex-1 mr-4">${file.name}</a>
-                      <div class="flex items-center space-x-2">
+                      <a href="${fileUrl}" ${
+            downloadAttr ? `download="${downloadAttr}"` : ""
+          } target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-blue-600 truncate flex-1 mr-4">${
+            file.name
+          }</a>
+                      <div class="flex items-center space-x-2 flex-shrink-0">
                           <label class="text-sm">Số trang:</label>
-                          <input type="number" class="w-16 p-1 border rounded-md text-sm custom-file-pages" min="1" value="${file.pages}" data-index="${index}">
+                          <input type="number" class="w-16 p-1 border rounded-md text-sm custom-file-pages" min="1" value="${
+                            file.pages
+                          }" data-index="${index}">
+                          <button type="button" class="remove-custom-file text-red-500 hover:text-red-700 font-bold text-lg" data-index="${index}">&times;</button>
                       </div>
                   `;
           list.appendChild(fileEl);
         });
       }
+
+      // FIX 5: Thêm listener cho nút X
+      document
+        .getElementById("custom-file-list")
+        .addEventListener("click", (e) => {
+          const removeBtn = e.target.closest(".remove-custom-file");
+          if (removeBtn) {
+            const index = parseInt(removeBtn.dataset.index);
+            customUploadedFiles.splice(index, 1);
+            renderCustomFileList();
+            updateCustomOrderCost();
+
+            if (customUploadedFiles.length === 0) {
+              document.querySelector(
+                '#custom-order-form button[type="submit"]'
+              ).disabled = true;
+            }
+          }
+        });
 
       document
         .getElementById("custom-file-list")
@@ -2650,25 +2658,27 @@
           customUploadedFiles.forEach((file) => {
             totalPages += parseInt(file.pages) || 0;
           });
+
+          // FEATURE 6: Pass 350 (giá gốc mặc định) cho file custom
           const total = calculateCost(
             totalPages,
             copies,
             printType,
-            paperType
+            paperType,
+            350
           );
           document.getElementById("custom-total-cost").textContent =
             formatCurrency(total);
 
-          const sheetsPerPage = Math.ceil(totalPages / 2); // Số tờ giấy cần cho 1 bản in
+          const sheetsPerPage = Math.ceil(totalPages / 2);
           const totalSheets = sheetsPerPage * copies;
 
           document.getElementById("custom-total-doc-sheets").textContent =
             totalSheets;
 
+          // FEATURE 6: Pass 350
           document.getElementById("custom-doc-price").textContent =
-            formatCurrency(calculateDiscountedPrice(totalSheets));
-
-
+            formatCurrency(calculateDiscountedPrice(totalSheets, 350));
         } catch (e) {
           document.getElementById("custom-total-cost").textContent = "Lỗi";
         }
@@ -2678,8 +2688,6 @@
         .getElementById("custom-order-form")
         .addEventListener("submit", async (e) => {
           e.preventDefault();
-
-          // THÊM: Kiểm tra đăng nhập
           if (!checkAuthAndShowLogin()) return;
 
           if (customUploadedFiles.length === 0) {
@@ -2713,11 +2721,14 @@
           const note = document
             .getElementById("custom-order-note")
             .value.trim();
+
+          // FEATURE 6: Pass 350
           const totalCost = calculateCost(
             totalPages,
             copies,
             printType,
-            paperType
+            paperType,
+            350
           );
 
           const finalItems = items.map((item) => ({
@@ -2753,9 +2764,8 @@
           }
         });
 
-      // --- THÊM: LOGIC VIEW IN NHANH ---
+      // --- LOGIC VIEW IN NHANH ---
 
-      // Render view In Nhanh
       function renderQuickPrintView() {
         const list = document.getElementById("quick-print-list");
         list.innerHTML = "";
@@ -2780,8 +2790,14 @@
             "flex items-center justify-between bg-gray-50 p-3 rounded-md border";
           itemEl.innerHTML = `
                       <div class="flex-1 min-w-0 mr-4">
-                          <a href="${fileUrl}" ${downloadAttr ? `download="${downloadAttr}"` : ''} target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-blue-600 truncate" title="${doc.name}">${doc.name}</a>
-                          <p class="text-xs text-gray-500">${doc.pages} trang</p>
+                          <a href="${fileUrl}" ${
+            downloadAttr ? `download="${downloadAttr}"` : ""
+          } target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-blue-600 truncate" title="${
+            doc.name
+          }">${doc.name}</a>
+                          <p class="text-xs text-gray-500">${
+                            doc.pages
+                          } trang</p>
                       </div>
                       <button type="button" class="remove-quick-print-item text-red-500 hover:text-red-700 font-bold text-lg" data-doc-id="${docId}">&times;</button>
                   `;
@@ -2790,20 +2806,18 @@
         updateQuickPrintCost();
       }
 
-      // Xóa item khỏi giỏ In Nhanh
       document
         .getElementById("quick-print-list")
         .addEventListener("click", (e) => {
           const removeBtn = e.target.closest(".remove-quick-print-item");
           if (removeBtn) {
             const docId = removeBtn.dataset.docId;
-            toggleQuickPrintItem(docId, false); // Tắt (false)
-            renderQuickPrintView(); // Vẽ lại list
-            updateQuickPrintCartCount(); // Cập nhật nút
+            toggleQuickPrintItem(docId, false);
+            renderQuickPrintView();
+            updateQuickPrintCartCount();
           }
         });
 
-      // Cập nhật chi phí In Nhanh
       document
         .getElementById("quick-print-form")
         .addEventListener("change", updateQuickPrintCost);
@@ -2820,14 +2834,28 @@
           ).value;
 
           let totalPages = 0;
+          // FEATURE 6: Tính tổng giá
+          let priceSum = 0;
           quickPrintCart.forEach((docId) => {
             const doc = allDocuments[docId];
             if (doc) {
               totalPages += parseInt(doc.pages) || 0;
+              priceSum += doc.defaultPrice || 350; // Thêm giá gốc
             }
           });
 
-          const total = calculateCost(totalPages, copies, printType, paperType);
+          // FEATURE 6: Tính giá gốc trung bình
+          const avgInitialPrice =
+            quickPrintCart.length > 0 ? priceSum / quickPrintCart.length : 350;
+
+          // FEATURE 6: Pass giá TB
+          const total = calculateCost(
+            totalPages,
+            copies,
+            printType,
+            paperType,
+            avgInitialPrice
+          );
           document.getElementById("quick-print-total-cost").textContent =
             formatCurrency(total);
 
@@ -2836,23 +2864,20 @@
           document.getElementById("quick-print-total-sheets").textContent =
             totalSheets;
 
+          // FEATURE 6: Pass giá TB
           document.getElementById("quick-print-price-per-sheet").textContent =
-            formatCurrency(calculateDiscountedPrice(totalSheets));
-          
-          
-          
+            formatCurrency(
+              calculateDiscountedPrice(totalSheets, avgInitialPrice)
+            );
         } catch (e) {
           document.getElementById("quick-print-total-cost").textContent = "Lỗi";
         }
       }
 
-      // Submit đơn hàng In Nhanh
       document
         .getElementById("quick-print-form")
         .addEventListener("submit", async (e) => {
           e.preventDefault();
-
-          // THÊM: Kiểm tra đăng nhập
           if (!checkAuthAndShowLogin()) return;
 
           if (quickPrintCart.length === 0) {
@@ -2874,15 +2899,15 @@
           ).value;
           const note = document.getElementById("quick-print-note").value.trim();
 
-          let totalCost = 0;
           const items = [];
+          let totalPages = 0;
+          let priceSum = 0;
           quickPrintCart.forEach((docId) => {
             const doc = allDocuments[docId];
             if (doc) {
               const pages = parseInt(doc.pages);
-              // FIX: Tính tổng chi phí dựa trên tổng số trang của TẤT CẢ các mục
-              // totalCost += calculateCost(pages, copies, printType, paperType);
-              
+              totalPages += pages;
+              priceSum += doc.defaultPrice || 350; // FEATURE 6
               items.push({
                 docId: docId,
                 docName: doc.name,
@@ -2899,17 +2924,24 @@
             showMessage("Lỗi", "Không có tài liệu hợp lệ trong giỏ.");
             return;
           }
-          
-          // FIX: Tính tổng chi phí một lần dựa trên tổng số trang
-          const totalPages = items.reduce((sum, item) => sum + item.pages, 0);
-          totalCost = calculateCost(totalPages, copies, printType, paperType);
+
+          // FEATURE 6: Tính giá TB và tổng chi phí
+          const avgInitialPrice =
+            items.length > 0 ? priceSum / items.length : 350;
+          const totalCost = calculateCost(
+            totalPages,
+            copies,
+            printType,
+            paperType,
+            avgInitialPrice
+          );
 
           const orderDetails = {
             userId: currentUserId,
             userName: currentUserData.name,
             userClass: currentUserData.class,
             items: items,
-            totalCost: totalCost,
+            totalCost: totalCost, // Sử dụng totalCost đã tính
             timestamp: serverTimestamp(),
             createdAt: Date.now(),
             ghiChu: note,
@@ -2917,13 +2949,12 @@
 
           try {
             await processOrderPayment(orderDetails, totalCost);
-            // Reset giỏ hàng
             quickPrintCart = [];
             updateQuickPrintCartCount();
             if (isQuickPrintMode) {
-              toggleQuickPrintMode(); // Tắt chế độ In Nhanh
+              toggleQuickPrintMode();
             } else {
-              renderDocumentGrid(); // Cập nhật lại grid
+              renderDocumentGrid();
             }
           } catch (error) {
             showMessage("Lỗi Đặt Hàng", error.message);
@@ -2984,12 +3015,10 @@
 
       // --- LOGIC LỊCH SỬ USER ---
 
-      // ĐÃ SỬA: Thêm tính toán tổng tiền
       function renderUserHistory() {
-        // THÊM: Nếu là khách, không render gì cả
         if (currentUserData.isGuest) {
           document.getElementById("history-table-body").innerHTML =
-            '<tr><td colspan="7" class="text-center p-6 text-gray-500">Vui lòng đăng nhập để xem lịch sử.</td></tr>';
+            '<tr><td colspan="8" class="text-center p-6 text-gray-500">Vui lòng đăng nhập để xem lịch sử.</td></tr>'; // Cập nhật colspan
           document.getElementById("history-total-spent").textContent = "0đ";
           document.getElementById("history-total-due").textContent = "0đ";
           return;
@@ -3006,7 +3035,6 @@
           ([id, order]) => order.userId === currentUserId
         );
 
-        // THÊM: Tính toán tổng chi và tổng nợ (trước khi lọc theo tab)
         let totalSpent = 0;
         let totalDue = 0;
         userOrders.forEach(([, order]) => {
@@ -3024,7 +3052,6 @@
           "history-total-due"
         ).textContent = `${formatCurrency(totalDue)}đ`;
 
-        // Lọc theo tab
         switch (activeTab) {
           case "pending":
             userOrders = userOrders.filter(
@@ -3053,7 +3080,7 @@
 
         if (userOrders.length === 0) {
           tbody.innerHTML =
-            '<tr><td colspan="7" class="text-center p-6 text-gray-500">Không có đơn hàng nào trong mục này.</td></tr>';
+            '<tr><td colspan="8" class="text-center p-6 text-gray-500">Không có đơn hàng nào trong mục này.</td></tr>'; // Cập nhật colspan
           return;
         }
 
@@ -3071,7 +3098,13 @@
               }
               const fileUrl = getForcedDownloadLink(url, name);
               const downloadAttr = getDownloadAttribute(url, name);
-              return `<div>- <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline" title="Xem/Tải file">${item.docName}</a> (x${item.copies}, ${item.printType}, ${item.paperType})</div>`;
+              return `<div>- <a href="${fileUrl}" ${
+                downloadAttr ? `download="${downloadAttr}"` : ""
+              } target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline" title="Xem/Tải file">${
+                item.docName
+              }</a> (x${item.copies}, ${item.printType}, ${
+                item.paperType
+              })</div>`;
             })
             .join("");
 
@@ -3117,6 +3150,9 @@
             !canEdit ? "disabled" : ""
           }>${canEdit ? "Sửa" : "Không thể sửa"}</button>`;
 
+          // FIX 3: Thêm nút Đặt Lại
+          const reorderButtonHtml = `<button class="text-xs font-medium text-green-600 hover:text-green-800 user-reorder" data-order-id="${id}">Đặt Lại</button>`;
+
           tr.innerHTML = `
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${formatDate(
                         order.timestamp
@@ -3129,6 +3165,8 @@
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-center">${viewButtonHtml}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-center">${editButtonHtml}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-center">${cancelActionHtml}</td>
+                      <!-- FIX 3: Render nút -->
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-center">${reorderButtonHtml}</td>
                   `;
           tbody.appendChild(tr);
         });
@@ -3137,6 +3175,14 @@
       document
         .getElementById("history-table-body")
         .addEventListener("click", async (e) => {
+          // FIX 3: Thêm listener cho Đặt Lại
+          const reorderBtn = e.target.closest(".user-reorder");
+          if (reorderBtn) {
+            const orderId = reorderBtn.dataset.orderId;
+            reorderOrder(orderId); // Gọi hàm mới
+            return;
+          }
+
           const editBtn = e.target.closest(".user-edit-order:not(:disabled)");
           if (editBtn) {
             const orderId = editBtn.dataset.orderId;
@@ -3226,16 +3272,124 @@
           }
         });
 
+      // FIX 3: Hàm mới để Đặt Lại
+      /**
+       * Mở view đặt hàng và điền sẵn thông tin từ đơn hàng cũ.
+       * @param {string} orderId ID của đơn hàng cũ.
+       */
+      async function reorderOrder(orderId) {
+        const order = allOrders[orderId];
+        if (!order) {
+          showMessage("Lỗi", "Không tìm thấy đơn hàng cũ.");
+          return;
+        }
+
+        // Lấy cài đặt chung từ item đầu tiên
+        const settings = order.items[0];
+        if (!settings) {
+          showMessage("Lỗi", "Đơn hàng cũ không có sản phẩm.");
+          return;
+        }
+        const copies = settings.copies;
+        const paperSize = settings.paperSize;
+        const printType = settings.printType;
+        const paperType = settings.paperType;
+        const note = order.ghiChu || ""; // Lấy ghi chú từ đơn hàng cha
+
+        // TH1: Đơn hàng chỉ có 1 file từ thư viện (có docId, không có cloudinaryUrl)
+        if (
+          order.items.length === 1 &&
+          order.items[0].docId &&
+          !order.items[0].cloudinaryUrl
+        ) {
+          const docId = order.items[0].docId;
+          if (!allDocuments[docId]) {
+            showMessage(
+              "Lỗi",
+              "Tài liệu gốc của đơn hàng này không còn tồn tại."
+            );
+            return;
+          }
+
+          // Mở view đặt in thường
+          openOrderView(docId);
+
+          // Điền thông tin
+          document.getElementById("copies").value = copies;
+          document.getElementById("paper-size").value = paperSize;
+          document.getElementById("print-type").value = printType;
+          document.getElementById("paper-type").value = paperType;
+          document.getElementById("order-note").value = note;
+
+          // Cập nhật giá và hiển thị
+          updateOrderCost();
+          showView("order-view");
+        }
+        // TH2: Đơn hàng custom (có cloudinaryUrl) hoặc in nhanh (nhiều file)
+        else {
+          customUploadedFiles = [];
+          // Biến đổi tất cả item thành định dạng của customUploadedFiles
+          for (const item of order.items) {
+            if (item.cloudinaryUrl) {
+              // File custom upload
+              customUploadedFiles.push({
+                name: item.docName,
+                url: item.cloudinaryUrl,
+                publicId: item.publicId || "",
+                pages: item.pages,
+              });
+            } else if (item.docId) {
+              // File từ thư viện (trong đơn in nhanh)
+              const doc = allDocuments[item.docId];
+              if (doc) {
+                customUploadedFiles.push({
+                  name: doc.name,
+                  url: doc.url,
+                  publicId: doc.publicId || "",
+                  pages: doc.pages,
+                });
+              }
+            }
+          }
+
+          if (customUploadedFiles.length === 0) {
+            showMessage(
+              "Lỗi",
+              "Không thể tìm thấy các file gốc cho đơn hàng này."
+            );
+            return;
+          }
+
+          // Render danh sách file trong view In Tùy Chọn
+          renderCustomFileList();
+
+          // Điền thông tin
+          document.getElementById("custom-copies").value = copies;
+          document.getElementById("custom-paper-size").value = paperSize;
+          document.getElementById("custom-print-type").value = printType;
+          document.getElementById("custom-paper-type").value = paperType;
+          document.getElementById("custom-order-note").value = note;
+
+          // Cập nhật giá, bật nút submit và hiển thị
+          updateCustomOrderCost();
+          document.querySelector(
+            '#custom-order-form button[type="submit"]'
+          ).disabled = false;
+          showView("custom-order-view");
+        }
+      }
+
       // --- LOGIC ADMIN: QUẢN LÝ TÀI LIỆU ---
 
       let adminFile = {};
+      // FIX 2: Thay đổi resourceType
       const adminUploadWidget = cloudinary.createUploadWidget(
         {
           cloudName: CLOUDINARY_CLOUD_NAME,
           uploadPreset: CLOUDINARY_UPLOAD_PRESET,
           multiple: false,
           folder: "admin_documents",
-          resourceType: "raw",
+          resourceType: "auto", // FIX 2: Đổi "raw" thành "auto"
           imageMetadata: true,
         },
         (error, result) => {
@@ -3251,6 +3405,7 @@
             document.getElementById("admin-doc-public-id").value =
               adminFile.publicId;
 
+            // FIX 2: Logic nhận số trang (đã có sẵn, sẽ hoạt động với "auto")
             if (result.info.pages) {
               document.getElementById("admin-doc-pages").value =
                 result.info.pages;
@@ -3258,6 +3413,7 @@
                 .getElementById("admin-doc-pages")
                 .classList.add("bg-green-50", "border-green-300");
             } else {
+              document.getElementById("admin-doc-pages").value = 1; // Mặc định là 1 nếu không nhận diện được
               document
                 .getElementById("admin-doc-pages")
                 .classList.remove("bg-green-50", "border-green-300");
@@ -3282,6 +3438,9 @@
           const pages = parseInt(
             document.getElementById("admin-doc-pages").value
           );
+          // FEATURE 6: Lấy giá
+          const defaultPrice =
+            parseInt(document.getElementById("admin-doc-price").value) || 350;
           const url = document.getElementById("admin-doc-url").value;
           const publicId = document.getElementById("admin-doc-public-id").value;
 
@@ -3290,7 +3449,15 @@
             return;
           }
 
-          const docData = { name, folderPath, pages, url, publicId };
+          // FEATURE 6: Thêm defaultPrice
+          const docData = {
+            name,
+            folderPath,
+            pages,
+            url,
+            publicId,
+            defaultPrice,
+          };
           showLoading(true);
           try {
             if (docId) {
@@ -3389,6 +3556,9 @@
         document.getElementById("admin-doc-folder").value =
           doc.folderPath || "";
         document.getElementById("admin-doc-pages").value = doc.pages;
+        // FEATURE 6: Điền giá
+        document.getElementById("admin-doc-price").value =
+          doc.defaultPrice || 350;
         document.getElementById("admin-doc-url").value = doc.url;
         document.getElementById("admin-doc-public-id").value = doc.publicId;
         document.getElementById(
@@ -3471,7 +3641,11 @@
               }
               const fileUrl = getForcedDownloadLink(url, name);
               const downloadAttr = getDownloadAttribute(url, name);
-              return `<div>- <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline" title="Xem/Tải file">${item.docName}</a> (x${item.copies})</div>`;
+              return `<div>- <a href="${fileUrl}" ${
+                downloadAttr ? `download="${downloadAttr}"` : ""
+              } target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline" title="Xem/Tải file">${
+                item.docName
+              }</a> (x${item.copies})</div>`;
             })
             .join("");
 
@@ -3553,10 +3727,18 @@
 
           const paidBtn = e.target.closest(".admin-mark-paid");
           if (paidBtn) {
+            // FIX 1: Thêm Log
             const orderId = paidBtn.dataset.id;
             const userId = paidBtn.dataset.userId;
+            console.log(
+              `Admin is marking order ${orderId} as paid for user ${userId}.`
+            );
+
             const order = allOrders[orderId];
-            if (!order) return;
+            if (!order) {
+              console.error("Order not found!");
+              return;
+            }
 
             const totalCost = order.totalCost;
             const amountDue = order.amountDue || 0;
@@ -3632,6 +3814,10 @@
         amountDue,
         amountCollected
       ) {
+        // FIX 1: Thêm Log
+        console.log(
+          `markOrderAsPaid called: orderId=${orderId}, userId=${userId}, totalCost=${totalCost}, amountDue=${amountDue}, amountCollected=${amountCollected}`
+        );
         showLoading(true);
         try {
           const balanceToAdd = amountCollected - amountDue;
@@ -3642,6 +3828,12 @@
             currentBalance = userSnap.val().balance || 0;
           }
           const newBalance = currentBalance + balanceToAdd;
+
+          // FIX 1: Thêm Log
+          console.log(
+            `Balance to add: ${balanceToAdd}, Current balance: ${currentBalance}, New balance: ${newBalance}`
+          );
+
           await update(userRef, { balance: newBalance });
 
           const orderRef = ref(
@@ -3661,33 +3853,41 @@
             )}đ vào số dư của user. Số dư mới: ${formatCurrency(newBalance)}đ`
           );
         } catch (error) {
+          console.error("Lỗi markOrderAsPaid:", error); // FIX 1: Log lỗi
           showMessage("Lỗi", "Không thể xác nhận thanh toán.");
         } finally {
           showLoading(false);
         }
       }
 
-      // --- THÊM: LOGIC ADMIN - QUẢN LÝ USER ---
-      // THAY ĐỔI: Gỡ bỏ điều kiện lọc "Admin"
+      // --- LOGIC ADMIN - QUẢN LÝ USER ---
       function renderAdminUsersTable() {
-        // Chờ cả 2 nguồn dữ liệu
+        // FIX 4: Thêm Log
+        console.log("Admin: renderAdminUsersTable called.", {
+          users: allUsersData,
+          orders: allOrders,
+        });
+
         if (!allUsersData || !allOrders) return;
 
         const tbody = document.getElementById("admin-users-table-body");
         tbody.innerHTML = "";
 
-        // Sắp xếp user theo tên
         const sortedUsers = Object.entries(allUsersData).sort(([, a], [, b]) =>
           (a.name || "").localeCompare(b.name || "")
         );
 
-        sortedUsers.forEach(([userId, user]) => {
-          // BỎ LỌC ADMIN: if (user.name === "Admin") return;
+        // FIX 4: Thêm check mảng rỗng
+        if (sortedUsers.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="5" class="text-center p-6 text-gray-500">Không có dữ liệu người dùng nào.</td></tr>';
+          return;
+        }
 
+        sortedUsers.forEach(([userId, user]) => {
           let totalSpent = 0;
           let totalDue = 0;
 
-          // Tính toán từ allOrders
           Object.values(allOrders).forEach((order) => {
             if (order.userId === userId && order.paymentStatus !== "replaced") {
               totalSpent += order.amountPaid || 0;
@@ -3773,9 +3973,12 @@
 
           if (
             order.paymentStatus === "paid" ||
-            order.paymentStatus === "printed"
+            order.paymentStatus === "printed" // Note: 'printed' is not a payment status, but 'paid' is.
           ) {
-            if (selectedMonth === "all" || orderMonthYear === selectedMonth) {
+            if (
+              order.paymentStatus === "paid" && // Chỉ tính đơn đã trả tiền
+              (selectedMonth === "all" || orderMonthYear === selectedMonth)
+            ) {
               totalRevenue += order.totalCost;
               paidOrders.push(order);
             }
@@ -3969,7 +4172,7 @@
             uploadPreset: CLOUDINARY_UPLOAD_PRESET,
             multiple: true,
             folder: "user_uploads_edited",
-            resourceType: "raw",
+            resourceType: "auto", // Sửa
             imageMetadata: true,
             sources: ["local", "url"],
             clientAllowedFormats: [
@@ -3992,7 +4195,7 @@
                 docName: result.info.original_filename,
                 cloudinaryUrl: result.info.secure_url,
                 publicId: result.info.public_id,
-                pages: result.info.pages || 1,
+                pages: result.info.pages || 1, // Sửa
               });
               renderEditFileList();
               updateEditOrderCost();
@@ -4071,11 +4274,17 @@
           const downloadAttr = getDownloadAttribute(url, name);
           fileEl.innerHTML = `
                       <div class="flex-1 min-w-0 mr-4">
-                          <a href="${fileUrl}" ${downloadAttr} target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-blue-600 truncate" title="${file.docName}">${file.docName}</a>
+                          <a href="${fileUrl}" ${
+            downloadAttr ? `download="${downloadAttr}"` : ""
+          } target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-blue-600 truncate" title="${
+            file.docName
+          }">${file.docName}</a>
                       </div>
                       <div class="flex items-center space-x-2 flex-shrink-0">
                           <label class="text-sm">Trang:</label>
-                          <input type="number" class="w-16 p-1 border rounded-md text-sm edit-file-pages" min="1" value="${file.pages}" data-index="${index}">
+                          <input type="number" class="w-16 p-1 border rounded-md text-sm edit-file-pages" min="1" value="${
+                            file.pages
+                          }" data-index="${index}">
                           <button type="button" class="remove-edit-file text-red-500 hover:text-red-700 font-bold text-lg" data-index="${index}">&times;</button>
                       </div>
                   `;
@@ -4089,11 +4298,34 @@
             parseInt(document.getElementById("edit-copies").value) || 1;
           const printType = document.getElementById("edit-print-type").value;
           const paperType = document.getElementById("edit-paper-type").value;
+
           let totalPages = 0;
+          // FEATURE 6: Tính giá TB
+          let priceSum = 0;
           filesBeingEdited.forEach((file) => {
             totalPages += parseInt(file.pages) || 0;
+
+            let initialPrice = 350;
+            if (file.docId && allDocuments[file.docId]) {
+              initialPrice = allDocuments[file.docId].defaultPrice || 350;
+            }
+            // Nếu là file custom (cloudinaryUrl) thì giá gốc là 350
+            priceSum += initialPrice;
           });
-          const total = calculateCost(totalPages, copies, printType, paperType);
+
+          const avgInitialPrice =
+            filesBeingEdited.length > 0
+              ? priceSum / filesBeingEdited.length
+              : 350;
+
+          // FEATURE 6: Pass giá TB
+          const total = calculateCost(
+            totalPages,
+            copies,
+            printType,
+            paperType,
+            avgInitialPrice
+          );
           document.getElementById("edit-total-cost").textContent =
             formatCurrency(total);
           return total;
@@ -4220,7 +4452,7 @@
               newOrderRef.key
             }). Ghi chú gốc: ${originalOrder.ghiChu || ""}`.trim(),
           });
-        
+
           sendDiscordNotification(newOrderDetails, newOrderRef.key, true);
           showMessage(
             "Thành Công",
@@ -4349,7 +4581,3 @@
     </script>
   </body>
 </html>
-
-
-
-        
